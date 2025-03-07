@@ -1,0 +1,97 @@
+{
+  "": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/SwiftASN1.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/SwiftASN1.o",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/master.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/ASN1.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/BER.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/BER.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/BER~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/BER.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/Basic ASN1 Types/ASN1Any.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Any.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Any~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Any.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/Basic ASN1 Types/ASN1BitString.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1BitString.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1BitString~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1BitString.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/Basic ASN1 Types/ASN1Boolean.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Boolean.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Boolean~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Boolean.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/Basic ASN1 Types/ASN1Identifier.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Identifier.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Identifier~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Identifier.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/Basic ASN1 Types/ASN1Integer.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Integer.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Integer~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Integer.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/Basic ASN1 Types/ASN1Null.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Null.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Null~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Null.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/Basic ASN1 Types/ASN1OctetString.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1OctetString.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1OctetString~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1OctetString.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/Basic ASN1 Types/ASN1Strings.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Strings.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Strings~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ASN1Strings.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/Basic ASN1 Types/ArraySliceBigint.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ArraySliceBigint.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ArraySliceBigint~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ArraySliceBigint.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/Basic ASN1 Types/GeneralizedTime.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/GeneralizedTime.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/GeneralizedTime~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/GeneralizedTime.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/Basic ASN1 Types/ObjectIdentifier.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ObjectIdentifier.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ObjectIdentifier~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/ObjectIdentifier.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/Basic ASN1 Types/PEMDocument.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/PEMDocument.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/PEMDocument~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/PEMDocument.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/Basic ASN1 Types/TimeUtilities.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/TimeUtilities.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/TimeUtilities~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/TimeUtilities.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/Basic ASN1 Types/UTCTime.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/UTCTime.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/UTCTime~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/UTCTime.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/DER.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/DER.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/DER~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/DER.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-asn1/Sources/SwiftASN1/Errors.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/Errors.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/Errors~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/Errors.swiftdeps"
+  }
+}

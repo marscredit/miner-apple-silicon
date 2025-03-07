@@ -1,0 +1,8 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "d235611cb94e615af8b04aa781cf83d81ceee69f6483baee3d7b217b33945515"
+build_start_time: [1741320391, 38385000]
+build_end_time: [1741320394, 499701000]
+inputs:
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/App.swift": [1741320221, 688812343]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/ContentView.swift": [1741320210, 745981697]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/MiningService.swift": [1741320261, 671250159]

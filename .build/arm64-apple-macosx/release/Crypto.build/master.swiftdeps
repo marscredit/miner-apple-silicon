@@ -1,0 +1,129 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "dd144457891dbf816a7143a23850dd7772aa03d8aad11ff79aa8c55219250f5a"
+build_start_time: [1741320380, 288571000]
+build_end_time: [1741320382, 411308000]
+inputs:
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Crypto.build/DerivedSources/resource_bundle_accessor.swift"
+  : [1741320379, 611499629]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/AEADs/AES/GCM/AES-GCM.swift": [1741320379, 459257666]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/AEADs/AES/GCM/BoringSSL/AES-GCM_boring.swift"
+  : [1741320379, 459359582]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/AEADs/ChachaPoly/BoringSSL/ChaChaPoly_boring.swift"
+  : [1741320379, 459474165]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/AEADs/ChachaPoly/ChaChaPoly.swift"
+  : [1741320379, 459533249]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/AEADs/Cipher.swift": [1741320379, 459590415]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/AEADs/Nonces.swift": [1741320379, 459645957]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/ASN1.swift": [1741320379, 459839498]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/Basic ASN1 Types/ASN1Any.swift"
+  : [1741320379, 459930748]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/Basic ASN1 Types/ASN1BitString.swift"
+  : [1741320379, 460004915]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/Basic ASN1 Types/ASN1Boolean.swift"
+  : [1741320379, 460056206]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/Basic ASN1 Types/ASN1Identifier.swift"
+  : [1741320379, 460109581]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/Basic ASN1 Types/ASN1Integer.swift"
+  : [1741320379, 460168790]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/Basic ASN1 Types/ASN1Null.swift"
+  : [1741320379, 460213415]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/Basic ASN1 Types/ASN1OctetString.swift"
+  : [1741320379, 460256665]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/Basic ASN1 Types/ASN1Strings.swift"
+  : [1741320379, 460309081]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/Basic ASN1 Types/ArraySliceBigint.swift"
+  : [1741320379, 460366665]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/Basic ASN1 Types/GeneralizedTime.swift"
+  : [1741320379, 460457290]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/Basic ASN1 Types/ObjectIdentifier.swift"
+  : [1741320379, 460514039]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/ECDSASignature.swift": [1741320379, 460592039]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/PEMDocument.swift": [1741320379, 460647164]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/PKCS8PrivateKey.swift": [1741320379, 460700623]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/SEC1PrivateKey.swift": [1741320379, 460741789]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/ASN1/SubjectPublicKeyInfo.swift": [1741320379, 460789164]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/CryptoKitErrors.swift": [1741320379, 460897498]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Digests/BoringSSL/Digest_boring.swift"
+  : [1741320379, 461012706]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Digests/Digest.swift": [1741320379, 461056247]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Digests/Digests.swift": [1741320379, 461132414]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Digests/HashFunctions.swift": [1741320379, 461247956]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Digests/HashFunctions_SHA2.swift"
+  : [1741320379, 461307497]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/HPKE/Ciphersuite/HPKE-AEAD.swift"
+  : [1741320379, 461511830]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/HPKE/Ciphersuite/HPKE-Ciphersuite.swift"
+  : [1741320379, 461569039]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/HPKE/Ciphersuite/HPKE-KDF.swift": [1741320379, 461622747]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/HPKE/Ciphersuite/HPKE-KexKeyDerivation.swift"
+  : [1741320379, 461675580]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/HPKE/Ciphersuite/HPKE-LabeledExtract.swift"
+  : [1741320379, 461724539]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/HPKE/Ciphersuite/HPKE-Utils.swift"
+  : [1741320379, 461770497]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/HPKE/Ciphersuite/KEM/Conformances/DHKEM.swift"
+  : [1741320379, 461887580]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/HPKE/Ciphersuite/KEM/Conformances/HPKE-KEM-Curve25519.swift"
+  : [1741320379, 461950080]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/HPKE/Ciphersuite/KEM/Conformances/HPKE-NIST-EC-KEMs.swift"
+  : [1741320379, 461997705]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/HPKE/Ciphersuite/KEM/HPKE-KEM.swift"
+  : [1741320379, 462047955]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/HPKE/HPKE-Errors.swift": [1741320379, 462094288]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/HPKE/HPKE.swift": [1741320379, 462154080]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/HPKE/Key Schedule/HPKE-Context.swift"
+  : [1741320379, 462241330]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/HPKE/Key Schedule/HPKE-KeySchedule.swift"
+  : [1741320379, 462294663]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/HPKE/Modes/HPKE-Modes.swift": [1741320379, 462387663]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Insecure/Insecure.swift": [1741320379, 462471163]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Insecure/Insecure_HashFunctions.swift"
+  : [1741320379, 462524830]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/KEM/KEM.swift": [1741320379, 462610538]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Key Agreement/BoringSSL/ECDH_boring.swift"
+  : [1741320379, 462739163]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Key Agreement/DH.swift": [1741320379, 462798954]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Key Agreement/ECDH.swift": [1741320379, 462881288]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Key Derivation/HKDF.swift": [1741320379, 463050287]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Key Wrapping/AESWrap.swift": [1741320379, 463128954]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Key Wrapping/BoringSSL/AESWrap_boring.swift"
+  : [1741320379, 463210121]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Keys/EC/BoringSSL/Ed25519_boring.swift"
+  : [1741320379, 463345121]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Keys/EC/BoringSSL/NISTCurvesKeys_boring.swift"
+  : [1741320379, 463417995]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Keys/EC/BoringSSL/X25519Keys_boring.swift"
+  : [1741320379, 463477120]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Keys/EC/Curve25519.swift": [1741320379, 463534037]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Keys/EC/Ed25519Keys.swift": [1741320379, 463598870]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Keys/EC/NISTCurvesKeys.swift": [1741320379, 463647495]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Keys/EC/X25519Keys.swift": [1741320379, 463696995]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Keys/Symmetric/SymmetricKeys.swift"
+  : [1741320379, 463786745]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Message Authentication Codes/HMAC/HMAC.swift"
+  : [1741320379, 463903453]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Message Authentication Codes/MACFunctions.swift"
+  : [1741320379, 463955662]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Message Authentication Codes/MessageAuthenticationCode.swift"
+  : [1741320379, 464011912]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/PRF/AES.swift": [1741320379, 464111703]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Signatures/BoringSSL/ECDSASignature_boring.swift"
+  : [1741320379, 464297328]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Signatures/BoringSSL/ECDSA_boring.swift"
+  : [1741320379, 464353161]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Signatures/BoringSSL/EdDSA_boring.swift"
+  : [1741320379, 464409995]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Signatures/ECDSA.swift": [1741320379, 464479745]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Signatures/Ed25519.swift": [1741320379, 464605161]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Signatures/Signature.swift": [1741320379, 464665786]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Util/BoringSSL/CryptoKitErrors_boring.swift"
+  : [1741320379, 464795828]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Util/BoringSSL/RNG_boring.swift": [1741320379, 464854869]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Util/BoringSSL/SafeCompare_boring.swift"
+  : [1741320379, 464910703]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Util/BoringSSL/Zeroization_boring.swift"
+  : [1741320379, 464966869]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Util/PrettyBytes.swift": [1741320379, 465017744]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Util/SafeCompare.swift": [1741320379, 465068619]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Util/SecureBytes.swift": [1741320379, 465124286]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-crypto/Sources/Crypto/Util/Zeroization.swift": [1741320379, 465184703]

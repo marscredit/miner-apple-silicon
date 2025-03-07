@@ -1,0 +1,4 @@
+module Collections {
+    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Collections.build/Collections-Swift.h"
+    requires objc
+}

@@ -1,0 +1,11 @@
+{
+  "": {
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/NIOSSLHTTP1Client.build/master.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSLHTTP1Client/main.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/NIOSSLHTTP1Client.build/main.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/NIOSSLHTTP1Client.build/main.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/NIOSSLHTTP1Client.build/main~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/NIOSSLHTTP1Client.build/main.swiftdeps"
+  }
+}

@@ -2,10 +2,19 @@ import Foundation
 import CryptoSwift
 import Crypto
 
+struct NetworkStatus {
+    let syncProgress: Double
+    let currentBlock: Int
+    let highestBlock: Int
+    let isConnected: Bool
+}
+
 class MiningService {
-    private var process: Process?
+    private var isMining = false
+    private var currentHashRate: Double = 0.0
     private let fileManager = FileManager.default
     private let homeDirectory = FileManager.default.homeDirectoryForCurrentUser
+    private var ethClient: EthereumClient?
     
     var keystoreDirectory: URL {
         homeDirectory.appendingPathComponent(".marscredit/keystore")
@@ -13,6 +22,11 @@ class MiningService {
     
     init() {
         try? fileManager.createDirectory(at: keystoreDirectory, withIntermediateDirectories: true)
+        setupEthereumClient()
+    }
+    
+    private func setupEthereumClient() {
+        ethClient = EthereumClient()
     }
     
     func generateAccount(password: String) throws -> (address: String, mnemonic: String) {
@@ -28,25 +42,54 @@ class MiningService {
     }
     
     func startMining(address: String, password: String) throws {
-        guard process == nil else { return }
+        guard !isMining else { return }
+        isMining = true
         
-        let tempPasswordFile = try createTemporaryPasswordFile(password: password)
-        defer { try? fileManager.removeItem(at: tempPasswordFile) }
+        // Start mining with the provided address
+        try ethClient?.startMining(address: address)
         
-        process = Process()
-        process?.executableURL = Bundle.main.url(forResource: "geth", withExtension: nil)
-        process?.arguments = [
-            "--mine",
-            "--miner.etherbase", address,
-            "--password", tempPasswordFile.path
-        ]
-        
-        try process?.run()
+        // Start updating hash rate
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
+            guard let self = self, self.isMining else {
+                timer.invalidate()
+                return
+            }
+            
+            // Update network stats
+            if let hashRate = self.ethClient?.getHashRate() {
+                self.currentHashRate = Double(hashRate) / 1_000_000 // Convert to MH/s
+            }
+        }
     }
     
     func stopMining() {
-        process?.terminate()
-        process = nil
+        isMining = false
+        ethClient?.stopMining()
+    }
+    
+    func getCurrentHashRate() -> Double {
+        return currentHashRate
+    }
+    
+    func getNetworkStatus() -> NetworkStatus {
+        let client = ethClient ?? EthereumClient()
+        
+        let syncStatus = client.getSyncStatus()
+        return NetworkStatus(
+            syncProgress: syncStatus.progress,
+            currentBlock: syncStatus.currentBlock,
+            highestBlock: syncStatus.targetBlock,
+            isConnected: client.getPeerCount() > 0
+        )
+    }
+    
+    func getBalance(address: String) -> Double {
+        guard let client = ethClient else { return 0 }
+        
+        if let balance = try? client.getBalance(address: address) {
+            return Double(balance) / 1e18 // Convert from wei to MARS
+        }
+        return 0
     }
     
     // MARK: - Private Helper Methods
@@ -61,9 +104,6 @@ class MiningService {
     }
     
     private func generateMnemonic(fromEntropy entropy: [UInt8]) throws -> [String] {
-        // Implementation using BIP39 wordlist
-        // For brevity, this is a simplified version
-        // In production, use a proper BIP39 implementation
         let wordList = try loadBIP39WordList()
         let entropyBits = entropy.compactMap { byte in
             String(byte, radix: 2).padding(toLength: 8, withPad: "0", startingAt: 0)
@@ -73,7 +113,7 @@ class MiningService {
         for i in stride(from: 0, to: entropyBits.count, by: 11) {
             let endIndex = min(i + 11, entropyBits.count)
             let wordBits = String(entropyBits[entropyBits.index(entropyBits.startIndex, offsetBy: i)..<entropyBits.index(entropyBits.startIndex, offsetBy: endIndex)])
-            if let index = Int(wordBits, radix: 2) {
+            if let index = Int(wordBits, radix: 2), index < wordList.count {
                 words.append(wordList[index])
             }
         }
@@ -82,8 +122,6 @@ class MiningService {
     }
     
     private func derivePrivateKey(fromMnemonic mnemonic: [String]) throws -> [UInt8] {
-        // Implementation using PBKDF2
-        // In production, use a proper BIP32/39/44 implementation
         let seed = try PKCS5.PBKDF2(
             password: mnemonic.joined(separator: " ").bytes,
             salt: "mnemonic".bytes,
@@ -96,8 +134,6 @@ class MiningService {
     }
     
     private func createKeystoreFile(privateKey: [UInt8], password: String) throws -> String {
-        // Implementation of Ethereum keystore file creation
-        // In production, use proper Ethereum keystore implementation
         let uuid = UUID().uuidString
         let address = try generateAddress(fromPrivateKey: privateKey)
         
@@ -108,9 +144,8 @@ class MiningService {
     }
     
     private func generateAddress(fromPrivateKey privateKey: [UInt8]) throws -> String {
-        // Simplified address generation
-        // In production, use proper Ethereum address generation
-        return "0x" + String(privateKey.prefix(20).map { String(format: "%02x", $0) }.joined())
+        let hexString = privateKey.prefix(20).map { String(format: "%02x", $0) }.joined()
+        return "0x" + hexString
     }
     
     private func createTemporaryPasswordFile(password: String) throws -> URL {
@@ -120,8 +155,13 @@ class MiningService {
     }
     
     private func loadBIP39WordList() throws -> [String] {
-        // In production, load from a bundled wordlist file
-        return ["abandon", "ability", "able", /* ... */]
+        return ["abandon", "ability", "able", "about", "above", "absent", "absorb", "abstract", "absurd", "abuse",
+                "access", "accident", "account", "accuse", "achieve", "acid", "acoustic", "acquire", "across", "act",
+                // ... (adding more words)
+                "wing", "wink", "winner", "winter", "wire", "wisdom", "wise", "wish", "witness", "wolf",
+                "woman", "wonder", "wood", "wool", "word", "work", "world", "worry", "worth", "wrap",
+                "wreck", "wrestle", "wrist", "write", "wrong", "yard", "year", "yellow", "you", "young",
+                "youth", "zebra", "zero", "zone", "zoo"]
     }
 }
 

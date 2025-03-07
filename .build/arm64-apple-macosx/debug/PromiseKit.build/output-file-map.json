@@ -1,0 +1,107 @@
+{
+  "": {
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/master.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Async.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Async.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Async.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Async~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Async.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Box.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Box.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Box.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Box~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Box.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Catchable.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Catchable.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Catchable.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Catchable~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Catchable.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Combine.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Combine.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Combine.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Combine~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Combine.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Configuration.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Configuration.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Configuration.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Configuration~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Configuration.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/CustomStringConvertible.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/CustomStringConvertible.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/CustomStringConvertible.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/CustomStringConvertible~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/CustomStringConvertible.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Error.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Error.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Error.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Error~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Error.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Guarantee.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Guarantee.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Guarantee.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Guarantee~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Guarantee.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/LogEvent.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/LogEvent.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/LogEvent.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/LogEvent~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/LogEvent.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Promise.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Promise.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Promise.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Promise~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Promise.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Resolver.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Resolver.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Resolver.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Resolver~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Resolver.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Thenable.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Thenable.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Thenable.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Thenable~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/Thenable.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/after.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/after.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/after.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/after~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/after.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/firstly.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/firstly.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/firstly.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/firstly~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/firstly.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/hang.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/hang.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/hang.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/hang~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/hang.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/race.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/race.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/race.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/race~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/race.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/when.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/when.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/when.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/when~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/PromiseKit.build/when.swiftdeps"
+  }
+}

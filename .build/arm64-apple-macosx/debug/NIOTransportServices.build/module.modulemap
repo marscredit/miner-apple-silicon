@@ -1,0 +1,4 @@
+module NIOTransportServices {
+    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/NIOTransportServices.build/NIOTransportServices-Swift.h"
+    requires objc
+}

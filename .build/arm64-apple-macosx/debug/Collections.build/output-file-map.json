@@ -1,0 +1,11 @@
+{
+  "": {
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Collections.build/master.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/Collections/Collections.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Collections.build/Collections.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Collections.build/Collections.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Collections.build/Collections~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Collections.build/Collections.swiftdeps"
+  }
+}

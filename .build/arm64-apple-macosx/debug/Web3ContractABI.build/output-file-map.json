@@ -1,0 +1,113 @@
+{
+  "": {
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/master.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/ABI.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABI.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABI.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABI~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABI.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/ABIConvertible.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABIConvertible.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABIConvertible.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABIConvertible~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABIConvertible.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/ABIDecoder.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABIDecoder.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABIDecoder.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABIDecoder~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABIDecoder.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/ABIEncoder.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABIEncoder.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABIEncoder.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABIEncoder~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABIEncoder.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/Eth+ABI.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/Eth+ABI.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/Eth+ABI.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/Eth+ABI~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/Eth+ABI.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/SolidityTuple.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityTuple.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityTuple.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityTuple~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityTuple.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/SolidityType+Codable.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityType+Codable.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityType+Codable.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityType+Codable~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityType+Codable.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/SolidityType.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityType.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityType.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityType~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityType.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/SolidityWrappedValue.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityWrappedValue.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityWrappedValue.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityWrappedValue~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityWrappedValue.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/ABIObject.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABIObject.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABIObject.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABIObject~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ABIObject.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/ERC165.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ERC165.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ERC165.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ERC165~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ERC165.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/ERC20.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ERC20.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ERC20.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ERC20~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ERC20.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/ERC721.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ERC721.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ERC721.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ERC721~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/ERC721.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/Eth+Contract.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/Eth+Contract.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/Eth+Contract.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/Eth+Contract~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/Eth+Contract.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/EthereumContract.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/EthereumContract.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/EthereumContract.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/EthereumContract~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/EthereumContract.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/SolidityEvent.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityEvent.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityEvent.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityEvent~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityEvent.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/SolidityFunction.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityFunction.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityFunction.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityFunction~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityFunction.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/SolidityInvocation.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityInvocation.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityInvocation.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityInvocation~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityInvocation.swiftdeps"
+  }
+}

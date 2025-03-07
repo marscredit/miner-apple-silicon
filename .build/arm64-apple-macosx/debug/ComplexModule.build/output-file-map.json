@@ -1,0 +1,29 @@
+{
+  "": {
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/master.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-numerics/Sources/ComplexModule/Arithmetic.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/Arithmetic.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/Arithmetic.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/Arithmetic~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/Arithmetic.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-numerics/Sources/ComplexModule/Complex.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/Complex.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/Complex.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/Complex~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/Complex.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-numerics/Sources/ComplexModule/Differentiable.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/Differentiable.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/Differentiable.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/Differentiable~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/Differentiable.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-numerics/Sources/ComplexModule/ElementaryFunctions.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/ElementaryFunctions.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/ElementaryFunctions.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/ElementaryFunctions~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/ComplexModule.build/ElementaryFunctions.swiftdeps"
+  }
+}

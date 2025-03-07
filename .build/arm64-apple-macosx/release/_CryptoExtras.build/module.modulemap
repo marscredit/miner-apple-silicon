@@ -1,4 +1,0 @@
-module _CryptoExtras {
-    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/_CryptoExtras.build/_CryptoExtras-Swift.h"
-    requires objc
-}

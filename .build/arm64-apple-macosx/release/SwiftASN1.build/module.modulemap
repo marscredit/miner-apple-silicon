@@ -1,4 +1,0 @@
-module SwiftASN1 {
-    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/SwiftASN1.build/SwiftASN1-Swift.h"
-    requires objc
-}

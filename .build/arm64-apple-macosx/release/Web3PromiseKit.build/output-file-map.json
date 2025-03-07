@@ -1,0 +1,27 @@
+{
+  "": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3PromiseKit.build/Web3PromiseKit.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3PromiseKit.build/Web3PromiseKit.o",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3PromiseKit.build/master.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/PromiseKit/ContractPromiseExtensions.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3PromiseKit.build/ContractPromiseExtensions.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3PromiseKit.build/ContractPromiseExtensions~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3PromiseKit.build/ContractPromiseExtensions.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/PromiseKit/Exports+PromiseKit.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3PromiseKit.build/Exports+PromiseKit.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3PromiseKit.build/Exports+PromiseKit~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3PromiseKit.build/Exports+PromiseKit.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/PromiseKit/Promisable.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3PromiseKit.build/Promisable.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3PromiseKit.build/Promisable~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3PromiseKit.build/Promisable.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/PromiseKit/Web3+PromiseKit.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3PromiseKit.build/Web3+PromiseKit.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3PromiseKit.build/Web3+PromiseKit~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3PromiseKit.build/Web3+PromiseKit.swiftdeps"
+  }
+}

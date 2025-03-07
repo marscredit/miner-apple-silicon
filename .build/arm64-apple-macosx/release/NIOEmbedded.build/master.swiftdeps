@@ -1,0 +1,8 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "da876805245217e90cea1d1c35c9b032a969a6b4d24f86d6e05b332a9b36e025"
+build_start_time: [1741345689, 335884000]
+build_end_time: [1741345690, 983854000]
+inputs:
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOEmbedded/AsyncTestingChannel.swift": [1741329909, 29085495]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOEmbedded/AsyncTestingEventLoop.swift": [1741329909, 29167536]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOEmbedded/Embedded.swift": [1741329909, 29514949]

@@ -1,0 +1,4 @@
+module BitCollections {
+    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/BitCollections.build/BitCollections-Swift.h"
+    requires objc
+}

@@ -1,0 +1,6 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "82e8b11da409e69d80b668499bcb1e16c5aac8816b8038dc7458a7f7d91dd9f9"
+build_start_time: [1741345697, 437036000]
+build_end_time: [1741345697, 521960000]
+inputs:
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIO/Exports.swift": [1741329909, 19717089]

@@ -1,0 +1,4 @@
+module Web3ContractABI {
+    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3ContractABI.build/Web3ContractABI-Swift.h"
+    requires objc
+}

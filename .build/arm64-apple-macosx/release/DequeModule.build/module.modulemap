@@ -1,0 +1,4 @@
+module DequeModule {
+    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/DequeModule.build/DequeModule-Swift.h"
+    requires objc
+}

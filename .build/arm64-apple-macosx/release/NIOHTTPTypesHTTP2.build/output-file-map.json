@@ -1,0 +1,22 @@
+{
+  "": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/NIOHTTPTypesHTTP2.build/NIOHTTPTypesHTTP2.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/NIOHTTPTypesHTTP2.build/NIOHTTPTypesHTTP2.o",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/NIOHTTPTypesHTTP2.build/master.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOHTTPTypesHTTP2/HTTP2HeadersStateMachine.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/NIOHTTPTypesHTTP2.build/HTTP2HeadersStateMachine.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/NIOHTTPTypesHTTP2.build/HTTP2HeadersStateMachine~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/NIOHTTPTypesHTTP2.build/HTTP2HeadersStateMachine.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOHTTPTypesHTTP2/HTTP2ToHTTPCodec.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/NIOHTTPTypesHTTP2.build/HTTP2ToHTTPCodec.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/NIOHTTPTypesHTTP2.build/HTTP2ToHTTPCodec~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/NIOHTTPTypesHTTP2.build/HTTP2ToHTTPCodec.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOHTTPTypesHTTP2/HTTPTypeConversion.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/NIOHTTPTypesHTTP2.build/HTTPTypeConversion.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/NIOHTTPTypesHTTP2.build/HTTPTypeConversion~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/NIOHTTPTypesHTTP2.build/HTTPTypeConversion.swiftdeps"
+  }
+}

@@ -1,0 +1,4 @@
+module Algorithms {
+    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Algorithms.build/Algorithms-Swift.h"
+    requires objc
+}

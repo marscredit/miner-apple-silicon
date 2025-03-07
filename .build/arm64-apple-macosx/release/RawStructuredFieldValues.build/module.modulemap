@@ -1,0 +1,4 @@
+module RawStructuredFieldValues {
+    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/RawStructuredFieldValues.build/RawStructuredFieldValues-Swift.h"
+    requires objc
+}

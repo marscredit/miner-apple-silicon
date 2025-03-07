@@ -1,0 +1,13 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "e8b713bb0155de3a42e15ec6aa7c2cf916b5223b23da9b507cc679dcb775f0a4"
+build_start_time: [1741345697, 596266000]
+build_end_time: [1741345698, 305858000]
+inputs:
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOFoundationCompat/ByteBuffer-foundation.swift"
+  : [1741329909, 33622200]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOFoundationCompat/Codable+ByteBuffer.swift"
+  : [1741329909, 33714824]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOFoundationCompat/JSONSerialization+ByteBuffer.swift"
+  : [1741329909, 33770115]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOFoundationCompat/WaitSpinningRunLoop.swift"
+  : [1741329909, 33824698]

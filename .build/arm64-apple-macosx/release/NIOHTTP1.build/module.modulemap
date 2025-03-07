@@ -1,0 +1,4 @@
+module NIOHTTP1 {
+    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/NIOHTTP1.build/NIOHTTP1-Swift.h"
+    requires objc
+}

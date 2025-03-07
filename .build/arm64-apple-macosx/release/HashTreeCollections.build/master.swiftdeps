@@ -1,0 +1,175 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "cb9961f613934c56a085bbd94b5401579d2eed83b74bbbeb14e9caadb005fdd2"
+build_start_time: [1741345662, 693224000]
+build_end_time: [1741345667, 121316000]
+inputs:
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_AncestorHashSlots.swift"
+  : [1741329923, 122707488]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_Bitmap.swift"
+  : [1741329923, 122793362]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_Bucket.swift"
+  : [1741329923, 122847862]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_Hash.swift"
+  : [1741329923, 122913153]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashLevel.swift"
+  : [1741329923, 122969778]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Builder.swift"
+  : [1741329923, 123074152]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Debugging.swift"
+  : [1741329923, 123124818]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Initializers.swift"
+  : [1741329923, 123201817]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Invariants.swift"
+  : [1741329923, 123249817]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Lookups.swift"
+  : [1741329923, 123345525]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Primitive Insertions.swift"
+  : [1741329923, 123397483]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Primitive Removals.swift"
+  : [1741329923, 123473357]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Primitive Replacement.swift"
+  : [1741329923, 123528273]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Storage.swift"
+  : [1741329923, 123619523]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural compactMapValues.swift"
+  : [1741329923, 123671772]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural filter.swift"
+  : [1741329923, 123718730]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural intersection.swift"
+  : [1741329923, 123793230]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural isDisjoint.swift"
+  : [1741329923, 123844688]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural isEqualSet.swift"
+  : [1741329923, 123898979]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural isSubset.swift"
+  : [1741329923, 123957229]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural mapValues.swift"
+  : [1741329923, 124007520]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural merge.swift"
+  : [1741329923, 124100061]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural subtracting.swift"
+  : [1741329923, 124185185]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural symmetricDifference.swift"
+  : [1741329923, 124295060]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural union.swift"
+  : [1741329923, 124386600]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Subtree Insertions.swift"
+  : [1741329923, 124459767]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Subtree Modify.swift"
+  : [1741329923, 124559766]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Subtree Removals.swift"
+  : [1741329923, 124648682]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+UnsafeHandle.swift"
+  : [1741329923, 124724431]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNode.swift"
+  : [1741329923, 124805889]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashNodeHeader.swift"
+  : [1741329923, 124860722]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashSlot.swift"
+  : [1741329923, 124907805]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashStack.swift"
+  : [1741329923, 124959513]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashTreeIterator.swift"
+  : [1741329923, 125012013]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_HashTreeStatistics.swift"
+  : [1741329923, 125090720]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_RawHashNode+UnsafeHandle.swift"
+  : [1741329923, 125158178]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_RawHashNode.swift"
+  : [1741329923, 125210345]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_UnmanagedHashNode.swift"
+  : [1741329923, 125273677]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/HashNode/_UnsafePath.swift"
+  : [1741329923, 125365760]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Codable.swift"
+  : [1741329923, 125783257]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Collection.swift"
+  : [1741329923, 125875131]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+CustomReflectable.swift"
+  : [1741329923, 125920589]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Debugging.swift"
+  : [1741329923, 125978797]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Descriptions.swift"
+  : [1741329923, 126028630]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Equatable.swift"
+  : [1741329923, 126104463]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+ExpressibleByDictionaryLiteral.swift"
+  : [1741329923, 126169129]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Filter.swift"
+  : [1741329923, 126267920]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Hashable.swift"
+  : [1741329923, 126324045]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Initializers.swift"
+  : [1741329923, 126451044]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Keys.swift"
+  : [1741329923, 126543585]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+MapValues.swift"
+  : [1741329923, 126596209]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Merge.swift"
+  : [1741329923, 126687542]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Sendable.swift"
+  : [1741329923, 126738750]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Sequence.swift"
+  : [1741329923, 126793541]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Values.swift"
+  : [1741329923, 126880457]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary.swift"
+  : [1741329923, 126962832]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Codable.swift"
+  : [1741329923, 127072081]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Collection.swift"
+  : [1741329923, 127164414]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+CustomReflectable.swift"
+  : [1741329923, 127216872]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Debugging.swift"
+  : [1741329923, 127276288]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Descriptions.swift"
+  : [1741329923, 127332537]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Equatable.swift"
+  : [1741329923, 127387787]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+ExpressibleByArrayLiteral.swift"
+  : [1741329923, 127441328]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Extras.swift"
+  : [1741329923, 127501453]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Filter.swift"
+  : [1741329923, 127566119]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Hashable.swift"
+  : [1741329923, 127616035]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Sendable.swift"
+  : [1741329923, 127663243]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Sequence.swift"
+  : [1741329923, 127735493]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra Initializers.swift"
+  : [1741329923, 127801242]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra basics.swift"
+  : [1741329923, 127892367]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra formIntersection.swift"
+  : [1741329923, 127959658]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra formSymmetricDifference.swift"
+  : [1741329923, 128037324]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra formUnion.swift"
+  : [1741329923, 128097657]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra intersection.swift"
+  : [1741329923, 128205198]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra isDisjoint.swift"
+  : [1741329923, 128270572]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra isEqualSet.swift"
+  : [1741329923, 128356488]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra isStrictSubset.swift"
+  : [1741329923, 128458988]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra isStrictSuperset.swift"
+  : [1741329923, 128541237]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra isSubset.swift"
+  : [1741329923, 128625320]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra isSuperset.swift"
+  : [1741329923, 128691736]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra subtract.swift"
+  : [1741329923, 128749319]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra subtracting.swift"
+  : [1741329923, 128809235]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra symmetricDifference.swift"
+  : [1741329923, 128880068]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra union.swift"
+  : [1741329923, 128955276]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet.swift"
+  : [1741329923, 129014442]

@@ -1,0 +1,17 @@
+{
+  "": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/_NIOFileSystemFoundationCompat.build/_NIOFileSystemFoundationCompat.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/_NIOFileSystemFoundationCompat.build/_NIOFileSystemFoundationCompat.o",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/_NIOFileSystemFoundationCompat.build/master.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOFileSystemFoundationCompat/Data+FileSystem.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/_NIOFileSystemFoundationCompat.build/Data+FileSystem.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/_NIOFileSystemFoundationCompat.build/Data+FileSystem~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/_NIOFileSystemFoundationCompat.build/Data+FileSystem.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOFileSystemFoundationCompat/Date+FileInfo.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/_NIOFileSystemFoundationCompat.build/Date+FileInfo.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/_NIOFileSystemFoundationCompat.build/Date+FileInfo~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/_NIOFileSystemFoundationCompat.build/Date+FileInfo.swiftdeps"
+  }
+}

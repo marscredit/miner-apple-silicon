@@ -1,0 +1,36 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "bf7a613201d2d94811669af3bbcf0d97aa2e6a6602b0cf5a0335e7157fbceb3a"
+build_start_time: [1741345701, 513723000]
+build_end_time: [1741345703, 471938000]
+inputs:
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/DebugInboundEventsHandler.swift"
+  : [1741329908, 915286012]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/DebugOutboundEventsHandler.swift"
+  : [1741329908, 915338304]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/FixedLengthFrameDecoder.swift"
+  : [1741329908, 915480511]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/HTTP1ProxyConnectHandler.swift"
+  : [1741329908, 915547343]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/JSONRPCFraming+ContentLengthHeader.swift"
+  : [1741329908, 915645384]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/JSONRPCFraming.swift": [1741329908, 915690717]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/LengthFieldBasedFrameDecoder.swift"
+  : [1741329908, 915784049]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/LengthFieldPrepender.swift"
+  : [1741329908, 915848674]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/LineBasedFrameDecoder.swift"
+  : [1741329908, 915900465]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/MarkedCircularBuffer+PopFirstCheckMarked.swift"
+  : [1741329908, 915999714]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/NIOExtrasError.swift": [1741329908, 916061088]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/NIOLengthFieldBitLength.swift"
+  : [1741329908, 916116296]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/NIORequestIdentifiable.swift"
+  : [1741329908, 916177962]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/PCAPRingBuffer.swift": [1741329908, 916246253]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/QuiescingHelper.swift": [1741329908, 916363377]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/RequestResponseHandler.swift"
+  : [1741329908, 916451917]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/RequestResponseWithIDHandler.swift"
+  : [1741329908, 916518125]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/NIOExtras/WritePCAPHandler.swift": [1741329908, 916636082]

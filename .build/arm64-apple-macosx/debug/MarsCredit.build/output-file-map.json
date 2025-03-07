@@ -2,46 +2,46 @@
   "": {
     "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/master.swiftdeps"
   },
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/App.swift": {
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/App.swift": {
     "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/App.d",
     "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/App.swift.o",
     "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/App~partial.swiftmodule",
     "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/App.swiftdeps"
   },
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/ContentView.swift": {
-    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ContentView.d",
-    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ContentView.swift.o",
-    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ContentView~partial.swiftmodule",
-    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ContentView.swiftdeps"
-  },
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/EthereumClient.swift": {
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/EthereumClient.swift": {
     "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/EthereumClient.d",
     "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/EthereumClient.swift.o",
     "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/EthereumClient~partial.swiftmodule",
     "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/EthereumClient.swiftdeps"
   },
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/Extensions/Font+Custom.swift": {
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Extensions/Font+Custom.swift": {
     "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/Font+Custom.d",
     "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/Font+Custom.swift.o",
     "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/Font+Custom~partial.swiftmodule",
     "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/Font+Custom.swiftdeps"
   },
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/MiningService.swift": {
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/MiningService.swift": {
     "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/MiningService.d",
     "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/MiningService.swift.o",
     "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/MiningService~partial.swiftmodule",
     "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/MiningService.swiftdeps"
   },
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/Views/ButtonStyles.swift": {
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ButtonStyles.swift": {
     "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ButtonStyles.d",
     "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ButtonStyles.swift.o",
     "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ButtonStyles~partial.swiftmodule",
     "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ButtonStyles.swiftdeps"
   },
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/Views/ContentView.swift": {
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift": {
     "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ContentView.d",
     "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ContentView.swift.o",
     "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ContentView~partial.swiftmodule",
     "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ContentView.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/DerivedSources/resource_bundle_accessor.swift": {
+    "dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/resource_bundle_accessor.d",
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/resource_bundle_accessor.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/resource_bundle_accessor~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/resource_bundle_accessor.swiftdeps"
   }
 }

@@ -1,0 +1,4 @@
+module HTTPTypesFoundation {
+    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/HTTPTypesFoundation.build/HTTPTypesFoundation-Swift.h"
+    requires objc
+}

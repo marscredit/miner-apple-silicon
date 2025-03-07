@@ -1,0 +1,14 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "e115d46148ce3f791c206db2dbb02ac50381b3a7c2b7e2ceeb132fc3e94c33fc"
+build_start_time: [1741345703, 542248000]
+build_end_time: [1741345706, 28398000]
+inputs:
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/websocket-kit/Sources/WebSocketKit/Concurrency/WebSocket+Concurrency.swift"
+  : [1741329922, 446846813]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/websocket-kit/Sources/WebSocketKit/Exports.swift": [1741329922, 446974270]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/websocket-kit/Sources/WebSocketKit/HTTPUpgradeRequestHandler.swift"
+  : [1741329922, 447025062]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/websocket-kit/Sources/WebSocketKit/WebSocket+Connect.swift": [1741329922, 447141936]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/websocket-kit/Sources/WebSocketKit/WebSocket.swift": [1741329922, 447233352]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/websocket-kit/Sources/WebSocketKit/WebSocketClient.swift": [1741329922, 447284476]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/websocket-kit/Sources/WebSocketKit/WebSocketHandler.swift": [1741329922, 447357059]

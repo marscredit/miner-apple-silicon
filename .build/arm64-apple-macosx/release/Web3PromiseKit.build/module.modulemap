@@ -1,0 +1,4 @@
+module Web3PromiseKit {
+    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Web3PromiseKit.build/Web3PromiseKit-Swift.h"
+    requires objc
+}

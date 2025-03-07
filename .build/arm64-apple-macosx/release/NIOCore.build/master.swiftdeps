@@ -1,0 +1,83 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "54f4fc861ec7b155e8d3d6def5fc7db34e1625760367ca1d9529e347fc74461a"
+build_start_time: [1741345682, 647481000]
+build_end_time: [1741345689, 262380000]
+inputs:
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/AddressedEnvelope.swift": [1741329909, 21227949]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/AsyncAwaitSupport.swift": [1741329909, 21293615]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/AsyncChannel/AsyncChannel.swift": [1741329909, 21404406]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/AsyncChannel/AsyncChannelHandler.swift"
+  : [1741329909, 21504321]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/AsyncChannel/AsyncChannelInboundStream.swift"
+  : [1741329909, 21574237]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/AsyncChannel/AsyncChannelOutboundWriter.swift"
+  : [1741329909, 21651653]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/AsyncSequences/NIOAsyncSequenceProducer.swift"
+  : [1741329909, 21790027]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/AsyncSequences/NIOAsyncSequenceProducerStrategies.swift"
+  : [1741329909, 21985233]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/AsyncSequences/NIOAsyncWriter.swift"
+  : [1741329909, 22110648]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/AsyncSequences/NIOThrowingAsyncSequenceProducer.swift"
+  : [1741329909, 22270105]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/BSDSocketAPI.swift": [1741329909, 22495686]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/ByteBuffer-aux.swift": [1741329909, 22591227]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/ByteBuffer-binaryEncodedLengthPrefix.swift"
+  : [1741329909, 22667309]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/ByteBuffer-conversions.swift": [1741329909, 22724934]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/ByteBuffer-core.swift": [1741329909, 22861558]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/ByteBuffer-hex.swift": [1741329909, 22939140]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/ByteBuffer-int.swift": [1741329909, 23026889]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/ByteBuffer-lengthPrefix.swift": [1741329909, 23098680]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/ByteBuffer-multi-int.swift": [1741329909, 23199554]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/ByteBuffer-quicBinaryEncodingStrategy.swift"
+  : [1741329909, 23285387]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/ByteBuffer-views.swift": [1741329909, 23388844]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/Channel.swift": [1741329909, 23580217]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/ChannelHandler.swift": [1741329909, 23673549]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/ChannelHandlers.swift": [1741329909, 23743965]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/ChannelInvoker.swift": [1741329909, 23805798]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/ChannelOption.swift": [1741329909, 23890464]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/ChannelPipeline.swift": [1741329909, 24038379]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/CircularBuffer.swift": [1741329909, 24268627]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/Codec.swift": [1741329909, 24468166]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/ConvenienceOptionSupport.swift": [1741329909, 24554040]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/DeadChannel.swift": [1741329909, 24807246]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/DispatchQueue+WithFuture.swift": [1741329909, 24857996]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/EventLoop+Deprecated.swift": [1741329909, 25345699]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/EventLoop+SerialExecutor.swift": [1741329909, 25409199]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/EventLoop.swift": [1741329909, 25529989]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/EventLoopFuture+AssumeIsolated.swift"
+  : [1741329909, 25681779]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/EventLoopFuture+Deprecated.swift": [1741329909, 25802778]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/EventLoopFuture+WithEventLoop.swift"
+  : [1741329909, 25961568]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/EventLoopFuture.swift": [1741329909, 26043984]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/FileDescriptor.swift": [1741329909, 26117150]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/FileHandle.swift": [1741329909, 26185649]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/FileRegion.swift": [1741329909, 26261065]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/GlobalSingletons.swift": [1741329909, 26360522]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/IO.swift": [1741329909, 26428313]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/IOData.swift": [1741329909, 26482063]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/IPProtocol.swift": [1741329909, 26554771]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/IntegerBitPacking.swift": [1741329909, 26612395]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/IntegerTypes.swift": [1741329909, 26662353]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/Interfaces.swift": [1741329909, 26747269]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/Linux.swift": [1741329909, 26815851]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/MarkedCircularBuffer.swift": [1741329909, 26879184]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/MulticastChannel.swift": [1741329909, 26969433]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/NIOAny.swift": [1741329909, 27193347]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/NIOCloseOnErrorHandler.swift": [1741329909, 27256513]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/NIOLoopBound.swift": [1741329909, 27332304]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/NIOScheduledCallback.swift": [1741329909, 27406929]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/NIOSendable.swift": [1741329909, 27458261]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/RecvByteBufferAllocator.swift": [1741329909, 27532844]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/SingleStepByteToMessageDecoder.swift"
+  : [1741329909, 27614176]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/SocketAddresses.swift": [1741329909, 27706176]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/SocketOptionProvider.swift": [1741329909, 27778967]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/SystemCallHelpers.swift": [1741329909, 27860674]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/TimeAmount+Duration.swift": [1741329909, 27911090]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/TypeAssistedChannelHandler.swift": [1741329909, 27968173]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/UniversalBootstrapSupport.swift": [1741329909, 28036006]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOCore/Utilities.swift": [1741329909, 28125088]

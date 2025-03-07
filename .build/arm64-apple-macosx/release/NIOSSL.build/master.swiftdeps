@@ -1,0 +1,43 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "6b45afa90c4ed53309cba57202097eee54fc4208064f9379ca739df98f68dfa8"
+build_start_time: [1741345698, 379994000]
+build_end_time: [1741345702, 630270000]
+inputs:
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/NIOSSL.build/DerivedSources/resource_bundle_accessor.swift"
+  : [1741345660, 361781878]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/AndroidCABundle.swift": [1741329922, 837256811]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/ByteBufferBIO.swift": [1741329922, 837326602]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/CustomPrivateKey.swift": [1741329922, 837404810]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/IdentityVerification.swift": [1741329922, 837561767]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/LinuxCABundle.swift": [1741329922, 837606225]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/NIOSSLClientHandler.swift": [1741329922, 837694766]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/NIOSSLHandler+Configuration.swift"
+  : [1741329922, 837748557]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/NIOSSLHandler.swift": [1741329922, 837879306]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/NIOSSLServerHandler.swift": [1741329922, 837993097]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/ObjectIdentifier.swift": [1741329922, 838082513]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/PosixPort.swift": [1741329922, 838158763]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/SSLCallbacks.swift": [1741329922, 838289053]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/SSLCertificate.swift": [1741329922, 838372803]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/SSLCertificateExtensions.swift": [1741329922, 838468469]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/SSLConnection.swift": [1741329922, 838547552]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/SSLContext.swift": [1741329922, 838650301]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/SSLErrors.swift": [1741329922, 838756633]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/SSLInit.swift": [1741329922, 838816091]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/SSLPKCS12Bundle.swift": [1741329922, 838888341]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/SSLPrivateKey.swift": [1741329922, 838963882]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/SSLPublicKey.swift": [1741329922, 839042214]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/SecurityFrameworkCertificateVerification.swift"
+  : [1741329922, 839123589]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/String+unsafeUninitializedCapacity.swift"
+  : [1741329922, 839190922]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/SubjectAlternativeName.swift": [1741329922, 839273671]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/SwiftCrypto/NIOSSLSecureBytes.swift"
+  : [1741329922, 839377795]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/SwiftCrypto/RNG.swift": [1741329922, 839514169]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/SwiftCrypto/SafeCompare.swift": [1741329922, 839607002]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/SwiftCrypto/Zeroization.swift": [1741329922, 839665877]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/TLSConfiguration.swift": [1741329922, 839788042]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/UniversalBootstrapSupport.swift"
+  : [1741329922, 839879667]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-ssl/Sources/NIOSSL/UnsafeKeyAndChainTarget.swift": [1741329922, 839958083]

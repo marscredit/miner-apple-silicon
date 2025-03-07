@@ -1,0 +1,69 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "2440d2d0306bc2d920bac64b93798eb7bb1c4702a90845f186c80fa9b066b340"
+build_start_time: [1741345706, 100897000]
+build_end_time: [1741345709, 990745000]
+inputs:
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Json/EthereumBlockObject.swift": [1741329924, 350453305]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Json/EthereumCall.swift": [1741329924, 350529930]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Json/EthereumData.swift": [1741329924, 350585929]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Json/EthereumLogObject.swift": [1741329924, 350633179]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Json/EthereumQuantity.swift": [1741329924, 350681053]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Json/EthereumQuantityTag.swift": [1741329924, 350725053]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Json/EthereumSyncStatusObject.swift": [1741329924, 350777303]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Json/EthereumTransactionObject.swift"
+  : [1741329924, 350839719]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Json/EthereumTransactionReceiptObject.swift"
+  : [1741329924, 350884260]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Json/EthereumValue.swift": [1741329924, 350955718]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Json/EthereumValueConvertible.swift": [1741329924, 351005760]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Json/RPCRequest.swift": [1741329924, 351055634]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Json/RPCResponse.swift": [1741329924, 351180342]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Json/Types+EthereumValueConvertible.swift"
+  : [1741329924, 351252549]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Providers/Web3Provider.swift": [1741329924, 351352674]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/RLP/RLPDecoder.swift": [1741329924, 351464173]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/RLP/RLPEncoder.swift": [1741329924, 351543214]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/RLP/RLPItem.swift": [1741329924, 351619547]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/RLP/RLPItemConvertible.swift": [1741329924, 351676505]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/RLP/Types+RLPItemConvertible.swift": [1741329924, 351728129]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/BigUInt+BytesConvertible.swift"
+  : [1741329924, 351805296]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/Bytes+HexString.swift": [1741329924, 351851753]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/Bytes+SecureRandom.swift": [1741329924, 351897878]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/Bytes+TrimLeadingZeros.swift"
+  : [1741329924, 351943503]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/Bytes+UInt.swift": [1741329924, 351988169]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/BytesConvertible.swift": [1741329924, 352034752]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/CharacterSet+Hex.swift": [1741329924, 352080794]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/Data+BytesConvertible.swift": [1741329924, 352127752]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/EthereumUtils.swift": [1741329924, 352175001]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/Exports+Web3.swift": [1741329924, 352223626]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/Int+ETH.swift": [1741329924, 352282000]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/Secp256k1+CTXCreator.swift": [1741329924, 352344750]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/String+BytesConvertible.swift"
+  : [1741329924, 352393333]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/String+Conversion.swift": [1741329924, 352445333]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/String+HexBytes.swift": [1741329924, 352494999]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/SynchronizedArray.swift": [1741329924, 352541374]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/SynchronizedDictionary.swift"
+  : [1741329924, 352587998]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/UInt+BytesRepresentable.swift"
+  : [1741329924, 352634873]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/UnsignedInteger+BytesConvertible.swift"
+  : [1741329924, 352682289]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Toolbox/UnsignedInteger+Shifting.swift"
+  : [1741329924, 352728831]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Transaction/EthereumAddress.swift": [1741329924, 352834746]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Transaction/EthereumPrivateKey.swift"
+  : [1741329924, 352941746]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Transaction/EthereumPublicKey.swift": [1741329924, 353013037]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Transaction/EthereumTransaction.swift"
+  : [1741329924, 353086495]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Web3/Web3.swift": [1741329924, 353192244]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/FoundationHTTP/Web3+HTTPInitializer.swift"
+  : [1741329924, 353289077]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/FoundationHTTP/Web3+WebSocketInitializer.swift"
+  : [1741329924, 353340118]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/FoundationHTTP/Web3HttpProvider.swift": [1741329924, 353427076]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/FoundationHTTP/Web3WebSocketProvider.swift"
+  : [1741329924, 353545575]

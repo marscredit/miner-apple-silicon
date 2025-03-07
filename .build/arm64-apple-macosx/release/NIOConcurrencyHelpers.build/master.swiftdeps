@@ -1,0 +1,11 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "74968d46239e991d7a47868b9def34f0161f98d0ecc2057921622c779e14f5a5"
+build_start_time: [1741345679, 928859000]
+build_end_time: [1741345680, 654450000]
+inputs:
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOConcurrencyHelpers/NIOAtomic.swift": [1741329909, 20394749]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOConcurrencyHelpers/NIOLock.swift": [1741329909, 20514623]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOConcurrencyHelpers/NIOLockedValueBox.swift"
+  : [1741329909, 20578830]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOConcurrencyHelpers/atomics.swift": [1741329909, 21004993]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOConcurrencyHelpers/lock.swift": [1741329909, 21135283]

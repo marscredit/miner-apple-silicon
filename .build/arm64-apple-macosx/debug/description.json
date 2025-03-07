@@ -17,6 +17,20 @@
         }
       ]
     },
+    "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit_MarsCredit.bundle/gunshipboldital.otf" : {
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Resources/gunshipboldital.otf"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit_MarsCredit.bundle/gunshipboldital.otf"
+        }
+      ]
+    },
     "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/swift-nio-ssl_NIOSSL.bundle/PrivacyInfo.xcprivacy" : {
       "inputs" : [
         {
@@ -5010,39 +5024,39 @@
       "inputs" : [
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/App.swift"
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/App.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/ContentView.swift"
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/EthereumClient.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/EthereumClient.swift"
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Extensions/Font+Custom.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/Extensions/Font+Custom.swift"
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/MiningService.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/MiningService.swift"
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ButtonStyles.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/Views/ButtonStyles.swift"
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/Views/ContentView.swift"
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/DerivedSources/resource_bundle_accessor.swift"
         },
         {
           "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/swift-version--58304C5D6DBC2206.txt"
         },
         {
-          "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Modules/CryptoSwift.swiftmodule"
+          "kind" : "virtual",
+          "name" : "<MarsCredit-arm64-apple-macosx15.0-debug.module-resources>"
         },
         {
           "kind" : "file",
@@ -5050,11 +5064,19 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Modules/Web3PromiseKit.swiftmodule"
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Modules/Web3ContractABI.swiftmodule"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Modules/Web3ContractABI.swiftmodule"
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Modules/PromiseKit.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Modules/CryptoSwift.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Modules/BigInt.swiftmodule"
         },
         {
           "kind" : "file",
@@ -5066,16 +5088,16 @@
       "moduleOutputPath" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Modules/MarsCredit.swiftmodule",
       "objects" : [
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/App.swift.o",
-        "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ContentView.swift.o",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/EthereumClient.swift.o",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/Font+Custom.swift.o",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/MiningService.swift.o",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ButtonStyles.swift.o",
-        "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ContentView.swift.o"
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ContentView.swift.o",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/resource_bundle_accessor.swift.o"
       ],
       "otherArguments" : [
         "-target",
-        "arm64-apple-macosx12.0",
+        "arm64-apple-macosx13.0",
         "-enable-batch-mode",
         "-index-store-path",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/index/store",
@@ -5160,7 +5182,6 @@
         "-color-diagnostics",
         "-swift-version",
         "5",
-        "-enable-bare-slash-regex",
         "-sdk",
         "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk",
         "-F",
@@ -5181,17 +5202,15 @@
         "-Xcc",
         "-fPIC",
         "-Xcc",
-        "-g"
+        "-g",
+        "-package-name",
+        "miner_apple_silicon"
       ],
       "outputFileMapPath" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/output-file-map.json",
       "outputs" : [
         {
           "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/App.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ContentView.swift.o"
         },
         {
           "kind" : "file",
@@ -5215,18 +5234,22 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/resource_bundle_accessor.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Modules/MarsCredit.swiftmodule"
         }
       ],
       "prepareForIndexing" : false,
       "sources" : [
-        "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/App.swift",
-        "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/ContentView.swift",
-        "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/EthereumClient.swift",
-        "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/Extensions/Font+Custom.swift",
-        "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/MiningService.swift",
-        "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/Views/ButtonStyles.swift",
-        "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/Views/ContentView.swift"
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/App.swift",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/EthereumClient.swift",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Extensions/Font+Custom.swift",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/MiningService.swift",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ButtonStyles.swift",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/DerivedSources/resource_bundle_accessor.swift"
       ],
       "tempsPath" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build",
       "wholeModuleOptimization" : false
@@ -20337,19 +20360,21 @@
       "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc",
       "-module-name",
       "MarsCredit",
+      "-package-name",
+      "miner_apple_silicon",
       "-incremental",
       "-c",
-      "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/App.swift",
-      "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/ContentView.swift",
-      "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/EthereumClient.swift",
-      "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/Extensions/Font+Custom.swift",
-      "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/MiningService.swift",
-      "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/Views/ButtonStyles.swift",
-      "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/Views/ContentView.swift",
+      "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/App.swift",
+      "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/EthereumClient.swift",
+      "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Extensions/Font+Custom.swift",
+      "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/MiningService.swift",
+      "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ButtonStyles.swift",
+      "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift",
+      "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/DerivedSources/resource_bundle_accessor.swift",
       "-I",
       "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Modules",
       "-target",
-      "arm64-apple-macosx12.0",
+      "arm64-apple-macosx13.0",
       "-enable-batch-mode",
       "-index-store-path",
       "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/index/store",
@@ -20434,7 +20459,6 @@
       "-color-diagnostics",
       "-swift-version",
       "5",
-      "-enable-bare-slash-regex",
       "-sdk",
       "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.2.sdk",
       "-F",
@@ -20456,6 +20480,8 @@
       "-fPIC",
       "-Xcc",
       "-g",
+      "-package-name",
+      "miner_apple_silicon",
       "-driver-use-frontend-path",
       "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"
     ],
@@ -25124,7 +25150,6 @@
 
     ],
     "MarsCredit" : [
-      "Web3PromiseKit",
       "PromiseKit",
       "Web3ContractABI",
       "Web3",
@@ -25164,8 +25189,8 @@
       "InternalCollectionsUtilities",
       "secp256k1",
       "libsecp256k1",
-      "BigInt",
-      "CryptoSwift"
+      "CryptoSwift",
+      "BigInt"
     ],
     "NIO" : [
       "NIOPosix",
@@ -27593,31 +27618,31 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/App.swift"
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/App.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/ContentView.swift"
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/EthereumClient.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/EthereumClient.swift"
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Extensions/Font+Custom.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/Extensions/Font+Custom.swift"
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/MiningService.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/MiningService.swift"
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ButtonStyles.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/Views/ButtonStyles.swift"
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift"
         },
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/src/MarsCredit/Sources/Views/ContentView.swift"
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/DerivedSources/resource_bundle_accessor.swift"
         }
       ],
       "outputFilePath" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/sources"
@@ -30655,10 +30680,6 @@
         },
         {
           "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ContentView.swift.o"
-        },
-        {
-          "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/EthereumClient.swift.o"
         },
         {
@@ -30668,6 +30689,10 @@
         {
           "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/MiningService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/resource_bundle_accessor.swift.o"
         },
         {
           "kind" : "file",
@@ -32196,22 +32221,6 @@
         {
           "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3ContractABI.build/SolidityWrappedValue.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3PromiseKit.build/ContractPromiseExtensions.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3PromiseKit.build/Exports+PromiseKit.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3PromiseKit.build/Promisable.swift.o"
-        },
-        {
-          "kind" : "file",
-          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Web3PromiseKit.build/Web3+PromiseKit.swift.o"
         },
         {
           "kind" : "file",

@@ -1,0 +1,4 @@
+module PromiseKit {
+    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/PromiseKit.build/PromiseKit-Swift.h"
+    requires objc
+}

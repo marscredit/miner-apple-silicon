@@ -1,0 +1,4 @@
+module CNIOExtrasZlib {
+    umbrella header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-extras/Sources/CNIOExtrasZlib/include/CNIOExtrasZlib.h"
+    export *
+}

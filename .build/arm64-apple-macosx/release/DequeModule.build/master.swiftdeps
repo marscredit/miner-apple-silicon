@@ -1,0 +1,28 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "d3440dc140612faa978c8989ac0c105db8781b0db7df3adeaa731b958c6cf238"
+build_start_time: [1741345662, 906598000]
+build_end_time: [1741345664, 6618000]
+inputs:
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/Deque+Codable.swift": [1741329923, 121366872]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/Deque+Collection.swift"
+  : [1741329923, 121446122]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/Deque+CustomReflectable.swift"
+  : [1741329923, 121499913]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/Deque+Descriptions.swift"
+  : [1741329923, 121552496]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/Deque+Equatable.swift": [1741329923, 121599287]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/Deque+ExpressibleByArrayLiteral.swift"
+  : [1741329923, 121643037]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/Deque+Extras.swift": [1741329923, 121733203]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/Deque+Hashable.swift": [1741329923, 121775995]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/Deque+Testing.swift": [1741329923, 121828744]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/Deque._Storage.swift": [1741329923, 121907827]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/Deque._UnsafeHandle.swift"
+  : [1741329923, 122000785]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/Deque.swift": [1741329923, 122114409]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/_DequeBuffer.swift": [1741329923, 122322282]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/_DequeBufferHeader.swift"
+  : [1741329923, 122369823]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/_DequeSlot.swift": [1741329923, 122423531]
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/_UnsafeWrappedBuffer.swift"
+  : [1741329923, 122511656]

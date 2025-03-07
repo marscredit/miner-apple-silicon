@@ -1,0 +1,4 @@
+module NIOFoundationCompat {
+    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/NIOFoundationCompat.build/NIOFoundationCompat-Swift.h"
+    requires objc
+}

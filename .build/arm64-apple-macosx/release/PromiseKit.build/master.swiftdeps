@@ -1,0 +1,22 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "4bbb57d6e0be03595dd1595a419c96f78b968922fb9b037ebed46f9dfe8f3e0a"
+build_start_time: [1741345661, 388816000]
+build_end_time: [1741345665, 583358000]
+inputs:
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Async.swift": [1741329909, 256220465]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Box.swift": [1741329909, 256272506]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Catchable.swift": [1741329909, 256366214]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Combine.swift": [1741329909, 256413880]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Configuration.swift": [1741329909, 256463296]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/CustomStringConvertible.swift": [1741329909, 256514128]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Error.swift": [1741329909, 256625794]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Guarantee.swift": [1741329909, 256690918]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/LogEvent.swift": [1741329909, 256792876]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Promise.swift": [1741329909, 256985749]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Resolver.swift": [1741329909, 257089123]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Thenable.swift": [1741329909, 257167289]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/after.swift": [1741329909, 257284038]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/firstly.swift": [1741329909, 257376162]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/hang.swift": [1741329909, 257551451]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/race.swift": [1741329909, 257693492]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/when.swift": [1741329909, 257829574]

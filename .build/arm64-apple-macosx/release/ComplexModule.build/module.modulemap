@@ -1,0 +1,4 @@
+module ComplexModule {
+    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/ComplexModule.build/ComplexModule-Swift.h"
+    requires objc
+}

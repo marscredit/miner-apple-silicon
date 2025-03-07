@@ -1,0 +1,14 @@
+version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
+options: "01e5c812c37b7a5225f3cab8dafaf249a09e41fd4e935679ad88ac5fd5c9f706"
+build_start_time: [1741346003, 57179000]
+build_end_time: [1741346004, 612985000]
+inputs:
+  ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/DerivedSources/resource_bundle_accessor.swift"
+  : [1741345660, 358884115]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/App.swift": [1741345901, 169539836]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/EthereumClient.swift": [1741345752, 887501725]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Extensions/Font+Custom.swift": [1741329875, 601164314]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/LogManager.swift": [1741345880, 136278987]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/MiningService.swift": [1741345930, 920901228]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ButtonStyles.swift": [1741330702, 789182541]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift": [1741345969, 409250543]

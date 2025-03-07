@@ -4979,11 +4979,19 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Models/LogType.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ButtonStyles.swift"
         },
         {
           "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/LogView.swift"
         },
         {
           "kind" : "file",
@@ -5031,8 +5039,10 @@
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/Font+Custom.swift.o",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/LogManager.swift.o",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/MiningService.swift.o",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/LogType.swift.o",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/ButtonStyles.swift.o",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/ContentView.swift.o",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/LogView.swift.o",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/resource_bundle_accessor.swift.o"
       ],
       "otherArguments" : [
@@ -5165,11 +5175,19 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/LogType.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/ButtonStyles.swift.o"
         },
         {
           "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/ContentView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/LogView.swift.o"
         },
         {
           "kind" : "file",
@@ -5187,8 +5205,10 @@
         "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Extensions/Font+Custom.swift",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/LogManager.swift",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/MiningService.swift",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Models/LogType.swift",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ButtonStyles.swift",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/LogView.swift",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/DerivedSources/resource_bundle_accessor.swift"
       ],
       "tempsPath" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build",
@@ -20055,8 +20075,10 @@
       "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Extensions/Font+Custom.swift",
       "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/LogManager.swift",
       "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/MiningService.swift",
+      "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Models/LogType.swift",
       "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ButtonStyles.swift",
       "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift",
+      "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/LogView.swift",
       "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/DerivedSources/resource_bundle_accessor.swift",
       "-I",
       "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/Modules",
@@ -27175,11 +27197,19 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Models/LogType.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ButtonStyles.swift"
         },
         {
           "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/LogView.swift"
         },
         {
           "kind" : "file",
@@ -30230,6 +30260,14 @@
         {
           "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/LogManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/LogType.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/LogView.swift.o"
         },
         {
           "kind" : "file",

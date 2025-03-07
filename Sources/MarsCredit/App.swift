@@ -4,8 +4,8 @@ import Foundation
 
 @main
 struct MarsCreditApp: App {
-    private let miningService = MiningService()
     @StateObject private var logManager = LogManager.shared
+    private var miningService = MiningService()
     
     init() {
         LogManager.shared.log("Starting Mars Credit Miner...", type: .info)
@@ -17,9 +17,9 @@ struct MarsCreditApp: App {
         let fileManager = FileManager.default
         let homeDir = fileManager.homeDirectoryForCurrentUser
         let marscreditDir = homeDir.appendingPathComponent(".marscredit")
-        let gethBinaryPath = marscreditDir.appendingPathComponent("marscredit")
+        let gethBinaryPath = marscreditDir.appendingPathComponent("geth-binary")
         
-        LogManager.shared.log("Setting up go-marscredit environment...", type: .info)
+        LogManager.shared.log("Setting up geth environment...", type: .info)
         
         // Create marscredit directory if it doesn't exist
         do {
@@ -90,7 +90,7 @@ struct MarsCreditApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView(miningService: miningService)
+            ContentView()
                 .frame(width: 800, height: 600)
                 .environmentObject(logManager)
         }

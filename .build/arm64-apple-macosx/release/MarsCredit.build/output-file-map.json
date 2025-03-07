@@ -29,6 +29,11 @@
     "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/MiningService~partial.swiftmodule",
     "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/MiningService.swiftdeps"
   },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Models/LogType.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/LogType.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/LogType~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/LogType.swiftdeps"
+  },
   "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ButtonStyles.swift": {
     "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/ButtonStyles.swift.o",
     "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/ButtonStyles~partial.swiftmodule",
@@ -38,6 +43,11 @@
     "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/ContentView.swift.o",
     "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/ContentView~partial.swiftmodule",
     "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/ContentView.swiftdeps"
+  },
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/LogView.swift": {
+    "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/LogView.swift.o",
+    "swiftmodule": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/LogView~partial.swiftmodule",
+    "swift-dependencies": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/LogView.swiftdeps"
   },
   "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/DerivedSources/resource_bundle_accessor.swift": {
     "object": "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/resource_bundle_accessor.swift.o",

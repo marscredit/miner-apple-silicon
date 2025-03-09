@@ -1,7 +1,10 @@
 /Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/App.swift
 /Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/EthereumClient.swift
 /Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Extensions/Font+Custom.swift
+/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/LogManager.swift
 /Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/MiningService.swift
+/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Models/LogType.swift
 /Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ButtonStyles.swift
 /Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift
+/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/LogView.swift
 /Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/DerivedSources/resource_bundle_accessor.swift

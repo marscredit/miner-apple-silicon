@@ -34,9 +34,12 @@ struct ContentView: View {
                         Circle()
                             .fill(miningService.networkStatus.isConnected ? Color.green : Color.red)
                             .frame(width: 8, height: 8)
-                        Text(miningService.networkStatus.isConnected ? "Connected" : "Disconnected")
+                        Text(miningService.isMining ? 
+                             (miningService.networkStatus.isConnected ? "Connected" : "Starting node...") : 
+                             (miningService.networkStatus.isConnected ? "Connected" : "Node not running"))
                             .font(.system(.body, design: .default))
-                            .foregroundColor(miningService.networkStatus.isConnected ? .green : .red)
+                            .foregroundColor(miningService.networkStatus.isConnected ? .green : 
+                                           (miningService.isMining ? .yellow : .red))
                     }
                     
                     if miningService.networkStatus.isConnected {
@@ -170,6 +173,8 @@ struct ContentView: View {
             .padding(.horizontal)
             .padding(.bottom, 32)
         }
+        .frame(width: 800, height: 600)
+        .background(Color.black)
         .sheet(isPresented: $showingMnemonicSheet) {
             ZStack {
                 Color.black.ignoresSafeArea()
@@ -212,8 +217,6 @@ struct ContentView: View {
                 moonAngle = 0
             }
         }
-        .frame(width: 800, height: 600)
-        .background(Color.black)
         .preferredColorScheme(.dark)
     }
 } 

@@ -1,16 +1,16 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "01e5c812c37b7a5225f3cab8dafaf249a09e41fd4e935679ad88ac5fd5c9f706"
-build_start_time: [1741361272, 600907000]
-build_end_time: [1741361273, 972204000]
+build_start_time: [1741405815, 5368000]
+build_end_time: [1741405817, 219578000]
 inputs:
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/DerivedSources/resource_bundle_accessor.swift"
   : [1741345660, 358884115]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/App.swift": [1741360843, 216571564]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/App.swift": [1741405478, 899717098]
   "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/EthereumClient.swift": [1741345752, 887501725]
   "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Extensions/Font+Custom.swift": [1741329875, 601164314]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/LogManager.swift": [1741345880, 136278987]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/MiningService.swift": [1741347891, 637225826]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Models/LogType.swift": [1741360927, 21547787]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/LogManager.swift": [1741405797, 635990337]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/MiningService.swift": [1741405712, 518918240]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Models/LogType.swift": [1741405770, 133870464]
   "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ButtonStyles.swift": [1741330702, 789182541]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift": [1741361262, 198073124]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift": [1741385191, 534291043]
   "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/LogView.swift": [1741360941, 186073703]

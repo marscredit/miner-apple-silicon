@@ -25,44 +25,86 @@ struct MarsCreditApp: App {
         do {
             try fileManager.createDirectory(at: marscreditDir, withIntermediateDirectories: true)
             LogManager.shared.log("Created marscredit directory at \(marscreditDir.path)", type: .success)
-        } catch {
-            LogManager.shared.log("Error creating directory: \(error.localizedDescription)", type: .error)
-        }
-        
-        // Get the path to the bundled geth binary
-        guard let bundledGethPath = Bundle.main.resourceURL?
-            .appendingPathComponent("deps")
-            .appendingPathComponent("go-marscredit")
-            .appendingPathComponent("build")
-            .appendingPathComponent("bin")
-            .appendingPathComponent("geth") else {
-            LogManager.shared.log("Error: Could not locate bundled geth binary", type: .error)
-            return
-        }
-        
-        // Copy the binary to the user's directory if it doesn't exist or needs updating
-        if !fileManager.fileExists(atPath: gethBinaryPath.path) {
-            do {
-                if fileManager.fileExists(atPath: gethBinaryPath.path) {
-                    try fileManager.removeItem(at: gethBinaryPath)
-                    LogManager.shared.log("Removed existing geth binary", type: .info)
+            
+            // If binary doesn't exist, we need to build it
+            if !fileManager.fileExists(atPath: gethBinaryPath.path) {
+                LogManager.shared.log("Building geth binary for Apple Silicon...", type: .info)
+                
+                // Create a temporary build directory
+                let buildDir = marscreditDir.appendingPathComponent("build")
+                try fileManager.createDirectory(at: buildDir, withIntermediateDirectories: true)
+                
+                // Write the go code for our minimal geth implementation
+                let gethSource = """
+                package main
+
+                import (
+                    "github.com/ethereum/go-ethereum/cmd/geth"
+                )
+
+                func main() {
+                    geth.Main()
                 }
-                try fileManager.copyItem(at: bundledGethPath, to: gethBinaryPath)
-                LogManager.shared.log("Copied geth binary to \(gethBinaryPath.path)", type: .success)
+                """
                 
-                // Make the binary executable
-                let process = Process()
-                process.executableURL = URL(fileURLWithPath: "/bin/chmod")
-                process.arguments = ["+x", gethBinaryPath.path]
-                try process.run()
-                process.waitUntilExit()
+                let goModSource = """
+                module marscredit
+
+                go 1.21
+
+                require github.com/ethereum/go-ethereum v1.13.14
+                """
                 
-                LogManager.shared.log("Successfully installed geth binary", type: .success)
-            } catch {
-                LogManager.shared.log("Error setting up geth binary: \(error.localizedDescription)", type: .error)
+                try gethSource.write(to: buildDir.appendingPathComponent("main.go"), atomically: true, encoding: .utf8)
+                try goModSource.write(to: buildDir.appendingPathComponent("go.mod"), atomically: true, encoding: .utf8)
+                
+                // Build the binary using go build
+                let buildProcess = Process()
+                buildProcess.currentDirectoryURL = buildDir
+                buildProcess.executableURL = URL(fileURLWithPath: "/usr/local/go/bin/go")
+                buildProcess.environment = ProcessInfo.processInfo.environment
+                buildProcess.environment?["GOARCH"] = "arm64"
+                buildProcess.environment?["GOOS"] = "darwin"
+                buildProcess.arguments = ["build", "-o", gethBinaryPath.path]
+                
+                let pipe = Pipe()
+                buildProcess.standardOutput = pipe
+                buildProcess.standardError = pipe
+                
+                do {
+                    try buildProcess.run()
+                    buildProcess.waitUntilExit()
+                    
+                    if buildProcess.terminationStatus == 0 {
+                        LogManager.shared.log("Successfully built geth binary", type: .success)
+                        
+                        // Set executable permissions
+                        try fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: gethBinaryPath.path)
+                        
+                        // Clean up build directory
+                        try fileManager.removeItem(at: buildDir)
+                    } else {
+                        let output = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+                        LogManager.shared.log("Failed to build geth binary: \(output)", type: .error)
+                    }
+                } catch {
+                    LogManager.shared.log("Error building geth binary: \(error.localizedDescription)", type: .error)
+                }
+            } else {
+                LogManager.shared.log("Using existing geth binary", type: .info)
             }
-        } else {
-            LogManager.shared.log("Using existing geth binary", type: .info)
+            
+            // Verify the binary is executable
+            if let attributes = try? fileManager.attributesOfItem(atPath: gethBinaryPath.path),
+               let permissions = attributes[.posixPermissions] as? NSNumber {
+                let isExecutable = (permissions.intValue & 0o111) != 0
+                if !isExecutable {
+                    LogManager.shared.log("Fixing geth binary permissions...", type: .info)
+                    try fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: gethBinaryPath.path)
+                }
+            }
+        } catch {
+            LogManager.shared.log("Error setting up geth environment: \(error.localizedDescription)", type: .error)
         }
     }
     

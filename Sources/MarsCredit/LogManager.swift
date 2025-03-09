@@ -18,22 +18,6 @@ class LogManager: ObservableObject {
         }
     }
     
-    enum LogType {
-        case info
-        case success
-        case error
-        case mining
-        
-        var color: Color {
-            switch self {
-            case .info: return .gray
-            case .success: return .green
-            case .error: return .red
-            case .mining: return Color(.lightGray)
-            }
-        }
-    }
-    
     private init() {}
     
     func log(_ message: String, type: LogType = .info) {

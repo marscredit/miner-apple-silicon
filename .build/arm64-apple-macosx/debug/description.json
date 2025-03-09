@@ -5036,7 +5036,15 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/LogManager.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/MiningService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Models/LogType.swift"
         },
         {
           "kind" : "file",
@@ -5045,6 +5053,10 @@
         {
           "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/LogView.swift"
         },
         {
           "kind" : "file",
@@ -5090,9 +5102,12 @@
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/App.swift.o",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/EthereumClient.swift.o",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/Font+Custom.swift.o",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/LogManager.swift.o",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/MiningService.swift.o",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/LogType.swift.o",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ButtonStyles.swift.o",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ContentView.swift.o",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/LogView.swift.o",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/resource_bundle_accessor.swift.o"
       ],
       "otherArguments" : [
@@ -5222,7 +5237,15 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/LogManager.swift.o"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/MiningService.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/LogType.swift.o"
         },
         {
           "kind" : "file",
@@ -5231,6 +5254,10 @@
         {
           "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/ContentView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/LogView.swift.o"
         },
         {
           "kind" : "file",
@@ -5246,9 +5273,12 @@
         "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/App.swift",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/EthereumClient.swift",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Extensions/Font+Custom.swift",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/LogManager.swift",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/MiningService.swift",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Models/LogType.swift",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ButtonStyles.swift",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift",
+        "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/LogView.swift",
         "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/DerivedSources/resource_bundle_accessor.swift"
       ],
       "tempsPath" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build",
@@ -20367,9 +20397,12 @@
       "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/App.swift",
       "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/EthereumClient.swift",
       "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Extensions/Font+Custom.swift",
+      "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/LogManager.swift",
       "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/MiningService.swift",
+      "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Models/LogType.swift",
       "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ButtonStyles.swift",
       "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift",
+      "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/LogView.swift",
       "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/DerivedSources/resource_bundle_accessor.swift",
       "-I",
       "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/Modules",
@@ -27630,7 +27663,15 @@
         },
         {
           "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/LogManager.swift"
+        },
+        {
+          "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/MiningService.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Models/LogType.swift"
         },
         {
           "kind" : "file",
@@ -27639,6 +27680,10 @@
         {
           "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/ContentView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Views/LogView.swift"
         },
         {
           "kind" : "file",
@@ -30685,6 +30730,18 @@
         {
           "kind" : "file",
           "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/Font+Custom.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/LogManager.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/LogType.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/MarsCredit.build/LogView.swift.o"
         },
         {
           "kind" : "file",

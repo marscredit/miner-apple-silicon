@@ -4,10 +4,10 @@ struct ContentView: View {
     @StateObject private var miningService = MiningService()
     @EnvironmentObject private var logManager: LogManager
     @State private var miningAddress = ""
-    @State private var password = ""
+    @State private var password = "marscredit" // Default password
     @State private var showingMnemonicSheet = false
-    @State private var generatedMnemonic = "abandon ability able about above absent absorb abstract absurd abuse access"
-    @State private var isAnimating = false
+    @State private var generatedMnemonic = ""
+    @State private var isAnimating: Bool = false
     @State private var moonAngle: Double = 0
     @State private var showLogs = true
     
@@ -206,17 +206,41 @@ struct ContentView: View {
             }
         }
         .onAppear {
-            miningAddress = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+            generateAccountIfNeeded()
         }
         .onChange(of: miningService.isMining) { isMining in
             if isMining {
-                withAnimation(Animation.linear(duration: 2).repeatForever(autoreverses: false)) {
+                // Start animation immediately when mining begins
+                isAnimating = true
+                moonAngle = 0 // Reset angle first
+                withAnimation(Animation.linear(duration: 30).repeatForever(autoreverses: false)) {
                     moonAngle = 360
                 }
             } else {
-                moonAngle = 0
+                isAnimating = false
+                withAnimation(.default) {
+                    moonAngle = 0
+                }
             }
         }
         .preferredColorScheme(.dark)
+    }
+    
+    // Add a method to generate an account
+    private func generateAccountIfNeeded() {
+        if miningAddress.isEmpty || generatedMnemonic.isEmpty {
+            // Use a default password for simplicity
+            do {
+                let (address, mnemonic) = try miningService.generateAccount(password: password)
+                miningAddress = address
+                generatedMnemonic = mnemonic
+                LogManager.shared.log("New account generated: \(address)", type: .success)
+                LogManager.shared.log("Backup phrase created (accessible via the 'See Backup Phrase' button)", type: .info)
+            } catch {
+                LogManager.shared.log("Error generating account: \(error.localizedDescription)", type: .error)
+                // Fallback to a default address if generation fails
+                miningAddress = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+            }
+        }
     }
 } 

@@ -5,10 +5,12 @@ import Foundation
 @main
 struct MarsCreditApp: App {
     @StateObject private var logManager = LogManager.shared
-    private var miningService = MiningService()
+    @StateObject private var miningService = MiningService()
     
     init() {
+        LogManager.shared.clear() // Clear any old logs
         LogManager.shared.log("Starting Mars Credit Miner...", type: .info)
+        MiningService.shared = miningService // Set the shared instance
         setupGethBinary()
         setupCustomFont()
     }

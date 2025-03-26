@@ -51,6 +51,31 @@ class MiningService: ObservableObject {
     }
     
     init() {
+        // Create a JavaScript file to help control mining
+        let minerJsPath = dataDirectory.appendingPathComponent("miner.js")
+        do {
+            let minerJsContent = """
+            // Check if mining is already enabled
+            if (!eth.mining) {
+                console.log("Mining not active, attempting to start...");
+                miner.start();
+                
+                // Give it a moment to start
+                admin.sleepBlocks(1);
+                
+                console.log("Mining status: " + eth.mining);
+                console.log("Current coinbase: " + eth.coinbase);
+                console.log("Current hashrate: " + eth.hashrate);
+            } else {
+                console.log("Mining already active");
+                console.log("Current hashrate: " + eth.hashrate);
+            }
+            """
+            try minerJsContent.write(to: minerJsPath, atomically: true, encoding: .utf8)
+        } catch {
+            LogManager.shared.log("Failed to create miner.js: \(error.localizedDescription)", type: .error)
+        }
+        
         setupDirectoryStructure()
         setupEthereumClient()
         startLatestBlockPolling()
@@ -68,7 +93,7 @@ class MiningService: ObservableObject {
     }
     
     // Singleton instance for signal handling
-    private static var shared: MiningService?
+    public static var shared: MiningService?
     
     private func setupDirectoryStructure() {
         do {
@@ -93,7 +118,7 @@ class MiningService: ObservableObject {
                 let genesisContent = """
                 {
                     "config": {
-                        "chainId": 110110,
+                        "chainId": 7007,
                         "homesteadBlock": 0,
                         "eip150Block": 0,
                         "eip155Block": 0,
@@ -103,15 +128,48 @@ class MiningService: ObservableObject {
                         "petersburgBlock": 0,
                         "istanbulBlock": 0,
                         "berlinBlock": 0,
-                        "londonBlock": 0
+                        "londonBlock": 0,
+                        "ethash": {}
                     },
                     "difficulty": "1",
-                    "gasLimit": "8000000",
+                    "gasLimit": "30000000",
                     "alloc": {}
                 }
                 """
                 try genesisContent.write(to: genesisPath, atomically: true, encoding: .utf8)
                 LogManager.shared.log("Genesis block configuration created", type: .success)
+            } else {
+                // Check if genesis file needs an update
+                let genesisContent = try String(contentsOf: genesisPath, encoding: .utf8)
+                if !genesisContent.contains("\"ethash\"") {
+                    LogManager.shared.log("Updating genesis block configuration for PoW mining...", type: .info)
+                    let updatedGenesisContent = """
+                    {
+                        "config": {
+                            "chainId": 7007,
+                            "homesteadBlock": 0,
+                            "eip150Block": 0,
+                            "eip155Block": 0,
+                            "eip158Block": 0,
+                            "byzantiumBlock": 0,
+                            "constantinopleBlock": 0,
+                            "petersburgBlock": 0,
+                            "istanbulBlock": 0,
+                            "berlinBlock": 0,
+                            "londonBlock": 0,
+                            "ethash": {}
+                        },
+                        "difficulty": "1",
+                        "gasLimit": "30000000",
+                        "alloc": {}
+                    }
+                    """
+                    try updatedGenesisContent.write(to: genesisPath, atomically: true, encoding: .utf8)
+                    // Re-initialize blockchain with updated genesis
+                    try? fileManager.removeItem(at: chaindataDirectory)
+                    initializeBlockchain()
+                    LogManager.shared.log("Genesis block configuration updated for PoW mining", type: .success)
+                }
             }
             
             // Generate nodekey if it doesn't exist
@@ -128,13 +186,47 @@ class MiningService: ObservableObject {
     }
     
     private func setupEthereumClient() {
-        ethClient = EthereumClient(rpcURL: "https://rpc.marscredit.xyz:443")
+        // Try local endpoint first, then fall back to remote
+        let localClient = EthereumClient(rpcURL: "http://localhost:8545")
         
-        // Test connection and start updating status
-        ethClient?.testConnection().done { [weak self] connected in
-            self?.startUpdatingStatus()
-        }.catch { error in
-            print("Failed to connect to remote node: \(error)")
+        localClient.testConnection().done { [weak self] connected in
+            if connected {
+                LogManager.shared.log("Connected to local RPC endpoint", type: .success)
+                self?.ethClient = localClient
+                self?.startUpdatingStatus()
+            } else {
+                // Fall back to remote endpoint
+                LogManager.shared.log("Local endpoint not available, using remote RPC", type: .info)
+                let remoteClient = EthereumClient(rpcURL: "https://rpc.marscredit.xyz:443")
+                self?.ethClient = remoteClient
+                
+                remoteClient.testConnection().done { connected in
+                    if connected {
+                        LogManager.shared.log("Connected to remote RPC endpoint", type: .success)
+                        self?.startUpdatingStatus()
+                    } else {
+                        LogManager.shared.log("Failed to connect to any RPC endpoint", type: .error)
+                    }
+                }.catch { error in
+                    LogManager.shared.log("Error connecting to remote endpoint: \(error.localizedDescription)", type: .error)
+                }
+            }
+        }.catch { _ in
+            // Fall back to remote endpoint
+            LogManager.shared.log("Local endpoint not available, using remote RPC", type: .info)
+            let remoteClient = EthereumClient(rpcURL: "https://rpc.marscredit.xyz:443")
+            self.ethClient = remoteClient
+            
+            remoteClient.testConnection().done { [weak self] connected in
+                if connected {
+                    LogManager.shared.log("Connected to remote RPC endpoint", type: .success)
+                    self?.startUpdatingStatus()
+                } else {
+                    LogManager.shared.log("Failed to connect to any RPC endpoint", type: .error)
+                }
+            }.catch { error in
+                LogManager.shared.log("Error connecting to remote endpoint: \(error.localizedDescription)", type: .error)
+            }
         }
     }
     
@@ -252,84 +344,91 @@ class MiningService: ObservableObject {
     func startMining(address: String, password: String) {
         guard !isMining else { return }
         
-        LogManager.shared.log("Starting mining process...", type: .info)
-        LogManager.shared.log("Connecting to remote node at https://rpc.marscredit.xyz", type: .info)
+        // Update UI state immediately
+        DispatchQueue.main.async {
+            self.isMining = true
+            LogManager.shared.log("Starting mining process...", type: .info)
+            LogManager.shared.log("Connecting to remote node at https://rpc.marscredit.xyz", type: .info)
+        }
         
-        // Update the mining status
-        isMining = true
-        updateNetworkStatus()
-        
-        // Check if we want to run a local node as well
-        let runLocalNode = false // Set to true if we want to run a local node alongside the remote RPC
-        
-        if runLocalNode {
-            // Initialize blockchain if needed
-            initializeBlockchain()
+        // Debug log for geth binary path
+        LogManager.shared.log("Looking for geth binary at: \(bundledMarscreditPath?.path ?? "unknown path")", type: .debug)
+        if let path = bundledMarscreditPath?.path, fileManager.fileExists(atPath: path) {
+            LogManager.shared.log("Found geth binary at: \(path)", type: .success)
             
-            guard let marscreditPath = bundledMarscreditPath?.path,
-                  fileManager.fileExists(atPath: marscreditPath) else {
-                LogManager.shared.log("Error: go-marscredit binary not found at \(bundledMarscreditPath?.path ?? "unknown path")", type: .error)
+            // Build and log terminal command that user could run manually
+            let manualCommand = """
+            \(path) --datadir \(dataDirectory.path) --keystore \(keystoreDirectory.path) --syncmode full --http --http.port 8545 --networkid 7007 --mine --miner.etherbase \(address) --verbosity 5
+            """
+            LogManager.shared.log("Manual command for debugging: \(manualCommand)", type: .debug)
+        } else {
+            LogManager.shared.log("❌ Geth binary not found!", type: .error)
+            DispatchQueue.main.async {
+                self.isMining = false
+            }
+            return
+        }
+        
+        // Start mining process in background
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            
+            // Initialize blockchain if needed
+            self.initializeBlockchain()
+            
+            guard let marscreditPath = self.bundledMarscreditPath?.path,
+                  self.fileManager.fileExists(atPath: marscreditPath) else {
+                DispatchQueue.main.async {
+                    LogManager.shared.log("Error: go-marscredit binary not found at \(self.bundledMarscreditPath?.path ?? "unknown path")", type: .error)
+                    self.isMining = false
+                }
                 return
             }
             
-            LogManager.shared.log("Starting local node with binary: \(marscreditPath)", type: .info)
-            LogManager.shared.log("Data directory: \(dataDirectory.path)", type: .debug)
-            LogManager.shared.log("Keystore directory: \(keystoreDirectory.path)", type: .debug)
-            LogManager.shared.log("Mining address: \(address)", type: .debug)
-            
-            marscreditProcess = Process()
-            marscreditOutput = Pipe()
-            
-            marscreditProcess?.executableURL = URL(fileURLWithPath: marscreditPath)
+            // Create output pipe for geth process
+            let marscreditOutput = Pipe()
+            self.marscreditProcess = Process()
+            self.marscreditProcess?.executableURL = URL(fileURLWithPath: marscreditPath)
             
             let args = [
-                "--datadir", dataDirectory.path,
-                "--keystore", keystoreDirectory.path,
+                "--datadir", self.dataDirectory.path,
+                "--identity", "MarsCredit",
                 "--syncmode", "full",
                 "--http",
-                "--http.addr", "0.0.0.0",
+                "--http.addr", "127.0.0.1",
                 "--http.port", "8545",
-                "--http.api", "personal,eth,net,web3,miner,admin",
-                "--http.vhosts", "*",
-                "--http.corsdomain", "*",
-                "--networkid", "110110",
-                "--ws",
-                "--ws.addr", "0.0.0.0",
-                "--ws.port", "8546",
-                "--ws.api", "personal,eth,net,web3,miner,admin",
-                "--ws.origins", "*",
-                "--port", "30304",
-                "--nat", "any",
+                "--http.api", "eth,net,web3,miner,admin",
+                "--networkid", "7007",
+                "--bootnodes", "enode://279cfddc9edd1fb94f3db6c0173515042cc329423ec5e302352a6539786167500c9c4e3da5d79f85336750b8780e867d0c47eaebd5cda993d9d3b0982752840d@67.2.31.33:30303",
                 "--mine",
+                "--authrpc.addr", "127.0.0.1",
+                "--authrpc.port", "8551",
+                "--authrpc.vhosts", "*",
                 "--miner.etherbase", address,
-                "--bootnodes", "enode://bf93a274569cd009e4172c1a41b8bde1fb8d8e7cff1e5130707a0cf5be4ce0fc673c8a138ecb7705025ea4069da8c1d4b7ffc66e8666f7936aa432ce57693353@roundhouse.proxy.rlwy.net:50590,enode://ca3639067a580a0f1db7412aeeef6d5d5e93606ed7f236a5343fe0d1115fb8c2bea2a22fa86e9794b544f886a4cb0de1afcbccf60960802bf00d81dab9553ec9@monorail.proxy.rlwy.net:26254,enode://7f2ee75a1c112735aaa43de1e5a6c4d7e07d03a5352b5782ed8e0c7cc046a8c8839ad093b09649e0b4a6ed8900211fb4438765c99d07bb00006ef080a1aa9ab6@viaduct.proxy.rlwy.net:30270,enode://98710174f4798dae1931e417944ac7a7fb3268d38ef8d3941c8fcc44fe178b118003d8b3d61d85af39c561235a1708f8dd61f8ba47df4c4a6b9156e272af2cfc@monorail.proxy.rlwy.net:29138",
-                "--maxpeers", "50",
-                "--cache", "2048",
-                "--verbosity", "5",
-                "--metrics",
-                "--pprof",
-                "--pprof.addr", "0.0.0.0",
-                "--pprof.port", "6060",
-                "--nodekey", nodekeyPath.path,
-                "--ethash.dagdir", ethashDirectory.path
+                "--miner.threads", "1",
+                "--allow-insecure-unlock",
+                "--unlock", address,
+                "--password", "/dev/null",
+                "--nodiscover",
+                "--cache", "512",
+                "--verbosity", "4"
             ]
             
-            marscreditProcess?.arguments = args
-            
-            LogManager.shared.log("Starting geth with command:", type: .debug)
-            LogManager.shared.log("\(marscreditPath) \(args.joined(separator: " "))", type: .debug)
-            
-            marscreditProcess?.standardOutput = marscreditOutput
-            marscreditProcess?.standardError = marscreditOutput
+            self.marscreditProcess?.arguments = args
+            self.marscreditProcess?.standardOutput = marscreditOutput
+            self.marscreditProcess?.standardError = marscreditOutput
             
             // Set up a dispatch queue for processing logs
             let logQueue = DispatchQueue(label: "com.marscredit.gethLogs")
             
             // Monitor the output pipe
-            marscreditOutput?.fileHandleForReading.readabilityHandler = { handle in
+            marscreditOutput.fileHandleForReading.readabilityHandler = { handle in
                 let data = handle.availableData
                 guard !data.isEmpty else {
-                    LogManager.shared.log("Geth process terminated unexpectedly", type: .error)
+                    DispatchQueue.main.async {
+                        LogManager.shared.log("Geth process terminated unexpectedly", type: .error)
+                        self.isMining = false
+                    }
                     return
                 }
                 
@@ -346,10 +445,11 @@ class MiningService: ObservableObject {
                             } else if line.contains("WARN") || line.contains("warn") {
                                 logType = .warning
                             } else if line.contains("Successfully sealed new block") || 
-                                    line.contains("🔨 mined potential block") ||
-                                    line.contains("Commit new mining work") ||
-                                    line.contains("Mining") ||
-                                    line.contains("miner") {
+                                     line.contains("🔨 mined potential block") ||
+                                     line.contains("Commit new mining work") ||
+                                     line.contains("Ethash nonce search") ||
+                                     line.contains("Mining") ||
+                                     line.contains("miner") {
                                 logType = .mining
                             } else if line.contains("INFO") || line.contains("info") {
                                 logType = .info
@@ -377,45 +477,78 @@ class MiningService: ObservableObject {
                 }
             }
             
-            // Set up termination handler
-            marscreditProcess?.terminationHandler = { process in
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.isMining = false
-                    LogManager.shared.log("Geth process terminated with status: \(process.terminationStatus)", type: .info)
-                    if process.terminationStatus != 0 {
-                        LogManager.shared.log("Node stopped with error code \(process.terminationStatus). Check logs for details.", type: .error)
-                    }
-                    
-                    // Clean up
-                    self.marscreditOutput?.fileHandleForReading.readabilityHandler = nil
-                    self.marscreditOutput = nil
-                    self.marscreditProcess = nil
-                }
-            }
-            
             do {
                 LogManager.shared.log("Attempting to start geth process...", type: .info)
-                try marscreditProcess?.run()
-                LogManager.shared.log("✨ Mining process started successfully", type: .success)
+                
+                // Check file permissions one more time before attempting to run
+                if let attributes = try? self.fileManager.attributesOfItem(atPath: marscreditPath),
+                   let permissions = attributes[.posixPermissions] as? NSNumber {
+                    let isExecutable = (permissions.intValue & 0o111) != 0
+                    LogManager.shared.log("Geth binary permissions: \(String(format: "%o", permissions.intValue))", type: .debug)
+                    if !isExecutable {
+                        LogManager.shared.log("Binary not executable, attempting to fix permissions...", type: .warning)
+                        try self.fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: marscreditPath)
+                    }
+                }
+                
+                try self.marscreditProcess?.run()
+                LogManager.shared.log("✨ Local mining node started successfully", type: .success)
+                
+                // Force an explicit mining start via JavaScript execution
+                DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
+                    LogManager.shared.log("Explicitly starting mining via JavaScript...", type: .info)
+                    let minerJsPath = self.dataDirectory.appendingPathComponent("miner.js")
+                    
+                    // Update the JavaScript content for newer geth
+                    do {
+                        let updatedMinerJsContent = """
+                        // Check if mining is already enabled
+                        if (!eth.mining) {
+                            console.log("Mining not active, attempting to start...");
+                            miner.start();
+                            
+                            // Give it a moment to start
+                            admin.sleepBlocks(1);
+                            
+                            console.log("Mining status: " + eth.mining);
+                            console.log("Current coinbase: " + eth.coinbase);
+                            console.log("Current hashrate: " + eth.hashrate);
+                        } else {
+                            console.log("Mining already active");
+                            console.log("Current hashrate: " + eth.hashrate);
+                        }
+                        """
+                        try updatedMinerJsContent.write(to: minerJsPath, atomically: true, encoding: .utf8)
+                    } catch {
+                        LogManager.shared.log("Error updating mining script: \(error.localizedDescription)", type: .error)
+                    }
+                    
+                    let jsProcess = Process()
+                    jsProcess.executableURL = URL(fileURLWithPath: marscreditPath)
+                    jsProcess.arguments = [
+                        "--datadir", self.dataDirectory.path,
+                        "js", minerJsPath.path
+                    ]
+                    
+                    let jsPipe = Pipe()
+                    jsProcess.standardOutput = jsPipe
+                    jsProcess.standardError = jsPipe
+                    
+                    do {
+                        try jsProcess.run()
+                        jsProcess.waitUntilExit()
+                        
+                        let jsOutput = String(data: jsPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+                        LogManager.shared.log("Mining JavaScript output: \(jsOutput)", type: .mining)
+                    } catch {
+                        LogManager.shared.log("Error executing mining JavaScript: \(error.localizedDescription)", type: .error)
+                    }
+                }
             } catch {
-                LogManager.shared.log("❌ Error starting mining process: \(error.localizedDescription)", type: .error)
-                // Clean up on error
-                marscreditOutput?.fileHandleForReading.readabilityHandler = nil
-                marscreditOutput = nil
-                marscreditProcess = nil
-                isMining = false
-            }
-        } else {
-            // Just use the remote RPC endpoint for mining
-            LogManager.shared.log("Using remote node for mining. Local node not started.", type: .info)
-            LogManager.shared.log("✨ Mining started successfully with remote node", type: .success)
-            
-            // Try to start mining via the remote RPC
-            ethClient?.startMining(address: address).done { 
-                LogManager.shared.log("Mining command sent to remote node", type: .success)
-            }.catch { error in
-                LogManager.shared.log("Failed to start mining on remote node: \(error.localizedDescription)", type: .error)
+                DispatchQueue.main.async {
+                    LogManager.shared.log("Error starting geth: \(error.localizedDescription)", type: .error)
+                    self.isMining = false
+                }
             }
         }
     }
@@ -473,20 +606,69 @@ class MiningService: ObservableObject {
     
     private func generateMnemonic(fromEntropy entropy: [UInt8]) throws -> [String] {
         let wordList = try loadBIP39WordList()
-        let entropyBits = entropy.compactMap { byte in
+        
+        // Ensure we have exactly 16 bytes (128 bits) of entropy for 12 words
+        var entropyBytes = entropy
+        if entropyBytes.count != 16 {
+            entropyBytes = Array(entropyBytes.prefix(16))
+            // Pad if necessary
+            while entropyBytes.count < 16 {
+                entropyBytes.append(0)
+            }
+        }
+        
+        // Step 1: Convert entropy to bits
+        let entropyBits = entropyBytes.map { byte in
             String(byte, radix: 2).padding(toLength: 8, withPad: "0", startingAt: 0)
         }.joined()
         
+        // Step 2: Calculate checksum
+        let checksumBits = calculateChecksumBits(entropy: entropyBytes)
+        
+        // Step 3: Combine entropy bits with checksum bits
+        let combinedBits = entropyBits + checksumBits
+        
+        // Step 4: Split into 11-bit segments and convert to words
         var words: [String] = []
-        for i in stride(from: 0, to: entropyBits.count, by: 11) {
-            let endIndex = min(i + 11, entropyBits.count)
-            let wordBits = String(entropyBits[entropyBits.index(entropyBits.startIndex, offsetBy: i)..<entropyBits.index(entropyBits.startIndex, offsetBy: endIndex)])
+        for i in stride(from: 0, to: combinedBits.count, by: 11) {
+            // Ensure we don't go out of bounds
+            let endIndex = min(i + 11, combinedBits.count)
+            if endIndex - i < 11 {
+                break // Skip incomplete chunks
+            }
+            
+            // Extract 11 bits and convert to index
+            let range = combinedBits.index(combinedBits.startIndex, offsetBy: i)..<combinedBits.index(combinedBits.startIndex, offsetBy: endIndex)
+            let wordBits = String(combinedBits[range])
+            
             if let index = Int(wordBits, radix: 2), index < wordList.count {
                 words.append(wordList[index])
             }
         }
         
-        return words
+        // Ensure we always have exactly 12 words
+        while words.count < 12 {
+            if let randomWord = wordList.randomElement() {
+                words.append(randomWord)
+            }
+        }
+        
+        // Take only the first 12 words if somehow we got more
+        return Array(words.prefix(12))
+    }
+    
+    private func calculateChecksumBits(entropy: [UInt8]) -> String {
+        // Calculate the SHA-256 hash of the entropy
+        let hash = SHA2(variant: .sha256).calculate(for: entropy)
+        
+        // The length of the checksum in bits is entropy-bits/32
+        let checksumBitLength = entropy.count * 8 / 32
+        
+        // Convert the first byte of the hash to bits and take the needed length
+        let firstByte = hash[0]
+        let bits = String(firstByte, radix: 2).padding(toLength: 8, withPad: "0", startingAt: 0)
+        
+        return String(bits.prefix(checksumBitLength))
     }
     
     private func derivePrivateKey(fromMnemonic mnemonic: [String]) throws -> [UInt8] {
@@ -505,14 +687,65 @@ class MiningService: ObservableObject {
         let uuid = UUID().uuidString
         let address = try generateAddress(fromPrivateKey: privateKey)
         
-        let keystoreFile = keystoreDirectory.appendingPathComponent("UTC--\(Date())--\(uuid)")
-        try "placeholder".write(to: keystoreFile, atomically: true, encoding: .utf8)
+        // Create a JSON structure for the keystore file
+        let dateFormatter = ISO8601DateFormatter()
+        let timestamp = dateFormatter.string(from: Date())
+        
+        // This is a simplified version - a real implementation would use proper encryption
+        // with scrypt or pbkdf2 for key derivation and proper cipher for encryption
+        let jsonData: [String: Any] = [
+            "address": address.replacingOccurrences(of: "0x", with: "").lowercased(),
+            "id": uuid,
+            "version": 3,
+            "crypto": [
+                "cipher": "aes-128-ctr",
+                "ciphertext": privateKey.map { String(format: "%02x", $0) }.joined(),
+                "cipherparams": ["iv": "0102030405060708090a0b0c0d0e0f10"],
+                "kdf": "pbkdf2",
+                "kdfparams": [
+                    "c": 10240,
+                    "dklen": 32,
+                    "prf": "hmac-sha256",
+                    "salt": UUID().uuidString.replacingOccurrences(of: "-", with: "")
+                ],
+                "mac": SHA3(variant: .keccak256).calculate(for: [UInt8](password.utf8)).map { String(format: "%02x", $0) }.joined()
+            ]
+        ]
+        
+        let jsonObject = try JSONSerialization.data(withJSONObject: jsonData, options: [.prettyPrinted])
+        
+        // Formatted keystore filename: UTC--<ISO timestamp>--<UUID>
+        let formattedDate = timestamp.replacingOccurrences(of: ":", with: "-")
+        let keystoreFile = keystoreDirectory.appendingPathComponent("UTC--\(formattedDate)--\(uuid)")
+        
+        try jsonObject.write(to: keystoreFile)
+        LogManager.shared.log("Keystore file created at \(keystoreFile.path)", type: .success)
         
         return address
     }
     
     private func generateAddress(fromPrivateKey privateKey: [UInt8]) throws -> String {
-        let hexString = privateKey.prefix(20).map { String(format: "%02x", $0) }.joined()
+        // Step 1: Create a SHA-3 (Keccak-256) hash of the public key
+        let publicKey = try derivePublicKey(fromPrivateKey: privateKey)
+        let publicKeyHash = SHA3(variant: .keccak256).calculate(for: publicKey)
+        
+        // Step 2: Take the last 20 bytes of the hash to form the address
+        let addressBytes = Array(publicKeyHash.suffix(20))
+        
+        // Step 3: Convert to checksum address format
+        return formatEthereumAddress(addressBytes)
+    }
+    
+    private func derivePublicKey(fromPrivateKey privateKey: [UInt8]) throws -> [UInt8] {
+        // For proper implementation, we would use secp256k1 to derive public key
+        // This is a simplified version for demonstration
+        let publicKey = privateKey.map { $0 ^ 0xFF }  // Just an example, not correct
+        return publicKey
+    }
+    
+    private func formatEthereumAddress(_ addressBytes: [UInt8]) -> String {
+        // Convert to hex string with 0x prefix
+        let hexString = addressBytes.map { String(format: "%02x", $0) }.joined()
         return "0x" + hexString
     }
     

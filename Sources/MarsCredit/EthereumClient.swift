@@ -5,6 +5,16 @@ import BigInt
 import PromiseKit
 import SwiftUI
 
+// Add extension for String to handle hex prefixes
+extension String {
+    func stripHexPrefix() -> String {
+        if hasPrefix("0x") {
+            return String(dropFirst(2))
+        }
+        return self
+    }
+}
+
 class EthereumClient {
     private let fileManager = FileManager.default
     private let homeDirectory = FileManager.default.homeDirectoryForCurrentUser
@@ -77,25 +87,36 @@ class EthereumClient {
                 switch response.status {
                 case .success(let hashRate):
                     print("Raw hashrate response: \(hashRate)")
-                    // Try to handle both string and numeric formats
-                    if let hexString = hashRate.ethereumValue().string {
+                    // Check if it's directly an EthereumQuantity
+                    if let quantity = hashRate as? EthereumQuantity {
+                        print("Hashrate is an EthereumQuantity")
+                        let bigUIntValue = quantity.quantity
+                        print("Hashrate quantity: \(bigUIntValue)")
+                        let value = BigInt(bigUIntValue)
+                        print("Parsed hashrate: \(value)")
+                        seal.fulfill(value)
+                    } 
+                    // Fallback to string parsing
+                    else if let hexString = hashRate.ethereumValue().string {
                         print("Hashrate hex string: \(hexString)")
-                        if let value = BigInt(hexString, radix: 16) {
+                        let cleanHex = hexString.stripHexPrefix()
+                        if let value = BigInt(cleanHex, radix: 16) {
+                            print("Parsed hashrate from hex: \(value)")
                             seal.fulfill(value)
                         } else if let value = BigInt(hexString, radix: 10) {
+                            print("Parsed hashrate from decimal: \(value)")
                             seal.fulfill(value)
                         } else {
-                            seal.fulfill(BigInt(0)) // Assume zero hashrate if parsing fails
+                            print("Could not parse hashrate string")
+                            seal.fulfill(BigInt(0))
                         }
-                    } else if let numValue = hashRate as? Int {
-                        seal.fulfill(BigInt(numValue))
                     } else {
-                        print("Unable to parse hashrate, defaulting to 0")
+                        print("Unknown hashrate format: \(type(of: hashRate))")
                         seal.fulfill(BigInt(0))
                     }
                 case .failure(let error):
                     print("Hashrate request failed: \(error)")
-                    seal.fulfill(BigInt(0)) // Return 0 instead of failing
+                    seal.fulfill(BigInt(0))
                 }
             }
         }
@@ -106,52 +127,66 @@ class EthereumClient {
             web3.eth.syncing { response in
                 switch response.status {
                 case .success(let result):
-                    print("Raw sync status response: \(result)")
+                    print("Raw sync status response: \(result), type: \(type(of: result))")
                     
+                    // Specific handling for EthereumSyncStatusObject 
                     if let syncStatus = result as? EthereumSyncStatusObject {
-                        print("Sync status object: \(syncStatus)")
+                        print("Sync status is an EthereumSyncStatusObject")
                         
                         var currentBlock = BigInt(0)
-                        if let currentBlockStr = syncStatus.currentBlock?.ethereumValue().string {
-                            print("Current block string: \(currentBlockStr)")
-                            if let value = BigInt(currentBlockStr, radix: 16) {
-                                currentBlock = value
-                            } else if let value = BigInt(currentBlockStr, radix: 10) {
-                                currentBlock = value
-                            }
-                        }
-                        
                         var highestBlock = BigInt(1) // Prevent division by zero
-                        if let highestBlockStr = syncStatus.highestBlock?.ethereumValue().string {
+                        
+                        // Handle current block
+                        if let currentBlockQuantity = syncStatus.currentBlock {
+                            let bigUIntValue = currentBlockQuantity.quantity
+                            print("Current block from quantity: \(bigUIntValue)")
+                            currentBlock = BigInt(bigUIntValue)
+                        } else if let currentBlockStr = syncStatus.currentBlock?.ethereumValue().string {
+                            print("Current block string: \(currentBlockStr)")
+                            let cleanHex = currentBlockStr.stripHexPrefix()
+                            if let value = BigInt(cleanHex, radix: 16) {
+                                currentBlock = value
+                            }
+                        }
+                        
+                        // Handle highest block
+                        if let highestBlockQuantity = syncStatus.highestBlock {
+                            let bigUIntValue = highestBlockQuantity.quantity
+                            print("Highest block from quantity: \(bigUIntValue)")
+                            highestBlock = BigInt(bigUIntValue)
+                        } else if let highestBlockStr = syncStatus.highestBlock?.ethereumValue().string {
                             print("Highest block string: \(highestBlockStr)")
-                            if let value = BigInt(highestBlockStr, radix: 16) {
-                                highestBlock = value
-                            } else if let value = BigInt(highestBlockStr, radix: 10) {
+                            let cleanHex = highestBlockStr.stripHexPrefix()
+                            if let value = BigInt(cleanHex, radix: 16) {
                                 highestBlock = value
                             }
                         }
                         
-                        let progress: Double = highestBlock > 0 ? Double(currentBlock) / Double(highestBlock) : 0.0
-                        print("Calculated sync progress: \(progress)")
+                        // Calculate progress
+                        let progress: Double
+                        if highestBlock > 0 {
+                            progress = Double(currentBlock) / Double(highestBlock)
+                        } else {
+                            progress = 0.0
+                        }
+                        
+                        print("Calculated sync progress: \(progress) (\(currentBlock)/\(highestBlock))")
                         seal.fulfill((currentBlock: currentBlock, progress: progress))
-                    } else if let boolValue = result as? Bool, boolValue == false {
-                        // Not syncing, we're up to date
-                        print("Node is synced (false returned)")
+                    } 
+                    // If we got here, assume we're actually in sync, so try to get block number
+                    else {
+                        print("Got non-object sync status: \(result) - assuming synced")
                         self.getBlockNumber().done { blockNumber in
+                            print("Current block number: \(blockNumber)")
                             seal.fulfill((currentBlock: blockNumber, progress: 1.0))
-                        }.catch { _ in
-                            // Even if getting block number fails, return sensible defaults
+                        }.catch { error in
+                            print("Failed to get block number after sync check: \(error)")
                             seal.fulfill((currentBlock: BigInt(0), progress: 1.0))
                         }
-                    } else {
-                        // Unknown response format, assume synced
-                        print("Unknown sync status format: \(type(of: result)), assuming synced")
-                        seal.fulfill((currentBlock: BigInt(0), progress: 1.0))
                     }
                     
                 case .failure(let error):
                     print("Sync status request failed: \(error)")
-                    // Even if request fails, return sensible defaults
                     seal.fulfill((currentBlock: BigInt(0), progress: 0.0))
                 }
             }
@@ -163,26 +198,39 @@ class EthereumClient {
             web3.eth.blockNumber { response in
                 switch response.status {
                 case .success(let block):
-                    print("Raw block number response: \(block)")
-                    // Try to handle both string and numeric formats
-                    if let hexString = block.ethereumValue().string {
+                    print("Raw block number response: \(block), type: \(type(of: block))")
+                    
+                    // Handle EthereumQuantity directly
+                    if let quantity = block as? EthereumQuantity {
+                        print("Block number is an EthereumQuantity")
+                        let bigUIntValue = quantity.quantity
+                        print("Block number quantity: \(bigUIntValue)")
+                        let value = BigInt(bigUIntValue)
+                        print("Parsed block number: \(value)")
+                        seal.fulfill(value)
+                    } 
+                    // Fallback to string parsing
+                    else if let hexString = block.ethereumValue().string {
                         print("Block number hex string: \(hexString)")
-                        if let value = BigInt(hexString, radix: 16) {
+                        let cleanHex = hexString.stripHexPrefix()
+                        if let value = BigInt(cleanHex, radix: 16) {
+                            print("Parsed block number from hex: \(value)")
                             seal.fulfill(value)
                         } else if let value = BigInt(hexString, radix: 10) {
+                            print("Parsed block number from decimal: \(value)")
                             seal.fulfill(value)
                         } else {
-                            seal.fulfill(BigInt(0)) // Assume block 0 if parsing fails
+                            print("Could not parse block number string")
+                            seal.fulfill(BigInt(0))
                         }
-                    } else if let numValue = block as? Int {
-                        seal.fulfill(BigInt(numValue))
                     } else {
-                        print("Unable to parse block number, defaulting to 0")
+                        print("Unknown block number format: \(type(of: block))")
                         seal.fulfill(BigInt(0))
                     }
+                    
                 case .failure(let error):
                     print("Block number request failed: \(error)")
-                    seal.fulfill(BigInt(0)) // Return 0 instead of failing
+                    seal.fulfill(BigInt(0))
                 }
             }
         }
@@ -197,15 +245,43 @@ class EthereumClient {
             web3.net.peerCount { response in
                 switch response.status {
                 case .success(let peerCount):
-                    if let value = peerCount.ethereumValue().string.flatMap({ BigInt($0, radix: 16) }) {
+                    print("Raw peer count response: \(peerCount), type: \(type(of: peerCount))")
+                    
+                    // Handle when peerCount is directly an EthereumQuantity
+                    if let quantity = peerCount as? EthereumQuantity {
+                        print("Peer count is an EthereumQuantity")
+                        let bigUIntValue = quantity.quantity
+                        print("Peer count quantity: \(bigUIntValue)")
+                        let value = BigInt(bigUIntValue)
+                        print("Parsed peer count: \(value)")
                         self.lastKnownPeerCount = value
                         seal.fulfill(value)
-                    } else {
-                        seal.reject(NSError(domain: "EthereumClient", code: -2, userInfo: [NSLocalizedDescriptionKey: "Failed to parse peer count"]))
                     }
+                    
+                    // Fallback to string parsing
+                    else if let peerCountStr = peerCount.ethereumValue().string {
+                        print("Peer count string: \(peerCountStr)")
+                        let cleanHex = peerCountStr.stripHexPrefix()
+                        if let value = BigInt(cleanHex, radix: 16) {
+                            print("Parsed peer count from hex: \(value)")
+                            self.lastKnownPeerCount = value
+                            seal.fulfill(value)
+                        } else if let value = BigInt(peerCountStr, radix: 10) {
+                            print("Parsed peer count from decimal: \(value)")
+                            self.lastKnownPeerCount = value
+                            seal.fulfill(value)
+                        } else {
+                            print("Could not parse peer count string")
+                            seal.fulfill(BigInt(0))
+                        }
+                    } else {
+                        print("Unknown peer count format, defaulting to 0")
+                        seal.fulfill(BigInt(0))
+                    }
+                    
                 case .failure(let error):
-                    print("Failed to get peer count: \(error)")
-                    seal.reject(error)
+                    print("Peer count request failed: \(error)")
+                    seal.fulfill(BigInt(0))
                 }
             }
         }
@@ -218,27 +294,41 @@ class EthereumClient {
                 web3.eth.getBalance(address: ethereumAddress, block: .latest) { response in
                     switch response.status {
                     case .success(let balance):
-                        print("Raw balance response: \(balance)")
+                        print("Raw balance response: \(balance), type: \(type(of: balance))")
                         
+                        // Handle when balance is directly an EthereumQuantity
+                        if let quantity = balance as? EthereumQuantity {
+                            print("Balance is an EthereumQuantity")
+                            let bigUIntValue = quantity.quantity
+                            print("Balance quantity: \(bigUIntValue)")
+                            let value = BigInt(bigUIntValue)
+                            print("Parsed balance: \(value) wei")
+                            self.lastKnownBalance = value
+                            seal.fulfill(value)
+                            return
+                        }
+                        
+                        // Fallback to ethereumValue() string
                         if let balanceStr = balance.ethereumValue().string {
                             print("Balance string: \(balanceStr)")
-                            if let value = BigInt(balanceStr, radix: 16) {
+                            let cleanHex = balanceStr.stripHexPrefix()
+                            if let value = BigInt(cleanHex, radix: 16) {
+                                print("Parsed balance from hex: \(value) wei")
                                 self.lastKnownBalance = value
                                 seal.fulfill(value)
                             } else if let value = BigInt(balanceStr, radix: 10) {
+                                print("Parsed balance from decimal: \(value) wei")
                                 self.lastKnownBalance = value
                                 seal.fulfill(value)
                             } else {
-                                print("Unable to parse balance, defaulting to 0")
+                                print("Could not parse balance string")
                                 seal.fulfill(BigInt(0))
                             }
-                        } else if let numValue = balance as? Int {
-                            self.lastKnownBalance = BigInt(numValue)
-                            seal.fulfill(BigInt(numValue))
                         } else {
                             print("Unknown balance format, defaulting to 0")
                             seal.fulfill(BigInt(0))
                         }
+                        
                     case .failure(let error):
                         print("Balance request failed: \(error)")
                         seal.fulfill(BigInt(0))

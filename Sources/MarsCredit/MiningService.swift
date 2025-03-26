@@ -128,13 +128,13 @@ class MiningService: ObservableObject {
     }
     
     private func setupEthereumClient() {
-        ethClient = EthereumClient(rpcURL: "http://localhost:8545")
+        ethClient = EthereumClient(rpcURL: "https://rpc.marscredit.xyz:443")
         
         // Test connection and start updating status
         ethClient?.testConnection().done { [weak self] connected in
             self?.startUpdatingStatus()
         }.catch { error in
-            print("Failed to connect to local node: \(error)")
+            print("Failed to connect to remote node: \(error)")
         }
     }
     
@@ -253,165 +253,196 @@ class MiningService: ObservableObject {
         guard !isMining else { return }
         
         LogManager.shared.log("Starting mining process...", type: .info)
+        LogManager.shared.log("Connecting to remote node at https://rpc.marscredit.xyz", type: .info)
         
-        // Initialize blockchain if needed
-        initializeBlockchain()
+        // Update the mining status
+        isMining = true
+        updateNetworkStatus()
         
-        guard let marscreditPath = bundledMarscreditPath?.path,
-              fileManager.fileExists(atPath: marscreditPath) else {
-            LogManager.shared.log("Error: go-marscredit binary not found at \(bundledMarscreditPath?.path ?? "unknown path")", type: .error)
-            return
-        }
+        // Check if we want to run a local node as well
+        let runLocalNode = false // Set to true if we want to run a local node alongside the remote RPC
         
-        LogManager.shared.log("Starting mining process with binary: \(marscreditPath)", type: .info)
-        LogManager.shared.log("Data directory: \(dataDirectory.path)", type: .debug)
-        LogManager.shared.log("Keystore directory: \(keystoreDirectory.path)", type: .debug)
-        LogManager.shared.log("Mining address: \(address)", type: .debug)
-        
-        marscreditProcess = Process()
-        marscreditOutput = Pipe()
-        
-        marscreditProcess?.executableURL = URL(fileURLWithPath: marscreditPath)
-        
-        let args = [
-            "--datadir", dataDirectory.path,
-            "--keystore", keystoreDirectory.path,
-            "--syncmode", "full",
-            "--http",
-            "--http.addr", "0.0.0.0",
-            "--http.port", "8545",
-            "--http.api", "personal,eth,net,web3,miner,admin",
-            "--http.vhosts", "*",
-            "--http.corsdomain", "*",
-            "--networkid", "110110",
-            "--ws",
-            "--ws.addr", "0.0.0.0",
-            "--ws.port", "8546",
-            "--ws.api", "personal,eth,net,web3,miner,admin",
-            "--ws.origins", "*",
-            "--port", "30304",
-            "--nat", "any",
-            "--mine",
-            "--miner.etherbase", address,
-            "--bootnodes", "enode://bf93a274569cd009e4172c1a41b8bde1fb8d8e7cff1e5130707a0cf5be4ce0fc673c8a138ecb7705025ea4069da8c1d4b7ffc66e8666f7936aa432ce57693353@roundhouse.proxy.rlwy.net:50590,enode://ca3639067a580a0f1db7412aeeef6d5d5e93606ed7f236a5343fe0d1115fb8c2bea2a22fa86e9794b544f886a4cb0de1afcbccf60960802bf00d81dab9553ec9@monorail.proxy.rlwy.net:26254,enode://7f2ee75a1c112735aaa43de1e5a6c4d7e07d03a5352b5782ed8e0c7cc046a8c8839ad093b09649e0b4a6ed8900211fb4438765c99d07bb00006ef080a1aa9ab6@viaduct.proxy.rlwy.net:30270,enode://98710174f4798dae1931e417944ac7a7fb3268d38ef8d3941c8fcc44fe178b118003d8b3d61d85af39c561235a1708f8dd61f8ba47df4c4a6b9156e272af2cfc@monorail.proxy.rlwy.net:29138",
-            "--maxpeers", "50",
-            "--cache", "2048",
-            "--verbosity", "5",
-            "--metrics",
-            "--pprof",
-            "--pprof.addr", "0.0.0.0",
-            "--pprof.port", "6060",
-            "--nodekey", nodekeyPath.path,
-            "--ethash.dagdir", ethashDirectory.path
-        ]
-        
-        marscreditProcess?.arguments = args
-        
-        LogManager.shared.log("Starting geth with command:", type: .debug)
-        LogManager.shared.log("\(marscreditPath) \(args.joined(separator: " "))", type: .debug)
-        
-        marscreditProcess?.standardOutput = marscreditOutput
-        marscreditProcess?.standardError = marscreditOutput
-        
-        // Set up a dispatch queue for processing logs
-        let logQueue = DispatchQueue(label: "com.marscredit.gethLogs")
-        
-        // Monitor the output pipe
-        marscreditOutput?.fileHandleForReading.readabilityHandler = { handle in
-            let data = handle.availableData
-            guard !data.isEmpty else {
-                LogManager.shared.log("Geth process terminated unexpectedly", type: .error)
+        if runLocalNode {
+            // Initialize blockchain if needed
+            initializeBlockchain()
+            
+            guard let marscreditPath = bundledMarscreditPath?.path,
+                  fileManager.fileExists(atPath: marscreditPath) else {
+                LogManager.shared.log("Error: go-marscredit binary not found at \(bundledMarscreditPath?.path ?? "unknown path")", type: .error)
                 return
             }
             
-            if let output = String(data: data, encoding: .utf8) {
-                logQueue.async {
-                    // Split the output into lines and process each one
-                    output.components(separatedBy: .newlines).forEach { line in
-                        guard !line.isEmpty else { return }
-                        
-                        // Determine log type based on content but keep full message
-                        let logType: LogType
-                        if line.contains("ERROR") || line.contains("error") {
-                            logType = .error
-                        } else if line.contains("WARN") || line.contains("warn") {
-                            logType = .warning
-                        } else if line.contains("Successfully sealed new block") || 
-                                line.contains("🔨 mined potential block") ||
-                                line.contains("Commit new mining work") ||
-                                line.contains("Mining") ||
-                                line.contains("miner") {
-                            logType = .mining
-                        } else if line.contains("INFO") || line.contains("info") {
-                            logType = .info
-                        } else {
-                            logType = .debug
-                        }
-                        
-                        // Add a prefix to easily identify different types of messages
-                        let prefix: String
-                        switch logType {
-                        case .error:   prefix = "❌ [ERROR] "
-                        case .warning: prefix = "⚠️ [WARN] "
-                        case .mining:  prefix = "⛏️ [MINE] "
-                        case .info:    prefix = "ℹ️ [INFO] "
-                        case .debug:   prefix = "🔍 [DEBUG] "
-                        case .success: prefix = "✅ [SUCCESS] "
-                        }
-                        
-                        // Post to main thread for UI update
-                        DispatchQueue.main.async {
-                            LogManager.shared.log(prefix + line, type: logType)
+            LogManager.shared.log("Starting local node with binary: \(marscreditPath)", type: .info)
+            LogManager.shared.log("Data directory: \(dataDirectory.path)", type: .debug)
+            LogManager.shared.log("Keystore directory: \(keystoreDirectory.path)", type: .debug)
+            LogManager.shared.log("Mining address: \(address)", type: .debug)
+            
+            marscreditProcess = Process()
+            marscreditOutput = Pipe()
+            
+            marscreditProcess?.executableURL = URL(fileURLWithPath: marscreditPath)
+            
+            let args = [
+                "--datadir", dataDirectory.path,
+                "--keystore", keystoreDirectory.path,
+                "--syncmode", "full",
+                "--http",
+                "--http.addr", "0.0.0.0",
+                "--http.port", "8545",
+                "--http.api", "personal,eth,net,web3,miner,admin",
+                "--http.vhosts", "*",
+                "--http.corsdomain", "*",
+                "--networkid", "110110",
+                "--ws",
+                "--ws.addr", "0.0.0.0",
+                "--ws.port", "8546",
+                "--ws.api", "personal,eth,net,web3,miner,admin",
+                "--ws.origins", "*",
+                "--port", "30304",
+                "--nat", "any",
+                "--mine",
+                "--miner.etherbase", address,
+                "--bootnodes", "enode://bf93a274569cd009e4172c1a41b8bde1fb8d8e7cff1e5130707a0cf5be4ce0fc673c8a138ecb7705025ea4069da8c1d4b7ffc66e8666f7936aa432ce57693353@roundhouse.proxy.rlwy.net:50590,enode://ca3639067a580a0f1db7412aeeef6d5d5e93606ed7f236a5343fe0d1115fb8c2bea2a22fa86e9794b544f886a4cb0de1afcbccf60960802bf00d81dab9553ec9@monorail.proxy.rlwy.net:26254,enode://7f2ee75a1c112735aaa43de1e5a6c4d7e07d03a5352b5782ed8e0c7cc046a8c8839ad093b09649e0b4a6ed8900211fb4438765c99d07bb00006ef080a1aa9ab6@viaduct.proxy.rlwy.net:30270,enode://98710174f4798dae1931e417944ac7a7fb3268d38ef8d3941c8fcc44fe178b118003d8b3d61d85af39c561235a1708f8dd61f8ba47df4c4a6b9156e272af2cfc@monorail.proxy.rlwy.net:29138",
+                "--maxpeers", "50",
+                "--cache", "2048",
+                "--verbosity", "5",
+                "--metrics",
+                "--pprof",
+                "--pprof.addr", "0.0.0.0",
+                "--pprof.port", "6060",
+                "--nodekey", nodekeyPath.path,
+                "--ethash.dagdir", ethashDirectory.path
+            ]
+            
+            marscreditProcess?.arguments = args
+            
+            LogManager.shared.log("Starting geth with command:", type: .debug)
+            LogManager.shared.log("\(marscreditPath) \(args.joined(separator: " "))", type: .debug)
+            
+            marscreditProcess?.standardOutput = marscreditOutput
+            marscreditProcess?.standardError = marscreditOutput
+            
+            // Set up a dispatch queue for processing logs
+            let logQueue = DispatchQueue(label: "com.marscredit.gethLogs")
+            
+            // Monitor the output pipe
+            marscreditOutput?.fileHandleForReading.readabilityHandler = { handle in
+                let data = handle.availableData
+                guard !data.isEmpty else {
+                    LogManager.shared.log("Geth process terminated unexpectedly", type: .error)
+                    return
+                }
+                
+                if let output = String(data: data, encoding: .utf8) {
+                    logQueue.async {
+                        // Split the output into lines and process each one
+                        output.components(separatedBy: .newlines).forEach { line in
+                            guard !line.isEmpty else { return }
+                            
+                            // Determine log type based on content but keep full message
+                            let logType: LogType
+                            if line.contains("ERROR") || line.contains("error") {
+                                logType = .error
+                            } else if line.contains("WARN") || line.contains("warn") {
+                                logType = .warning
+                            } else if line.contains("Successfully sealed new block") || 
+                                    line.contains("🔨 mined potential block") ||
+                                    line.contains("Commit new mining work") ||
+                                    line.contains("Mining") ||
+                                    line.contains("miner") {
+                                logType = .mining
+                            } else if line.contains("INFO") || line.contains("info") {
+                                logType = .info
+                            } else {
+                                logType = .debug
+                            }
+                            
+                            // Add a prefix to easily identify different types of messages
+                            let prefix: String
+                            switch logType {
+                            case .error:   prefix = "❌ [ERROR] "
+                            case .warning: prefix = "⚠️ [WARN] "
+                            case .mining:  prefix = "⛏️ [MINE] "
+                            case .info:    prefix = "ℹ️ [INFO] "
+                            case .debug:   prefix = "🔍 [DEBUG] "
+                            case .success: prefix = "✅ [SUCCESS] "
+                            }
+                            
+                            // Post to main thread for UI update
+                            DispatchQueue.main.async {
+                                LogManager.shared.log(prefix + line, type: logType)
+                            }
                         }
                     }
                 }
             }
-        }
-        
-        // Set up termination handler
-        marscreditProcess?.terminationHandler = { process in
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                self.isMining = false
-                LogManager.shared.log("Geth process terminated with status: \(process.terminationStatus)", type: .info)
-                if process.terminationStatus != 0 {
-                    LogManager.shared.log("Node stopped with error code \(process.terminationStatus). Check logs for details.", type: .error)
+            
+            // Set up termination handler
+            marscreditProcess?.terminationHandler = { process in
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.isMining = false
+                    LogManager.shared.log("Geth process terminated with status: \(process.terminationStatus)", type: .info)
+                    if process.terminationStatus != 0 {
+                        LogManager.shared.log("Node stopped with error code \(process.terminationStatus). Check logs for details.", type: .error)
+                    }
+                    
+                    // Clean up
+                    self.marscreditOutput?.fileHandleForReading.readabilityHandler = nil
+                    self.marscreditOutput = nil
+                    self.marscreditProcess = nil
                 }
-                
-                // Clean up
-                self.marscreditOutput?.fileHandleForReading.readabilityHandler = nil
-                self.marscreditOutput = nil
-                self.marscreditProcess = nil
             }
-        }
-        
-        do {
-            LogManager.shared.log("Attempting to start geth process...", type: .info)
-            try marscreditProcess?.run()
-            isMining = true
-            LogManager.shared.log("✨ Mining process started successfully", type: .success)
-            updateNetworkStatus()
-        } catch {
-            LogManager.shared.log("❌ Error starting mining process: \(error.localizedDescription)", type: .error)
-            // Clean up on error
-            marscreditOutput?.fileHandleForReading.readabilityHandler = nil
-            marscreditOutput = nil
-            marscreditProcess = nil
+            
+            do {
+                LogManager.shared.log("Attempting to start geth process...", type: .info)
+                try marscreditProcess?.run()
+                LogManager.shared.log("✨ Mining process started successfully", type: .success)
+            } catch {
+                LogManager.shared.log("❌ Error starting mining process: \(error.localizedDescription)", type: .error)
+                // Clean up on error
+                marscreditOutput?.fileHandleForReading.readabilityHandler = nil
+                marscreditOutput = nil
+                marscreditProcess = nil
+                isMining = false
+            }
+        } else {
+            // Just use the remote RPC endpoint for mining
+            LogManager.shared.log("Using remote node for mining. Local node not started.", type: .info)
+            LogManager.shared.log("✨ Mining started successfully with remote node", type: .success)
+            
+            // Try to start mining via the remote RPC
+            ethClient?.startMining(address: address).done { 
+                LogManager.shared.log("Mining command sent to remote node", type: .success)
+            }.catch { error in
+                LogManager.shared.log("Failed to start mining on remote node: \(error.localizedDescription)", type: .error)
+            }
         }
     }
     
     func stopMining() {
         LogManager.shared.log("🛑 Stopping mining process...", type: .info)
         
-        // Gracefully terminate the process
-        marscreditProcess?.terminate()
+        if marscreditProcess != nil {
+            // If running a local node
+            // Gracefully terminate the process
+            marscreditProcess?.terminate()
+            
+            // Wait for the process to finish
+            marscreditProcess?.waitUntilExit()
+            
+            marscreditProcess = nil
+            marscreditOutput?.fileHandleForReading.readabilityHandler = nil
+            marscreditOutput = nil
+        } else {
+            // If using remote node
+            ethClient?.stopMining().done {
+                LogManager.shared.log("Mining stopped on remote node", type: .success)
+            }.catch { error in
+                LogManager.shared.log("Error stopping mining on remote node: \(error.localizedDescription)", type: .error)
+            }
+        }
         
-        // Wait for the process to finish
-        marscreditProcess?.waitUntilExit()
-        
-        marscreditProcess = nil
-        marscreditOutput?.fileHandleForReading.readabilityHandler = nil
-        marscreditOutput = nil
         isMining = false
         currentHashRate = 0
         LogManager.shared.log("✅ Mining stopped successfully", type: .success)

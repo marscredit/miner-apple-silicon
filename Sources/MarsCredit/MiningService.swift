@@ -697,339 +697,61 @@ class MiningService: ObservableObject {
     func startMining(address: String, password: String) {
         guard !isMining else { return }
         
-        // Set the mining address
-        self.miningAddress = address
-        
-        // Update UI state immediately
-        DispatchQueue.main.async {
-            self.isMining = true
-            LogManager.shared.log("Starting mining process...", type: .info)
-            LogManager.shared.log("Initializing blockchain...", type: .info)
-        }
-        
-        // Debug log for geth binary path
-        LogManager.shared.log("Looking for geth binary at: \(bundledMarscreditPath?.path ?? "unknown path")", type: .debug)
-        if let path = bundledMarscreditPath?.path, fileManager.fileExists(atPath: path) {
-            LogManager.shared.log("Found geth binary at: \(path)", type: .success)
-            
-            // Build and log terminal command that user could run manually
-            let args = [
-                "--datadir", self.dataDirectory.path,
-                "--keystore", self.keystoreDirectory.path,
-                "--syncmode", "full",
-                "--http",
-                "--http.addr", "localhost",
-                "--http.port", "8546",
-                "--http.api", "personal,eth,net,web3,miner,admin",
-                "--http.vhosts", "*",
-                "--http.corsdomain", "*",
-                "--networkid", "110110",
-                "--ws",
-                "--ws.addr", "localhost",
-                "--ws.port", "8547",
-                "--port", "30304",
-                "--nat", "any",
-                "--mine",
-                "--miner.threads", "1",
-                "--miner.etherbase", address,
-                "--bootnodes", "enode://bf93a274569cd009e4172c1a41b8bde1fb8d8e7cff1e5130707a0cf5be4ce0fc673c8a138ecb7705025ea4069da8c1d4b7ffc66e8666f7936aa432ce57693353@roundhouse.proxy.rlwy.net:50590,enode://ca3639067a580a0f1db7412aeeef6d5d5e93606ed7f236a5343fe0d1115fb8c2bea2a22fa86e9794b544f886a4cb0de1afcbccf60960802bf00d81dab9553ec9@monorail.proxy.rlwy.net:26254,enode://7f2ee75a1c112735aaa43de1e5a6c4d7e07d03a5352b5782ed8e0c7cc046a8c8839ad093b09649e0b4a6ed8900211fb4438765c99d07bb00006ef080a1aa9ab6@viaduct.proxy.rlwy.net:30270,enode://98710174f4798dae1931e417944ac7a7fb3268d38ef8d3941c8fcc44fe178b118003d8b3d61d85af39c561235a1708f8dd61f8ba47df4c4a6b9156e272af2cfc@monorail.proxy.rlwy.net:29138",
-                "--verbosity", "6",
-                "--maxpeers", "50",
-                "--cache", "2048",
-                "--nodiscover",
-                "--rpc.allow-unprotected-txs",
-                "--authrpc.addr", "localhost",
-                "--authrpc.port", "8551",
-                "--authrpc.vhosts", "*",
-                "--ethash.dagdir", self.ethashDirectory.path
-            ]
-            
-            let manualCommand = args.joined(separator: " ")
-            LogManager.shared.log("Manual command for debugging: \(self.bundledMarscreditPath?.path ?? "geth") \(manualCommand)", type: .debug)
-        } else {
-            LogManager.shared.log("❌ Geth binary not found!", type: .error)
-            LogManager.shared.log("Will attempt to use remote RPC endpoint for mining...", type: .info)
-            
-            // Try remote mining if local geth isn't available
-            if let client = ethClient {
-                client.startMining(address: address).done {
-                    LogManager.shared.log("Mining started on remote node for address: \(address)", type: .success)
-                    // Start tracking miner stats
-                    self.startMinerStatsTracking()
-                }.catch { error in
-                    LogManager.shared.log("Failed to start remote mining: \(error.localizedDescription)", type: .error)
-                    DispatchQueue.main.async {
-                        self.isMining = false
-                    }
-                }
-            } else {
-                LogManager.shared.log("No RPC endpoint available for mining", type: .error)
-                DispatchQueue.main.async {
-                    self.isMining = false
-                }
-            }
-            return
-        }
-        
-        // Start mining process in background
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+        // First test that the geth binary actually works
+        testGethBinary { [weak self] success, error in
             guard let self = self else { return }
             
-            // Initialize blockchain if needed
-            self.initializeBlockchain()
-            
-            guard let marscreditPath = self.bundledMarscreditPath?.path,
-                  self.fileManager.fileExists(atPath: marscreditPath) else {
-                DispatchQueue.main.async {
-                    LogManager.shared.log("Error: go-marscredit binary not found at \(self.bundledMarscreditPath?.path ?? "unknown path")", type: .error)
-                    self.isMining = false
-                }
+            if !success {
+                LogManager.shared.log("⚠️ Geth binary test failed: \(error ?? "Unknown error")", type: .error)
+                LogManager.shared.log("Cannot start mining with a non-functional geth binary", type: .error)
                 return
             }
             
-            // When starting the miner, we'll explicitly set our state to "syncing from zero"
-            // until we start getting accurate sync data from our local node
+            // Continue with normal mining startup
             DispatchQueue.main.async {
-                self.networkStatus = NetworkStatus(
-                    currentBlock: 0,
-                    highestBlock: self.latestBlockNumber,
-                    isConnected: true
-                )
+                self.isMining = true
+                self.miningAddress = address
             }
             
-            // Create output pipe for geth process
-            let outputPipe = Pipe()
-            let errorPipe = Pipe()
-            self.marscreditProcess = Process()
-            self.marscreditProcess?.executableURL = URL(fileURLWithPath: marscreditPath)
+            // Try to wait for any previous mining operation to clean up
+            sleep(1)
             
-            let args = [
-                "--datadir", self.dataDirectory.path,
-                "--keystore", self.keystoreDirectory.path,
-                "--syncmode", "full",
-                "--http",
-                "--http.addr", "localhost",
-                "--http.port", "8546",
-                "--http.api", "personal,eth,net,web3,miner,admin",
-                "--http.vhosts", "*",
-                "--http.corsdomain", "*",
-                "--networkid", "110110",
-                "--ws",
-                "--ws.addr", "localhost",
-                "--ws.port", "8547",
-                "--port", "30304",
-                "--nat", "any",
-                "--mine",
-                "--miner.threads", "1",
-                "--miner.etherbase", address,
-                "--bootnodes", "enode://bf93a274569cd009e4172c1a41b8bde1fb8d8e7cff1e5130707a0cf5be4ce0fc673c8a138ecb7705025ea4069da8c1d4b7ffc66e8666f7936aa432ce57693353@roundhouse.proxy.rlwy.net:50590,enode://ca3639067a580a0f1db7412aeeef6d5d5e93606ed7f236a5343fe0d1115fb8c2bea2a22fa86e9794b544f886a4cb0de1afcbccf60960802bf00d81dab9553ec9@monorail.proxy.rlwy.net:26254,enode://7f2ee75a1c112735aaa43de1e5a6c4d7e07d03a5352b5782ed8e0c7cc046a8c8839ad093b09649e0b4a6ed8900211fb4438765c99d07bb00006ef080a1aa9ab6@viaduct.proxy.rlwy.net:30270,enode://98710174f4798dae1931e417944ac7a7fb3268d38ef8d3941c8fcc44fe178b118003d8b3d61d85af39c561235a1708f8dd61f8ba47df4c4a6b9156e272af2cfc@monorail.proxy.rlwy.net:29138",
-                "--verbosity", "6",
-                "--maxpeers", "50",
-                "--cache", "2048",
-                "--nodiscover",
-                "--rpc.allow-unprotected-txs",
-                "--authrpc.addr", "localhost",
-                "--authrpc.port", "8551",
-                "--authrpc.vhosts", "*",
-                "--ethash.dagdir", self.ethashDirectory.path
-            ]
+            // Reset stats
+            self.currentHashRate = 0
+            self.blocksFound = 0
             
-            self.marscreditProcess?.arguments = args
-            self.marscreditProcess?.standardOutput = outputPipe
-            self.marscreditProcess?.standardError = errorPipe
+            // Set the mining address
+            self.miningAddress = address
             
-            // Set up a dispatch queue for processing logs
-            let logQueue = DispatchQueue(label: "com.marscredit.gethLogs")
-            
-            // Process output function
-            let processOutput = { (pipe: Pipe, prefix: String, type: LogType) in
-                pipe.fileHandleForReading.readabilityHandler = { fileHandle in
-                    let data = fileHandle.availableData
-                    if data.isEmpty { return }
+            // Try to use a local node first
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                guard let self = self else { return }
+                
+                // Debug log for geth binary path
+                LogManager.shared.log("Looking for geth binary at: \(self.bundledMarscreditPath?.path ?? "unknown path")", type: .debug)
+                if let path = self.bundledMarscreditPath?.path, self.fileManager.fileExists(atPath: path) {
+                    LogManager.shared.log("Found geth binary at: \(path)", type: .success)
                     
-                    if let output = String(data: data, encoding: .utf8) {
-                        logQueue.async {
-                            // Split the output into lines and process each one
-                            output.components(separatedBy: .newlines).forEach { line in
-                                guard !line.isEmpty else { return }
-                                
-                                // Check for specific patterns that might indicate blockchain issues
-                                if line.contains("Failed to write genesis block") {
-                                    DispatchQueue.main.async {
-                                        LogManager.shared.log("⚠️ Genesis block write failed, retrying initialization...", type: .warning)
-                                        // Try to reinitialize blockchain
-                                        DispatchQueue.global().async {
-                                            self.stopMining()
-                                            
-                                            // Delete chaindata and try again
-                                            try? self.fileManager.removeItem(at: self.chaindataDirectory)
-                                            self.initializeBlockchain()
-                                            
-                                            // Restart mining after a short delay
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                                self.startMining(address: address, password: password)
-                                            }
-                                        }
-                                    }
-                                }
-                                
-                                if line.contains("Started P2P networking") {
-                                    DispatchQueue.main.async {
-                                        LogManager.shared.log("✅ P2P networking started successfully", type: .success)
-                                    }
-                                }
-                                
-                                if line.contains("Starting mining operation") || line.contains("mined potential block") {
-                                    DispatchQueue.main.async {
-                                        LogManager.shared.log("⛏️ " + line, type: .mining)
-                                    }
-                                }
-                                
-                                if line.contains("Successfully sealed new block") {
-                                    DispatchQueue.main.async {
-                                        LogManager.shared.log("🎉 Block mined! " + line, type: .success)
-                                    }
-                                }
-                                
-                                DispatchQueue.main.async {
-                                    LogManager.shared.log("\(prefix): \(line)", type: type)
-                                }
-                            }
+                    // We have a local binary, try to start it
+                    self.startLocalNode(address: address, password: password)
+                } else {
+                    LogManager.shared.log("Geth binary not found, cannot use local node", type: .warning)
+                    
+                    // Try remote mining if local geth isn't available
+                    if let client = self.ethClient {
+                        client.startMining(address: address).done {
+                            LogManager.shared.log("Mining started on remote node for address: \(address)", type: .success)
+                        }.catch { error in
+                            LogManager.shared.log("Failed to start mining on remote node: \(error.localizedDescription)", type: .error)
                         }
+                    } else {
+                        LogManager.shared.log("No ethereum client available, cannot mine", type: .error)
                     }
                 }
+                
+                // Start tracking miner stats
+                self.startMinerStatsTracking()
             }
-            
-            // Monitor the output pipe
-            processOutput(outputPipe, "STDOUT", .debug)
-            
-            // Monitor the error pipe separately
-            processOutput(errorPipe, "STDERR", .error)
-            
-            do {
-                LogManager.shared.log("Attempting to start geth process...", type: .info)
-                LogManager.shared.log("Command: \(marscreditPath) \(args.joined(separator: " "))", type: .debug)
-                
-                // Check file permissions one more time before attempting to run
-                if let attributes = try? self.fileManager.attributesOfItem(atPath: marscreditPath),
-                   let permissions = attributes[.posixPermissions] as? NSNumber {
-                    let isExecutable = (permissions.intValue & 0o111) != 0
-                    LogManager.shared.log("Geth binary permissions: \(String(format: "%o", permissions.intValue))", type: .debug)
-                    if !isExecutable {
-                        LogManager.shared.log("Binary not executable, attempting to fix permissions...", type: .warning)
-                        try self.fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: marscreditPath)
-                    }
-                }
-                
-                // Set the current directory for the process
-                self.marscreditProcess?.currentDirectoryURL = URL(fileURLWithPath: self.dataDirectory.path)
-                
-                // Make sure any stale IPC file is removed
-                let ipcPath = self.dataDirectory.appendingPathComponent("geth.ipc").path
-                if fileManager.fileExists(atPath: ipcPath) {
-                    try? fileManager.removeItem(atPath: ipcPath)
-                    LogManager.shared.log("Removed stale IPC file", type: .debug)
-                }
-                
-                // Save references to the pipes
-                self.marscreditOutput = outputPipe
-                
-                // Clean up any terminated processes
-                LogManager.shared.log("Killing any existing geth processes...", type: .debug)
-                let killTask = Process()
-                killTask.executableURL = URL(fileURLWithPath: "/usr/bin/pkill")
-                killTask.arguments = ["-f", "geth-binary"]
-                try? killTask.run()
-                
-                // Start the process with a slight delay to ensure cleanup is complete
-                DispatchQueue.global().asyncAfter(deadline: .now() + 1) { [weak self] in
-                    guard let self = self else { return }
-                    do {
-                        try self.marscreditProcess?.run()
-                        
-                        LogManager.shared.log("✨ Local mining node started with PID: \(self.marscreditProcess?.processIdentifier ?? 0)", type: .success)
-                        
-                        // Check if process is running after a short delay
-                        DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
-                            if let process = self.marscreditProcess, process.isRunning {
-                                LogManager.shared.log("Confirmed geth process is running with PID: \(process.processIdentifier)", type: .success)
-                                
-                                // Try to check geth's log files directly
-                                self.checkGethLogs()
-                                
-                                // Let's also try to run the lsof command to ensure the socket is open
-                                let lsofProcess = Process()
-                                lsofProcess.executableURL = URL(fileURLWithPath: "/usr/sbin/lsof")
-                                lsofProcess.arguments = ["-i", ":8546"]
-                                
-                                let outputPipe = Pipe()
-                                lsofProcess.standardOutput = outputPipe
-                                
-                                do {
-                                    try lsofProcess.run()
-                                    lsofProcess.waitUntilExit()
-                                    
-                                    let output = String(data: outputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
-                                    LogManager.shared.log("Port check: \(output)", type: .debug)
-                                    
-                                    if output.contains("geth") {
-                                        LogManager.shared.log("✅ Geth is listening on port 8546", type: .success)
-                                    } else {
-                                        LogManager.shared.log("⚠️ Geth may not be listening on port 8546 yet", type: .warning)
-                                        
-                                        // Check for geth processes
-                                        let psProcess = Process()
-                                        psProcess.executableURL = URL(fileURLWithPath: "/bin/ps")
-                                        psProcess.arguments = ["aux"]
-                                        
-                                        let psOutputPipe = Pipe()
-                                        psProcess.standardOutput = psOutputPipe
-                                        
-                                        try psProcess.run()
-                                        psProcess.waitUntilExit()
-                                        
-                                        let psOutput = String(data: psOutputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
-                                        let gethLines = psOutput.components(separatedBy: .newlines).filter { $0.contains("geth") && !$0.contains("grep") }
-                                        
-                                        LogManager.shared.log("Active geth processes:\n\(gethLines.joined(separator: "\n"))", type: .debug)
-                                    }
-                                } catch {
-                                    LogManager.shared.log("Error checking port: \(error)", type: .error)
-                                }
-                            } else {
-                                LogManager.shared.log("⚠️ Warning: Geth process is not running properly", type: .warning)
-                                
-                                // Try running geth directly to see what happens
-                                let directGethProcess = Process()
-                                directGethProcess.executableURL = URL(fileURLWithPath: marscreditPath)
-                                directGethProcess.arguments = ["--help"]
-                                
-                                let directOutputPipe = Pipe()
-                                directGethProcess.standardOutput = directOutputPipe
-                                directGethProcess.standardError = directOutputPipe
-                                
-                                do {
-                                    try directGethProcess.run()
-                                    let output = String(data: directOutputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
-                                    LogManager.shared.log("Direct geth output:\n\(output)", type: .debug)
-                                } catch {
-                                    LogManager.shared.log("Failed to run geth directly: \(error)", type: .error)
-                                }
-                            }
-                        }
-                    } catch {
-                        LogManager.shared.log("Failed to start geth process: \(error.localizedDescription)", type: .error)
-                    }
-                }
-            } catch {
-                DispatchQueue.main.async {
-                    LogManager.shared.log("Error starting geth: \(error.localizedDescription)", type: .error)
-                    self.isMining = false
-                }
-            }
-            
-            // Start tracking miner stats
-            self.startMinerStatsTracking()
         }
     }
     
@@ -1268,13 +990,68 @@ class MiningService: ObservableObject {
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             let timestamp = dateFormatter.string(from: now)
             
+            // Get more detailed system info
+            let sysInfo = Process()
+            sysInfo.executableURL = URL(fileURLWithPath: "/usr/bin/sw_vers")
+            let sysInfoPipe = Pipe()
+            sysInfo.standardOutput = sysInfoPipe
+            try? sysInfo.run()
+            sysInfo.waitUntilExit()
+            let macOSInfo = String(data: sysInfoPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? "Unknown"
+            
+            // Get CPU info
+            let cpuInfo = Process()
+            cpuInfo.executableURL = URL(fileURLWithPath: "/usr/sbin/sysctl")
+            cpuInfo.arguments = ["-n", "machdep.cpu.brand_string"]
+            let cpuInfoPipe = Pipe()
+            cpuInfo.standardOutput = cpuInfoPipe
+            try? cpuInfo.run()
+            cpuInfo.waitUntilExit()
+            let processorInfo = String(data: cpuInfoPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "Unknown"
+            
+            // Check file permissions
+            let permissionInfo = Process()
+            permissionInfo.executableURL = URL(fileURLWithPath: "/bin/ls")
+            permissionInfo.arguments = ["-la", bundledMarscreditPath?.path ?? ""]
+            let permissionInfoPipe = Pipe()
+            permissionInfo.standardOutput = permissionInfoPipe
+            try? permissionInfo.run()
+            permissionInfo.waitUntilExit()
+            let filePermissions = String(data: permissionInfoPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? "Unknown"
+            
+            // Create comprehensive log content
             let logContent = """
             --- Mars Credit Miner Debug Log: \(timestamp) ---
+            System Info:
+            \(macOSInfo)
+            Processor: \(processorInfo)
+            
+            Application Configuration:
             Mining Address: \(miningAddress)
             Data Directory: \(dataDirectory.path)
             Geth Binary: \(bundledMarscreditPath?.path ?? "not found")
+            File Permissions: 
+            \(filePermissions)
+            
+            Process Info:
             PID: \(marscreditProcess?.processIdentifier ?? 0)
             Is Running: \(marscreditProcess?.isRunning ?? false)
+            
+            Directory Structure Check:
+            Data Directory Exists: \(fileManager.fileExists(atPath: dataDirectory.path))
+            Keystore Directory Exists: \(fileManager.fileExists(atPath: keystoreDirectory.path))
+            Chaindata Directory Exists: \(fileManager.fileExists(atPath: chaindataDirectory.path))
+            Ethash Directory Exists: \(fileManager.fileExists(atPath: ethashDirectory.path))
+            
+            Network Status:
+            Current Block: \(networkStatus.currentBlock)
+            Highest Block: \(networkStatus.highestBlock)
+            Is Connected: \(networkStatus.isConnected)
+            Connection Attempts: \(connectionAttempts)
+            
+            Mining Status:
+            Is Mining: \(isMining)
+            Current Hashrate: \(currentHashRate) MH/s
             
             """
             
@@ -1287,6 +1064,24 @@ class MiningService: ObservableObject {
             try statusProcess.run()
             statusProcess.waitUntilExit()
             
+            // Check for open network ports
+            let netstatProcess = Process()
+            netstatProcess.executableURL = URL(fileURLWithPath: "/usr/sbin/lsof")
+            netstatProcess.arguments = ["-i", "TCP:8546"]
+            let netstatPipe = Pipe()
+            netstatProcess.standardOutput = netstatPipe
+            try netstatProcess.run()
+            netstatProcess.waitUntilExit()
+            let netstatOutput = String(data: netstatPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+            
+            // Append to log file with FileHandle
+            if let fileHandle = FileHandle(forWritingAtPath: debugLogPath.path) {
+                fileHandle.seekToEndOfFile()
+                let appendString = "\n\n--- Network Connections ---\n\(netstatOutput)\n\n"
+                fileHandle.write(appendString.data(using: .utf8)!)
+                fileHandle.closeFile()
+            }
+            
             // Check for pending transactions
             let pendingTxProcess = Process()
             pendingTxProcess.executableURL = URL(fileURLWithPath: bundledMarscreditPath?.path ?? "/usr/local/bin/geth")
@@ -1298,6 +1093,7 @@ class MiningService: ObservableObject {
             
             let pendingTxOutput = Pipe()
             pendingTxProcess.standardOutput = pendingTxOutput
+            pendingTxProcess.standardError = pendingTxOutput
             
             do {
                 try pendingTxProcess.run()
@@ -1315,6 +1111,14 @@ class MiningService: ObservableObject {
                 }
             } catch {
                 LogManager.shared.log("Failed to get pending transactions: \(error)", type: .warning)
+                
+                // Log the error details
+                if let fileHandle = FileHandle(forWritingAtPath: debugLogPath.path) {
+                    fileHandle.seekToEndOfFile()
+                    let appendString = "\n\n--- Pending Transactions Error ---\n\(error)\n\n"
+                    fileHandle.write(appendString.data(using: .utf8)!)
+                    fileHandle.closeFile()
+                }
             }
             
             // Try to check if mining is active
@@ -1328,6 +1132,7 @@ class MiningService: ObservableObject {
             
             let miningStatusOutput = Pipe()
             miningStatusProcess.standardOutput = miningStatusOutput
+            miningStatusProcess.standardError = miningStatusOutput
             
             do {
                 try miningStatusProcess.run()
@@ -1349,6 +1154,72 @@ class MiningService: ObservableObject {
                 }
             } catch {
                 LogManager.shared.log("Failed to get mining status: \(error)", type: .warning)
+                
+                // Log the error details
+                if let fileHandle = FileHandle(forWritingAtPath: debugLogPath.path) {
+                    fileHandle.seekToEndOfFile()
+                    let appendString = "\n\n--- Mining Status Error ---\n\(error)\n\n"
+                    fileHandle.write(appendString.data(using: .utf8)!)
+                    fileHandle.closeFile()
+                }
+            }
+            
+            // Check if we can connect to the node at all
+            let nodeInfoProcess = Process()
+            nodeInfoProcess.executableURL = URL(fileURLWithPath: bundledMarscreditPath?.path ?? "/usr/local/bin/geth")
+            let nodeInfoArgs = [
+                "--exec", "admin.nodeInfo",
+                "attach", "http://localhost:8546"
+            ]
+            nodeInfoProcess.arguments = nodeInfoArgs
+            
+            let nodeInfoOutput = Pipe()
+            nodeInfoProcess.standardOutput = nodeInfoOutput
+            nodeInfoProcess.standardError = nodeInfoOutput
+            
+            do {
+                try nodeInfoProcess.run()
+                nodeInfoProcess.waitUntilExit()
+                
+                let output = String(data: nodeInfoOutput.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+                
+                // Append to log file with FileHandle
+                if let fileHandle = FileHandle(forWritingAtPath: debugLogPath.path) {
+                    fileHandle.seekToEndOfFile()
+                    let appendString = "--- Node Info ---\n\(output)\n\n"
+                    fileHandle.write(appendString.data(using: .utf8)!)
+                    fileHandle.closeFile()
+                }
+                
+                LogManager.shared.log("Node info: \(output.prefix(100))...", type: .debug)
+            } catch {
+                LogManager.shared.log("Failed to get node info: \(error)", type: .warning)
+                
+                // Log the error details
+                if let fileHandle = FileHandle(forWritingAtPath: debugLogPath.path) {
+                    fileHandle.seekToEndOfFile()
+                    let appendString = "\n\n--- Node Info Error ---\n\(error)\n\n"
+                    fileHandle.write(appendString.data(using: .utf8)!)
+                    fileHandle.closeFile()
+                }
+            }
+            
+            // Check disk space
+            let diskSpaceProcess = Process()
+            diskSpaceProcess.executableURL = URL(fileURLWithPath: "/bin/df")
+            diskSpaceProcess.arguments = ["-h", dataDirectory.path]
+            let diskSpacePipe = Pipe()
+            diskSpaceProcess.standardOutput = diskSpacePipe
+            try diskSpaceProcess.run()
+            diskSpaceProcess.waitUntilExit()
+            let diskSpaceOutput = String(data: diskSpacePipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+            
+            // Append disk space info to log
+            if let fileHandle = FileHandle(forWritingAtPath: debugLogPath.path) {
+                fileHandle.seekToEndOfFile()
+                let appendString = "\n\n--- Disk Space ---\n\(diskSpaceOutput)\n\n"
+                fileHandle.write(appendString.data(using: .utf8)!)
+                fileHandle.closeFile()
             }
             
             LogManager.shared.log("Debug log created at: \(debugLogPath.path)", type: .info)
@@ -1472,6 +1343,483 @@ class MiningService: ObservableObject {
     deinit {
         stopMining()
         MiningService.shared = nil
+    }
+    
+    // Helper function to test if the geth binary works correctly
+    private func testGethBinary(completion: @escaping (Bool, String?) -> Void) {
+        // First check if the binary exists
+        guard let gethPath = bundledMarscreditPath?.path,
+              fileManager.fileExists(atPath: gethPath) else {
+            completion(false, "Geth binary not found")
+            return
+        }
+        
+        // Prepare log directory
+        let logsDir = dataDirectory.appendingPathComponent("logs")
+        try? fileManager.createDirectory(at: logsDir, withIntermediateDirectories: true)
+        let testLogPath = logsDir.appendingPathComponent("geth_test.log")
+        
+        let logEntry = "===== GETH BINARY TEST: \(Date()) =====\n"
+        try? logEntry.write(to: testLogPath, atomically: true, encoding: .utf8)
+        
+        // Run a simple version command to test the binary
+        let versionProcess = Process()
+        versionProcess.executableURL = URL(fileURLWithPath: gethPath)
+        versionProcess.arguments = ["version"]
+        
+        let outputPipe = Pipe()
+        versionProcess.standardOutput = outputPipe
+        versionProcess.standardError = outputPipe
+        
+        do {
+            // Try to make sure the binary is executable
+            try fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: gethPath)
+            
+            LogManager.shared.log("Testing geth binary with 'version' command...", type: .info)
+            try versionProcess.run()
+            versionProcess.waitUntilExit()
+            
+            let output = String(data: outputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+            
+            // Append output to test log
+            if let fileHandle = FileHandle(forWritingAtPath: testLogPath.path) {
+                fileHandle.seekToEndOfFile()
+                let appendString = "VERSION TEST OUTPUT:\n\(output)\n\n"
+                fileHandle.write(appendString.data(using: .utf8)!)
+                fileHandle.closeFile()
+            }
+            
+            if versionProcess.terminationStatus == 0 && output.contains("Version") {
+                LogManager.shared.log("✅ Geth binary test successful: \(output.prefix(50))...", type: .success)
+                
+                // Try a more complex test - check if geth can initialize a test genesis
+                let testGenesisPath = dataDirectory.appendingPathComponent("test_genesis.json")
+                let testGenesisContent = """
+                {
+                    "config": {
+                        "chainId": 999999,
+                        "homesteadBlock": 0,
+                        "eip150Block": 0,
+                        "eip155Block": 0,
+                        "eip158Block": 0
+                    },
+                    "nonce": "0x0000000000000042",
+                    "timestamp": "0x0",
+                    "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+                    "extraData": "0x",
+                    "gasLimit": "0x1c9c380",
+                    "difficulty": "0x400",
+                    "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+                    "coinbase": "0x0000000000000000000000000000000000000000",
+                    "alloc": {}
+                }
+                """
+                try? testGenesisContent.write(to: testGenesisPath, atomically: true, encoding: .utf8)
+                
+                // Create a test directory
+                let testDir = dataDirectory.appendingPathComponent("geth_test")
+                try? fileManager.createDirectory(at: testDir, withIntermediateDirectories: true)
+                
+                // Try to initialize the test genesis
+                let initProcess = Process()
+                initProcess.executableURL = URL(fileURLWithPath: gethPath)
+                initProcess.arguments = [
+                    "--datadir", testDir.path,
+                    "init",
+                    testGenesisPath.path
+                ]
+                
+                let initOutputPipe = Pipe()
+                initProcess.standardOutput = initOutputPipe
+                initProcess.standardError = initOutputPipe
+                
+                LogManager.shared.log("Testing geth binary with genesis initialization...", type: .info)
+                try initProcess.run()
+                initProcess.waitUntilExit()
+                
+                let initOutput = String(data: initOutputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+                
+                // Append init output to test log
+                if let fileHandle = FileHandle(forWritingAtPath: testLogPath.path) {
+                    fileHandle.seekToEndOfFile()
+                    let appendString = "INIT TEST OUTPUT:\n\(initOutput)\n\n"
+                    fileHandle.write(appendString.data(using: .utf8)!)
+                    fileHandle.closeFile()
+                }
+                
+                if initProcess.terminationStatus == 0 {
+                    LogManager.shared.log("✅ Geth binary successfully initialized test genesis", type: .success)
+                    
+                    // Clean up test directory
+                    try? fileManager.removeItem(at: testDir)
+                    try? fileManager.removeItem(at: testGenesisPath)
+                    
+                    completion(true, nil)
+                } else {
+                    LogManager.shared.log("⚠️ Geth binary failed to initialize test genesis: \(initOutput)", type: .warning)
+                    
+                    // The binary still works for version, so let's consider it partially functional
+                    completion(true, "Binary works but genesis init failed. Mining may not work properly.")
+                }
+            } else {
+                LogManager.shared.log("❌ Geth binary test failed: \(output)", type: .error)
+                completion(false, "Binary failed version test: \(output)")
+            }
+        } catch {
+            LogManager.shared.log("❌ Error running geth binary test: \(error.localizedDescription)", type: .error)
+            
+            // Append error to test log
+            if let fileHandle = FileHandle(forWritingAtPath: testLogPath.path) {
+                fileHandle.seekToEndOfFile()
+                let appendString = "ERROR RUNNING TEST:\n\(error.localizedDescription)\n\n"
+                fileHandle.write(appendString.data(using: .utf8)!)
+                fileHandle.closeFile()
+            }
+            
+            completion(false, error.localizedDescription)
+        }
+    }
+    
+    // Start a local geth node for mining
+    private func startLocalNode(address: String, password: String) {
+        // Update UI state immediately
+        DispatchQueue.main.async {
+            LogManager.shared.log("Starting mining process...", type: .info)
+            LogManager.shared.log("Initializing blockchain...", type: .info)
+        }
+        
+        // Build and log terminal command that user could run manually
+        let args = [
+            "--datadir", self.dataDirectory.path,
+            "--keystore", self.keystoreDirectory.path,
+            "--syncmode", "full",
+            "--http",
+            "--http.addr", "localhost",
+            "--http.port", "8546",
+            "--http.api", "personal,eth,net,web3,miner,admin",
+            "--http.vhosts", "*",
+            "--http.corsdomain", "*",
+            "--networkid", "110110",
+            "--ws",
+            "--ws.addr", "localhost",
+            "--ws.port", "8547",
+            "--port", "30304",
+            "--nat", "any",
+            "--mine",
+            "--miner.etherbase", address,
+            "--bootnodes", "enode://bf93a274569cd009e4172c1a41b8bde1fb8d8e7cff1e5130707a0cf5be4ce0fc673c8a138ecb7705025ea4069da8c1d4b7ffc66e8666f7936aa432ce57693353@roundhouse.proxy.rlwy.net:50590,enode://ca3639067a580a0f1db7412aeeef6d5d5e93606ed7f236a5343fe0d1115fb8c2bea2a22fa86e9794b544f886a4cb0de1afcbccf60960802bf00d81dab9553ec9@monorail.proxy.rlwy.net:26254,enode://7f2ee75a1c112735aaa43de1e5a6c4d7e07d03a5352b5782ed8e0c7cc046a8c8839ad093b09649e0b4a6ed8900211fb4438765c99d07bb00006ef080a1aa9ab6@viaduct.proxy.rlwy.net:30270,enode://98710174f4798dae1931e417944ac7a7fb3268d38ef8d3941c8fcc44fe178b118003d8b3d61d85af39c561235a1708f8dd61f8ba47df4c4a6b9156e272af2cfc@monorail.proxy.rlwy.net:29138",
+            "--verbosity", "6",
+            "--maxpeers", "50",
+            "--cache", "2048",
+            "--nodiscover",
+            "--rpc.allow-unprotected-txs",
+            "--authrpc.addr", "localhost",
+            "--authrpc.port", "8551",
+            "--authrpc.vhosts", "*",
+            "--ethash.dagdir", self.ethashDirectory.path
+        ]
+        
+        let manualCommand = args.joined(separator: " ")
+        LogManager.shared.log("Manual command for debugging: \(self.bundledMarscreditPath?.path ?? "geth") \(manualCommand)", type: .debug)
+        
+        // Initialize blockchain if needed
+        self.initializeBlockchain()
+        
+        guard let marscreditPath = self.bundledMarscreditPath?.path,
+              self.fileManager.fileExists(atPath: marscreditPath) else {
+            DispatchQueue.main.async {
+                LogManager.shared.log("Error: go-marscredit binary not found at \(self.bundledMarscreditPath?.path ?? "unknown path")", type: .error)
+                self.isMining = false
+            }
+            return
+        }
+        
+        // When starting the miner, we'll explicitly set our state to "syncing from zero"
+        // until we start getting accurate sync data from our local node
+        DispatchQueue.main.async {
+            self.networkStatus = NetworkStatus(
+                currentBlock: 0,
+                highestBlock: self.latestBlockNumber,
+                isConnected: true
+            )
+        }
+        
+        // Create output pipe for geth process
+        let outputPipe = Pipe()
+        let errorPipe = Pipe()
+        self.marscreditProcess = Process()
+        self.marscreditProcess?.executableURL = URL(fileURLWithPath: marscreditPath)
+        
+        self.marscreditProcess?.arguments = args
+        self.marscreditProcess?.standardOutput = outputPipe
+        self.marscreditProcess?.standardError = errorPipe
+        
+        // Set up a dispatch queue for processing logs
+        let logQueue = DispatchQueue(label: "com.marscredit.gethLogs")
+        
+        // Process output function
+        let processOutput = { (pipe: Pipe, prefix: String, type: LogType) in
+            pipe.fileHandleForReading.readabilityHandler = { fileHandle in
+                let data = fileHandle.availableData
+                if data.isEmpty { return }
+                
+                if let output = String(data: data, encoding: .utf8) {
+                    logQueue.async {
+                        // Prepare log directory
+                        let logsDir = self.dataDirectory.appendingPathComponent("logs")
+                        try? FileManager.default.createDirectory(at: logsDir, withIntermediateDirectories: true)
+                        let logFilePath = logsDir.appendingPathComponent("geth_output.log")
+                        
+                        // Append output to log file
+                        if let fileHandle = try? FileHandle(forWritingTo: logFilePath) {
+                            defer { fileHandle.closeFile() }
+                            fileHandle.seekToEndOfFile()
+                            let timestamp = ISO8601DateFormatter().string(from: Date())
+                            let logEntry = "[\(timestamp)] [\(prefix)]: \(output)"
+                            fileHandle.write(logEntry.data(using: .utf8)!)
+                        } else {
+                            // If we couldn't open the file for appending, try to create it
+                            try? output.write(to: logFilePath, atomically: true, encoding: .utf8)
+                        }
+                        
+                        // Split the output into lines and process each one
+                        output.components(separatedBy: .newlines).forEach { line in
+                            guard !line.isEmpty else { return }
+                            
+                            // Check for specific patterns that might indicate blockchain issues
+                            if line.contains("Failed to write genesis block") {
+                                DispatchQueue.main.async {
+                                    LogManager.shared.log("⚠️ Genesis block write failed, retrying initialization...", type: .warning)
+                                    // Try to reinitialize blockchain
+                                    DispatchQueue.global().async {
+                                        self.stopMining()
+                                        
+                                        // Delete chaindata and try again
+                                        try? self.fileManager.removeItem(at: self.chaindataDirectory)
+                                        self.initializeBlockchain()
+                                        
+                                        // Restart mining after a short delay
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                            self.startMining(address: address, password: password)
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            if line.contains("Fatal:") || line.contains("panic:") || line.contains("WARN") || line.contains("ERROR") {
+                                DispatchQueue.main.async {
+                                    LogManager.shared.log("⚠️ Critical geth error detected: \(line)", type: .error)
+                                }
+                            }
+                            
+                            if line.contains("Started P2P networking") {
+                                DispatchQueue.main.async {
+                                    LogManager.shared.log("✅ P2P networking started successfully", type: .success)
+                                }
+                            }
+                            
+                            if line.contains("Starting mining operation") || line.contains("mined potential block") {
+                                DispatchQueue.main.async {
+                                    LogManager.shared.log("⛏️ " + line, type: .mining)
+                                }
+                            }
+                            
+                            if line.contains("Successfully sealed new block") {
+                                DispatchQueue.main.async {
+                                    LogManager.shared.log("🎉 Block mined! " + line, type: .success)
+                                }
+                            }
+                            
+                            DispatchQueue.main.async {
+                                LogManager.shared.log("\(prefix): \(line)", type: type)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Monitor the output pipe
+        processOutput(outputPipe, "STDOUT", .debug)
+        
+        // Monitor the error pipe separately
+        processOutput(errorPipe, "STDERR", .error)
+        
+        do {
+            LogManager.shared.log("Attempting to start geth process...", type: .info)
+            LogManager.shared.log("Command: \(marscreditPath) \(args.joined(separator: " "))", type: .debug)
+            
+            // Check file permissions one more time before attempting to run
+            if let attributes = try? self.fileManager.attributesOfItem(atPath: marscreditPath),
+               let permissions = attributes[.posixPermissions] as? NSNumber {
+                let isExecutable = (permissions.intValue & 0o111) != 0
+                LogManager.shared.log("Geth binary permissions: \(String(format: "%o", permissions.intValue))", type: .debug)
+                if !isExecutable {
+                    LogManager.shared.log("Binary not executable, attempting to fix permissions...", type: .warning)
+                    try self.fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: marscreditPath)
+                }
+            }
+            
+            // Set the current directory for the process
+            self.marscreditProcess?.currentDirectoryURL = URL(fileURLWithPath: self.dataDirectory.path)
+            
+            // Make sure any stale IPC file is removed
+            let ipcPath = self.dataDirectory.appendingPathComponent("geth.ipc").path
+            if fileManager.fileExists(atPath: ipcPath) {
+                try? fileManager.removeItem(atPath: ipcPath)
+                LogManager.shared.log("Removed stale IPC file", type: .debug)
+            }
+            
+            // Save references to the pipes
+            self.marscreditOutput = outputPipe
+            
+            // Clean up any terminated processes
+            LogManager.shared.log("Killing any existing geth processes...", type: .debug)
+            let killTask = Process()
+            killTask.executableURL = URL(fileURLWithPath: "/usr/bin/pkill")
+            killTask.arguments = ["-f", "geth-binary"]
+            try? killTask.run()
+            
+            // Start the process with a slight delay to ensure cleanup is complete
+            DispatchQueue.global().asyncAfter(deadline: .now() + 1) { [weak self] in
+                guard let self = self else { return }
+                do {
+                    try self.marscreditProcess?.run()
+                    
+                    LogManager.shared.log("✨ Local mining node started with PID: \(self.marscreditProcess?.processIdentifier ?? 0)", type: .success)
+                    
+                    // Create a separate file to log geth's raw output
+                    let logsDir = self.dataDirectory.appendingPathComponent("logs")
+                    try? FileManager.default.createDirectory(at: logsDir, withIntermediateDirectories: true)
+                    let gethLogPath = logsDir.appendingPathComponent("geth_output.log")
+                    
+                    // Save process information to the log
+                    let logEntry = """
+                    
+                    ===============================================
+                    GETH PROCESS STARTED: \(Date())
+                    PID: \(self.marscreditProcess?.processIdentifier ?? 0)
+                    COMMAND: \(marscreditPath) \(args.joined(separator: " "))
+                    ===============================================
+                    
+                    """
+                    try? logEntry.write(to: gethLogPath, atomically: true, encoding: .utf8)
+                    
+                    // Create a timer to periodically check if geth is still running
+                    let _ = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak self] _ in
+                        guard let self = self else { return }
+                        
+                        if let process = self.marscreditProcess, process.isRunning {
+                            LogManager.shared.log("Geth process check: Running with PID \(process.processIdentifier)", type: .debug)
+                        } else {
+                            LogManager.shared.log("⚠️ WARNING: Geth process is not running!", type: .warning)
+                            // Check if we can find the process using ps
+                            let psProcess = Process()
+                            psProcess.executableURL = URL(fileURLWithPath: "/bin/ps")
+                            psProcess.arguments = ["aux"]
+                            
+                            let psOutputPipe = Pipe()
+                            psProcess.standardOutput = psOutputPipe
+                            
+                            do {
+                                try psProcess.run()
+                                psProcess.waitUntilExit()
+                                
+                                let psOutput = String(data: psOutputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+                                let gethLines = psOutput.components(separatedBy: .newlines).filter { $0.contains("geth") && !$0.contains("grep") }
+                                
+                                if !gethLines.isEmpty {
+                                    LogManager.shared.log("Found geth processes that might not be tracked by our app:", type: .warning)
+                                    for line in gethLines {
+                                        LogManager.shared.log(line, type: .warning)
+                                    }
+                                } else {
+                                    LogManager.shared.log("No geth processes found running on the system", type: .warning)
+                                }
+                            } catch {
+                                LogManager.shared.log("Error checking for geth processes: \(error)", type: .error)
+                            }
+                        }
+                    }
+                    
+                    // Check if process is running after a short delay
+                    DispatchQueue.global().asyncAfter(deadline: .now() + 5) {
+                        if let process = self.marscreditProcess, process.isRunning {
+                            LogManager.shared.log("Confirmed geth process is running with PID: \(process.processIdentifier)", type: .success)
+                            
+                            // Try to check geth's log files directly
+                            self.checkGethLogs()
+                            
+                            // Let's also try to run the lsof command to ensure the socket is open
+                            let lsofProcess = Process()
+                            lsofProcess.executableURL = URL(fileURLWithPath: "/usr/sbin/lsof")
+                            lsofProcess.arguments = ["-i", ":8546"]
+                            
+                            let outputPipe = Pipe()
+                            lsofProcess.standardOutput = outputPipe
+                            
+                            do {
+                                try lsofProcess.run()
+                                lsofProcess.waitUntilExit()
+                                
+                                let output = String(data: outputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+                                LogManager.shared.log("Port check: \(output)", type: .debug)
+                                
+                                if output.contains("geth") {
+                                    LogManager.shared.log("✅ Geth is listening on port 8546", type: .success)
+                                } else {
+                                    LogManager.shared.log("⚠️ Geth may not be listening on port 8546 yet", type: .warning)
+                                    
+                                    // Check for geth processes
+                                    let psProcess = Process()
+                                    psProcess.executableURL = URL(fileURLWithPath: "/bin/ps")
+                                    psProcess.arguments = ["aux"]
+                                    
+                                    let psOutputPipe = Pipe()
+                                    psProcess.standardOutput = psOutputPipe
+                                    
+                                    try psProcess.run()
+                                    psProcess.waitUntilExit()
+                                    
+                                    let psOutput = String(data: psOutputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+                                    let gethLines = psOutput.components(separatedBy: .newlines).filter { $0.contains("geth") && !$0.contains("grep") }
+                                    
+                                    LogManager.shared.log("Active geth processes:\n\(gethLines.joined(separator: "\n"))", type: .debug)
+                                }
+                            } catch {
+                                LogManager.shared.log("Error checking port: \(error)", type: .error)
+                            }
+                        } else {
+                            LogManager.shared.log("⚠️ Warning: Geth process is not running properly", type: .warning)
+                            
+                            // Try running geth directly to see what happens
+                            let directGethProcess = Process()
+                            directGethProcess.executableURL = URL(fileURLWithPath: marscreditPath)
+                            directGethProcess.arguments = ["--help"]
+                            
+                            let directOutputPipe = Pipe()
+                            directGethProcess.standardOutput = directOutputPipe
+                            directGethProcess.standardError = directOutputPipe
+                            
+                            do {
+                                try directGethProcess.run()
+                                let output = String(data: directOutputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+                                LogManager.shared.log("Direct geth output:\n\(output)", type: .debug)
+                            } catch {
+                                LogManager.shared.log("Failed to run geth directly: \(error)", type: .error)
+                            }
+                        }
+                    }
+                } catch {
+                    LogManager.shared.log("Failed to start geth process: \(error.localizedDescription)", type: .error)
+                }
+            }
+        } catch {
+            DispatchQueue.main.async {
+                LogManager.shared.log("Error starting geth: \(error.localizedDescription)", type: .error)
+                self.isMining = false
+            }
+        }
     }
 }
 

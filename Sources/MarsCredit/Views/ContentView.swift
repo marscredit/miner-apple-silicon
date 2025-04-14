@@ -365,6 +365,9 @@ struct ContentView: View {
         .onAppear {
             generateAccountIfNeeded()
             startAnimationTimers()
+            // We no longer automatically start mining - let the user click the button
+            MiningService.shared = miningService
+            LogManager.shared.log("App started. Click 'Start Mining' to begin mining.", type: .info)
         }
         .onDisappear {
             stopAnimationTimers()

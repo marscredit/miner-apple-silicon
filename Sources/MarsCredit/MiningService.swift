@@ -54,7 +54,21 @@ class MiningService: ObservableObject {
     }
     
     private var bundledMarscreditPath: URL? {
-        dataDirectory.appendingPathComponent("geth-binary")
+        // Try to find the geth binary in the Resources directory
+        let workingDirectory = FileManager.default.currentDirectoryPath
+        let resourcesGethPath = URL(fileURLWithPath: workingDirectory)
+            .appendingPathComponent("Resources")
+            .appendingPathComponent("geth")
+            .appendingPathComponent("geth")
+        
+        if FileManager.default.fileExists(atPath: resourcesGethPath.path) {
+            LogManager.shared.log("Found geth binary in Resources/geth directory", type: .success)
+            return resourcesGethPath
+        }
+        
+        // Fall back to the classic path if not found
+        LogManager.shared.log("Geth binary not found in Resources, falling back to ~/.marscredit/geth-binary", type: .warning)
+        return dataDirectory.appendingPathComponent("geth-binary")
     }
     
     init() {
@@ -1506,17 +1520,13 @@ class MiningService: ObservableObject {
             "--port", "30304",
             "--nat", "any",
             "--mine",
+            "--miner.threads", "1",
             "--miner.etherbase", address,
             "--bootnodes", "enode://bf93a274569cd009e4172c1a41b8bde1fb8d8e7cff1e5130707a0cf5be4ce0fc673c8a138ecb7705025ea4069da8c1d4b7ffc66e8666f7936aa432ce57693353@roundhouse.proxy.rlwy.net:50590,enode://ca3639067a580a0f1db7412aeeef6d5d5e93606ed7f236a5343fe0d1115fb8c2bea2a22fa86e9794b544f886a4cb0de1afcbccf60960802bf00d81dab9553ec9@monorail.proxy.rlwy.net:26254,enode://7f2ee75a1c112735aaa43de1e5a6c4d7e07d03a5352b5782ed8e0c7cc046a8c8839ad093b09649e0b4a6ed8900211fb4438765c99d07bb00006ef080a1aa9ab6@viaduct.proxy.rlwy.net:30270,enode://98710174f4798dae1931e417944ac7a7fb3268d38ef8d3941c8fcc44fe178b118003d8b3d61d85af39c561235a1708f8dd61f8ba47df4c4a6b9156e272af2cfc@monorail.proxy.rlwy.net:29138",
-            "--verbosity", "6",
+            "--verbosity", "3",
             "--maxpeers", "50",
-            "--cache", "2048",
-            "--nodiscover",
-            "--rpc.allow-unprotected-txs",
-            "--authrpc.addr", "localhost",
-            "--authrpc.port", "8551",
-            "--authrpc.vhosts", "*",
-            "--ethash.dagdir", self.ethashDirectory.path
+            "--cache", "512",
+            "--nodiscover"
         ]
         
         let manualCommand = args.joined(separator: " ")
@@ -1585,6 +1595,15 @@ class MiningService: ObservableObject {
                         // Split the output into lines and process each one
                         output.components(separatedBy: .newlines).forEach { line in
                             guard !line.isEmpty else { return }
+                            
+                            // Check for DAG generation progress
+                            if line.contains("Generating DAG in progress") {
+                                let logLine = "⛏️ " + line
+                                DispatchQueue.main.async {
+                                    LogManager.shared.log(logLine, type: .mining)
+                                }
+                                return
+                            }
                             
                             // Check for specific patterns that might indicate blockchain issues
                             if line.contains("Failed to write genesis block") {

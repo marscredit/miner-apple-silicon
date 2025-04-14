@@ -10,6 +10,45 @@ A native macOS application for mining Mars Credit (MARS) on Apple Silicon Macs. 
 - One-click mining start/stop
 - Clean, modern user interface
 
+## Technical Overview
+
+The Mars Credit Miner implements an Ethereum mining node using Geth 1.10.18 with the following configuration:
+
+### Blockchain Configuration
+- Custom private blockchain with chainID 110110
+- Proof-of-Work (PoW) with Ethash algorithm
+- Genesis block with low initial difficulty (0x400)
+- Block gas limit of 0x1c9c380
+
+### Node Execution
+- Wrapper script (`run_geth_in_app.sh`) manages Geth execution
+- Geth binary (v1.10.18) is bundled with the application
+- Direct Process execution fallback if wrapper is unavailable
+
+### Network Configuration
+- HTTP RPC on port 8546
+- WebSocket interface on port 8547
+- P2P port 30304
+- Configured bootnodes for peer discovery
+- Full node synchronization mode
+- Maximum 50 peers
+
+### Mining Settings
+- Single mining thread to prevent resource overuse
+- Reduced cache (512MB) for better stability
+- Mining rewards sent to configurable address
+- DAG generation progress tracking in UI
+
+### Data Storage
+- User data stored in ~/.marscredit
+- Separate directories for keystore, chaindata, and logs
+- Comprehensive logging for debugging
+
+### Error Handling
+- Process monitoring for crashes
+- Automatic chaindata reinitialization if needed
+- Log file monitoring with error detection
+
 ## Requirements
 
 - macOS 12.0 or later

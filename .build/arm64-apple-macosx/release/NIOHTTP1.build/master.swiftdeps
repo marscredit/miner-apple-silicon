@@ -1,7 +1,7 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "b7b95ea1e18604f4da90fbca6418855aeb45b7cee97b946e3286a25ca173a405"
-build_start_time: [1741345697, 596523000]
-build_end_time: [1741345701, 438202000]
+build_start_time: [1744958221, 433687000]
+build_end_time: [1744958224, 805396000]
 inputs:
   "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOHTTP1/ByteCollectionUtils.swift": [1741329909, 33923863]
   "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOHTTP1/HTTPDecoder.swift": [1741329909, 34020487]

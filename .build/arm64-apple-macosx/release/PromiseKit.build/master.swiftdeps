@@ -1,7 +1,7 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "4bbb57d6e0be03595dd1595a419c96f78b968922fb9b037ebed46f9dfe8f3e0a"
-build_start_time: [1741345661, 388816000]
-build_end_time: [1741345665, 583358000]
+build_start_time: [1744958204, 441449000]
+build_end_time: [1744958205, 745378000]
 inputs:
   "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Async.swift": [1741329909, 256220465]
   "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/PromiseKit/Sources/Box.swift": [1741329909, 256272506]

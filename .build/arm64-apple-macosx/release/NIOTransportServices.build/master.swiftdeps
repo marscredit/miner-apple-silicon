@@ -1,7 +1,7 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "8766c008ee4a08ab3b21664de9d6709f412676fc7b3bd3995c4d77071054b740"
-build_start_time: [1741345698, 379813000]
-build_end_time: [1741345701, 413349000]
+build_start_time: [1744958222, 154661000]
+build_end_time: [1744958224, 663055000]
 inputs:
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio-transport-services/Sources/NIOTransportServices/AcceptHandler.swift"
   : [1741329922, 951518689]

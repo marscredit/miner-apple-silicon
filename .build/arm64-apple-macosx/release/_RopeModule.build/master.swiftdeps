@@ -1,7 +1,7 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "4aa8275aadb6484f01fb8d5799c7bc9f07827f972447a40e099ed2c1267c6d44"
-build_start_time: [1741345662, 409235000]
-build_end_time: [1741345672, 937379000]
+build_start_time: [1744958205, 468738000]
+build_end_time: [1744958211, 207656000]
 inputs:
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Basics/BigString+Builder.swift"
   : [1741329923, 137456756]

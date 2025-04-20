@@ -1,7 +1,7 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "1ad18ab8980ff6b115bd419f8cba9e8755e77cb87288b4fd9f640e544ce7f775"
-build_start_time: [1741345679, 430280000]
-build_end_time: [1741345683, 566224000]
+build_start_time: [1744958204, 443912000]
+build_end_time: [1744958208, 357453000]
 inputs:
   "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/BigInt/Sources/Addition.swift": [1741329924, 424345652]
   "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/BigInt/Sources/BigInt.swift": [1741329924, 424420610]

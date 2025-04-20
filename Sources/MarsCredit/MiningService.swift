@@ -10,14 +10,50 @@ struct NetworkStatus {
 }
 
 class MiningService: ObservableObject {
-    @Published private(set) var isMining = false
-    @Published private(set) var currentHashRate: Double = 0.0
-    @Published private(set) var networkStatus = NetworkStatus(currentBlock: 0, highestBlock: 0, isConnected: false)
-    @Published private(set) var currentBalance: Double = 0.0
-    @Published private(set) var miningAddress: String = ""
-    @Published private(set) var averageBlockTime: Double = 0.0
-    @Published private(set) var blocksFound: Int = 0
-    @Published private(set) var connectionAttempts: Int = 0
+    // Add serial queue for synchronization
+    private let queue = DispatchQueue(label: "com.marscredit.miningservice")
+    private let semaphore = DispatchSemaphore(value: 1)
+    
+    @Published private(set) var isMining = false {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+    @Published private(set) var currentHashRate: Double = 0.0 {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+    @Published private(set) var networkStatus = NetworkStatus(currentBlock: 0, highestBlock: 0, isConnected: false) {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+    @Published private(set) var currentBalance: Double = 0.0 {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+    @Published private(set) var miningAddress: String = "" {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+    @Published private(set) var averageBlockTime: Double = 0.0 {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+    @Published private(set) var blocksFound: Int = 0 {
+        didSet {
+            objectWillChange.send()
+        }
+    }
+    @Published private(set) var connectionAttempts: Int = 0 {
+        didSet {
+            objectWillChange.send()
+        }
+    }
     
     private let fileManager = FileManager.default
     private let homeDirectory = FileManager.default.homeDirectoryForCurrentUser
@@ -31,6 +67,10 @@ class MiningService: ObservableObject {
     private var lastBlockTimestamps: [TimeInterval] = []
     private var lastConnectionAttempt: Date?
     private var isReconnecting = false
+    
+    private var localClient: EthereumClient?
+    private var remoteClient: EthereumClient?
+    private let remoteRpcUrl = "https://rpc.marscredit.xyz"
     
     // Directory structure
     var keystoreDirectory: URL {
@@ -58,7 +98,16 @@ class MiningService: ObservableObject {
     }
     
     private var bundledMarscreditPath: URL? {
-        // Try to find the geth binary in the Resources directory
+        // First try to find the binary in the app bundle's Resources directory
+        if let bundleURL = Bundle.main.resourceURL {
+            let gethPath = bundleURL.appendingPathComponent("geth").appendingPathComponent("geth")
+            if FileManager.default.fileExists(atPath: gethPath.path) {
+                LogManager.shared.log("Found geth binary in app bundle", type: .success)
+                return gethPath
+            }
+        }
+        
+        // Try to find the geth binary in the Resources directory relative to working directory
         let workingDirectory = FileManager.default.currentDirectoryPath
         let resourcesGethPath = URL(fileURLWithPath: workingDirectory)
             .appendingPathComponent("Resources")
@@ -71,7 +120,7 @@ class MiningService: ObservableObject {
         }
         
         // Fall back to the classic path if not found
-        LogManager.shared.log("Geth binary not found in Resources, falling back to ~/.marscredit/geth-binary", type: .warning)
+        LogManager.shared.log("Geth binary not found in standard locations, falling back to ~/.marscredit/geth-binary", type: .warning)
         return dataDirectory.appendingPathComponent("geth-binary")
     }
     
@@ -226,62 +275,129 @@ class MiningService: ObservableObject {
     }
     
     private func setupEthereumClient() {
-        connectionAttempts += 1
-        lastConnectionAttempt = Date()
-        
-        // Try local endpoint first, then fall back to remote
-        let localClient = EthereumClient(rpcURL: "http://localhost:8546")
-        
-        localClient.testConnection().done { [weak self] connected in
+        queue.async { [weak self] in
             guard let self = self else { return }
             
-            if connected {
-                LogManager.shared.log("Connected to local RPC endpoint", type: .success)
-                self.ethClient = localClient
-                self.startUpdatingStatus()
-                self.isReconnecting = false
-            } else {
-                // Fall back to remote endpoint
-                LogManager.shared.log("Local endpoint not available, using remote RPC", type: .info)
-                let remoteClient = EthereumClient(rpcURL: "https://rpc.marscredit.xyz:443")
-                self.ethClient = remoteClient
-                
-                remoteClient.testConnection().done { connected in
-                    if connected {
-                        LogManager.shared.log("Connected to remote RPC endpoint - Mars Credit network (ID: 110110)", type: .success)
-                        self.startUpdatingStatus()
-                        self.isReconnecting = false
-                    } else {
-                        LogManager.shared.log("Failed to connect to any RPC endpoint", type: .error)
-                        self.scheduleReconnection()
+            DispatchQueue.main.async {
+                self.connectionAttempts += 1
+                self.lastConnectionAttempt = Date()
+            }
+            
+            // Set up remote client first to get network status
+            let remote = EthereumClient(rpcURL: remoteRpcUrl)
+            
+            do {
+                let remoteConnected = try remote.testConnection().wait()
+                if remoteConnected {
+                    LogManager.shared.log("Connected to remote RPC endpoint", type: .success)
+                    DispatchQueue.main.async {
+                        self.remoteClient = remote
                     }
-                }.catch { error in
-                    LogManager.shared.log("Error connecting to remote endpoint: \(error.localizedDescription)", type: .error)
-                    self.scheduleReconnection()
+                    
+                    // Get initial network status
+                    self.updateNetworkStatus()
+                }
+            } catch {
+                LogManager.shared.log("Failed to connect to remote RPC: \(error.localizedDescription)", type: .warning)
+            }
+            
+            // Now try local endpoint for mining
+            let local = EthereumClient(rpcURL: "http://localhost:8546")
+            
+            var localConnected = false
+            for attempt in 1...3 {
+                do {
+                    let result = try local.testConnection().wait()
+                    if result {
+                        LogManager.shared.log("Connected to local RPC endpoint (attempt \(attempt))", type: .success)
+                        localConnected = true
+                        break
+                    }
+                } catch {
+                    LogManager.shared.log("Local connection attempt \(attempt) failed: \(error.localizedDescription)", type: .warning)
+                    Thread.sleep(forTimeInterval: Double(attempt) * 2.0)
                 }
             }
-        }.catch { [weak self] _ in
-            guard let self = self else { return }
             
-            // Fall back to remote endpoint
-            LogManager.shared.log("Local endpoint not available, using remote RPC", type: .info)
-            let remoteClient = EthereumClient(rpcURL: "https://rpc.marscredit.xyz:443")
-            self.ethClient = remoteClient
-            
-            remoteClient.testConnection().done { connected in
-                if connected {
-                    LogManager.shared.log("Connected to remote RPC endpoint - Mars Credit network (ID: 110110)", type: .success)
+            if localConnected {
+                DispatchQueue.main.async {
+                    self.localClient = local
                     self.startUpdatingStatus()
                     self.isReconnecting = false
-                } else {
-                    LogManager.shared.log("Failed to connect to any RPC endpoint", type: .error)
-                    self.scheduleReconnection()
                 }
-            }.catch { error in
-                LogManager.shared.log("Error connecting to remote endpoint: \(error.localizedDescription)", type: .error)
-                self.scheduleReconnection()
+            } else {
+                // Add exponential backoff for retry
+                let delay = min(30.0, pow(2.0, Double(self.connectionAttempts)))
+                DispatchQueue.global().asyncAfter(deadline: .now() + delay) { [weak self] in
+                    DispatchQueue.main.async {
+                        self?.isReconnecting = false
+                    }
+                    self?.setupEthereumClient()
+                }
+                LogManager.shared.log("Local endpoint not available, retrying in \(Int(delay)) seconds", type: .info)
             }
         }
+    }
+    
+    private func updateNetworkStatus() {
+        guard let remote = remoteClient else { return }
+        
+        // Get latest block from remote
+        remote.getLatestBlock().done { [weak self] blockNumber in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.latestBlockNumber = blockNumber
+            }
+        }.catch { error in
+            LogManager.shared.log("Failed to get latest block from remote: \(error.localizedDescription)", type: .error)
+        }
+        
+        // Get local sync status if available
+        if let local = localClient {
+            local.getSyncStatus().done { [weak self] syncStatus in
+                guard let self = self else { return }
+                
+                DispatchQueue.main.async {
+                    self.networkStatus = NetworkStatus(
+                        currentBlock: syncStatus.currentBlock,
+                        highestBlock: self.latestBlockNumber,
+                        isConnected: true
+                    )
+                }
+            }.catch { error in
+                LogManager.shared.log("Failed to get local sync status: \(error.localizedDescription)", type: .error)
+            }
+            
+            // Get mining status and hashrate
+            local.getHashRate().done { [weak self] hashRate in
+                DispatchQueue.main.async {
+                    self?.isMining = hashRate > 0
+                    self?.currentHashRate = Double(hashRate) / 1_000_000 // Convert to MH/s
+                }
+            }.catch { error in
+                LogManager.shared.log("Failed to get hashrate: \(error.localizedDescription)", type: .error)
+            }
+        }
+    }
+    
+    private func checkDagGenerationStatus() -> String? {
+        let logFile = dataDirectory.appendingPathComponent("geth.log")
+        guard let logContents = try? String(contentsOf: logFile, encoding: .utf8) else {
+            return nil
+        }
+        
+        // Look for DAG generation progress in the last few lines
+        let lines = logContents.components(separatedBy: .newlines).reversed()
+        for line in lines.prefix(20) {
+            if line.contains("Generating DAG in progress") {
+                if let percentageRange = line.range(of: "percentage=\\d+", options: .regularExpression),
+                   let percentage = Int(line[percentageRange].dropFirst(10)) {
+                    return "DAG generation at \(percentage)%"
+                }
+                return "DAG generation in progress"
+            }
+        }
+        return nil
     }
     
     private func setupReconnectionTimer() {
@@ -471,141 +587,60 @@ class MiningService: ObservableObject {
     }
     
     private func startUpdatingStatus() {
-        updateTimer?.invalidate()
-        updateTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
-            self?.updateNetworkStatus()
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            
+            // Start update timer if not already running
+            if self.updateTimer == nil {
+                self.updateTimer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: true) { [weak self] _ in
+                    self?.queue.async {
+                        self?.updateMiningStatus()
+                    }
+                }
+            }
+            
+            // Start block timer if not already running
+            if self.latestBlockTimer == nil {
+                self.latestBlockTimer = Timer.scheduledTimer(withTimeInterval: 15.0, repeats: true) { [weak self] _ in
+                    self?.queue.async {
+                        self?.updateLatestBlock()
+                    }
+                }
+            }
         }
-        updateTimer?.fire()
     }
     
-    private func updateNetworkStatus() {
-        guard let client = ethClient else { 
-            // No client available, schedule reconnection
-            if !isReconnecting {
-                scheduleReconnection()
+    private func updateMiningStatus() {
+        guard let client = ethClient else {
+            DispatchQueue.main.async { [weak self] in
+                self?.networkStatus = NetworkStatus(currentBlock: 0, highestBlock: 0, isConnected: false)
             }
-            return 
+            return
         }
         
-        // Check if we're running a local node or using a remote RPC
-        let isLocalNode = marscreditProcess != nil && client.rpcURL.contains("localhost")
-        
-        // Update mining status directly from geth when possible
-        if isMining && isLocalNode {
-            updateGethStatus()
-        }
-        
-        client.getSyncStatus().done { [weak self] result in
+        // Get sync status
+        client.getSyncStatus().done { [weak self] syncStatus in
             guard let self = self else { return }
             
-            // Store the values
-            let currentBlock = result.currentBlock
-            let highestBlock = result.highestBlock
-            
-            // Track block timestamps for average calculation
-            if let lastKnownBlock = self.networkStatus.currentBlock as? BigInt, 
-               currentBlock > lastKnownBlock {
-                self.lastBlockTimestamps.append(Date().timeIntervalSince1970)
-                
-                // Limit the array to the last 10 blocks for the average
-                if self.lastBlockTimestamps.count > 10 {
-                    self.lastBlockTimestamps.removeFirst()
-                }
-                
-                // Calculate average block time if we have at least 2 timestamps
-                if self.lastBlockTimestamps.count >= 2 {
-                    let times = self.lastBlockTimestamps
-                    var totalTime: TimeInterval = 0
-                    
-                    for i in 1..<times.count {
-                        totalTime += times[i] - times[i-1]
-                    }
-                    
-                    let avgTime = totalTime / Double(times.count - 1)
-                    self.averageBlockTime = avgTime
-                }
-            }
-            
-            // Calculate sync progress - ensure we have a valid value
-            let progress: Double
-            
-            if isLocalNode {
-                // When using local node, we need to track sync progress
-                if highestBlock > 0 {
-                    progress = Double(currentBlock) / Double(highestBlock)
-                } else if self.latestBlockNumber > 0 {
-                    progress = Double(currentBlock) / Double(self.latestBlockNumber)
-                } else {
-                    progress = 0
-                }
-                
-                // For local nodes, we always show sync status until we reach the network height
-                let isSyncing = currentBlock < self.latestBlockNumber
-                
-                DispatchQueue.main.async {
-                    self.networkStatus = NetworkStatus(
-                        currentBlock: currentBlock,
-                        highestBlock: self.latestBlockNumber,
-                        isConnected: true
-                    )
-                }
-            } else {
-                // When using remote node, we're already at network height
-                DispatchQueue.main.async {
-                    self.networkStatus = NetworkStatus(
-                        currentBlock: currentBlock,
-                        highestBlock: currentBlock, // Same as current block
-                        isConnected: true
-                    )
-                }
-            }
-            
-            // Update balance for the mining address if we have one
-            if !self.miningAddress.isEmpty {
-                self.updateBalance(address: self.miningAddress)
-            } else {
-                // Fallback to a default address if necessary
-                self.updateBalance(address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e")
-            }
-        }.catch { [weak self] error in
-            guard let self = self else { return }
-            print("Failed to update network status: \(error)")
-            
-            // Mark as disconnected on error
             DispatchQueue.main.async {
-                var currentStatus = self.networkStatus
-                currentStatus.isConnected = false
-                self.networkStatus = currentStatus
+                self.networkStatus = NetworkStatus(
+                    currentBlock: syncStatus.currentBlock,
+                    highestBlock: syncStatus.highestBlock,
+                    isConnected: true
+                )
             }
-            
-            if !self.isReconnecting {
-                self.scheduleReconnection()
-            }
+        }.catch { error in
+            LogManager.shared.log("Failed to get sync status: \(error.localizedDescription)", type: .error)
         }
         
-        // Get latest block separately to ensure we always have the most current network height
-        client.getLatestBlock().done { [weak self] blockNumber in
-            guard let self = self else { return }
-            self.latestBlockNumber = blockNumber
-        }.catch { [weak self] error in
-            print("Failed to get latest block: \(error)")
-            // No need to take action here since the sync status call will handle reconnection
-        }
-        
-        if isMining {
-            client.getHashRate().done { [weak self] hashRate in
+        // Get mining status by checking hash rate
+        client.getHashRate().done { [weak self] hashRate in
+            DispatchQueue.main.async {
+                self?.isMining = hashRate > 0
                 self?.currentHashRate = Double(hashRate) / 1_000_000 // Convert to MH/s
-                
-                // Only log significant hashrate changes
-                if let self = self, hashRate > 0 {
-                    LogManager.shared.log("Mining hashrate: \(Double(hashRate) / 1_000_000) MH/s", type: .mining)
-                }
-            }.catch { [weak self] error in
-                print("Failed to update hash rate: \(error)")
-                
-                // Fallback to direct mining hashrate retrieval using admin module
-                self?.updateDirectHashrate()
             }
+        }.catch { error in
+            LogManager.shared.log("Failed to get hashrate: \(error.localizedDescription)", type: .error)
         }
     }
     
@@ -1573,6 +1608,10 @@ class MiningService: ObservableObject {
             // Use the wrapper script instead of directly managing Process
             LogManager.shared.log("Found geth wrapper script - using it to launch geth", type: .info)
             
+            // Make sure ethash directory exists
+            try? fileManager.createDirectory(at: ethashDirectory, withIntermediateDirectories: true)
+            LogManager.shared.log("Ensured ethash directory exists at: \(ethashDirectory.path)", type: .debug)
+            
             // Create a simple Process to run the wrapper script
             let wrapperProcess = Process()
             wrapperProcess.executableURL = URL(fileURLWithPath: "/bin/bash")
@@ -1582,33 +1621,49 @@ class MiningService: ObservableObject {
                 try wrapperProcess.run()
                 LogManager.shared.log("✨ Launched geth wrapper script", type: .success)
                 
-                // Make sure ethash directory exists
-                try? fileManager.createDirectory(at: ethashDirectory, withIntermediateDirectories: true)
-                LogManager.shared.log("Ensured ethash directory exists at: \(ethashDirectory.path)", type: .debug)
-                
-                // Connection is delayed to give Geth time to start up
-                LogManager.shared.log("Waiting for Geth to start up...", type: .info)
+                // For Geth 1.10.18, we need to wait a bit longer for node startup
+                LogManager.shared.log("Waiting for Geth to start up (DAG generation may take time)...", type: .info)
                 
                 // Set up a timer to monitor the geth log file
-                Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
+                let logMonitorTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
                     self?.monitorGethLogFile()
                 }
                 
-                // Connect to the RPC endpoint after a longer delay (10 seconds)
-                // This gives Geth time to start up and begin DAG generation without blocking UI
-                DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in
+                // Connection is delayed to give Geth time to start up - this is critical for Apple Silicon
+                // We'll use a longer delay to ensure DAG generation has time to progress
+                DispatchQueue.main.asyncAfter(deadline: .now() + 15) { [weak self] in
                     guard let self = self else { return }
                     LogManager.shared.log("Attempting to connect to Geth RPC endpoint...", type: .info)
                     self.setupEthereumClient()
                     
-                    // Check connection status after another delay
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    // First connection attempt
+                    // We'll check again after a delay and set up auto-reconnect if needed
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in
+                        guard let self = self else { return }
+                        
                         if self.networkStatus.isConnected {
                             LogManager.shared.log("Successfully connected to Geth node", type: .success)
+                            
+                            // Verify mining is running
+                            self.checkMiningStatus()
                         } else {
                             LogManager.shared.log("Still waiting for Geth node to be ready...", type: .warning)
+                            
+                            // Try checking the process status
+                            self.checkGethProcess()
+                            
                             // Set up auto-reconnect
                             self.setupReconnectionTimer()
+                            
+                            // One more attempt after a longer delay
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 20) { [weak self] in
+                                guard let self = self else { return }
+                                
+                                if !self.networkStatus.isConnected {
+                                    LogManager.shared.log("Trying one more time to connect to Geth...", type: .info)
+                                    self.setupEthereumClient()
+                                }
+                            }
                         }
                     }
                 }
@@ -1625,10 +1680,47 @@ class MiningService: ObservableObject {
         directLaunchGeth(address: address, password: password)
     }
     
+    // Check if mining is actually running
+    private func checkMiningStatus() {
+        guard let client = ethClient else { return }
+        
+        // Use eth.mining to check if mining is actually running
+        client.executeJS(script: "eth.mining").done { result in
+            let isMining = result.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == "true"
+            
+            if isMining {
+                LogManager.shared.log("✅ Mining is active", type: .success)
+            } else {
+                LogManager.shared.log("⚠️ Mining is not active, attempting to start it", type: .warning)
+                
+                // Try to start mining
+                client.executeJS(script: "miner.start()").done { _ in
+                    LogManager.shared.log("Mining start command sent", type: .info)
+                }.catch { error in
+                    LogManager.shared.log("Failed to start mining via RPC: \(error)", type: .error)
+                }
+            }
+        }.catch { error in
+            LogManager.shared.log("Failed to check mining status: \(error)", type: .warning)
+        }
+        
+        // Also check hashrate as a confirmation
+        client.getHashRate().done { hashRate in
+            if hashRate > 0 {
+                LogManager.shared.log("Confirmed mining is working with hashrate: \(Double(hashRate) / 1_000_000) MH/s", type: .success)
+            } else {
+                LogManager.shared.log("Mining appears to be inactive (hashrate = 0)", type: .warning)
+            }
+        }.catch { _ in
+            // Silent fail - already logged in other methods
+        }
+    }
+    
     // Monitor Geth process status
     private func checkGethProcess() {
         // Check if PID file exists
         let pidFilePath = dataDirectory.appendingPathComponent("geth.pid").path
+        
         if fileManager.fileExists(atPath: pidFilePath) {
             do {
                 let pidString = try String(contentsOfFile: pidFilePath, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines)
@@ -1656,6 +1748,30 @@ class MiningService: ObservableObject {
             } catch {
                 LogManager.shared.log("Error checking Geth PID: \(error.localizedDescription)", type: .error)
             }
+        }
+        
+        // If PID file doesn't exist or process not running, check for any geth processes
+        let checkAllProcess = Process()
+        checkAllProcess.executableURL = URL(fileURLWithPath: "/usr/bin/pgrep")
+        checkAllProcess.arguments = ["geth"]
+        
+        let outputPipe = Pipe()
+        checkAllProcess.standardOutput = outputPipe
+        
+        do {
+            try checkAllProcess.run()
+            checkAllProcess.waitUntilExit()
+            
+            let output = String(data: outputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+            if !output.isEmpty {
+                let pids = output.components(separatedBy: .newlines).filter { !$0.isEmpty }
+                if !pids.isEmpty {
+                    LogManager.shared.log("Found running geth processes with PIDs: \(pids.joined(separator: ", "))", type: .info)
+                    return
+                }
+            }
+        } catch {
+            LogManager.shared.log("Error checking for geth processes: \(error.localizedDescription)", type: .debug)
         }
         
         // If we get here, the Geth process is not running
@@ -1755,6 +1871,138 @@ class MiningService: ObservableObject {
         
         LogManager.shared.log("Created new wallet with address: \(address)", type: .success)
         return (address, mnemonicString)
+    }
+    
+    // Direct launch method as a fallback - more likely to cause app freezing
+    private func directLaunchGeth(address: String, password: String) {
+        LogManager.shared.log("WARNING: Using direct launch method, which may affect app stability", type: .warning)
+        
+        // Initialize blockchain if needed
+        self.initializeBlockchain()
+        
+        guard let marscreditPath = self.bundledMarscreditPath?.path,
+              self.fileManager.fileExists(atPath: marscreditPath) else {
+            DispatchQueue.main.async {
+                LogManager.shared.log("Error: go-marscredit binary not found at \(self.bundledMarscreditPath?.path ?? "unknown path")", type: .error)
+                self.isMining = false
+            }
+            return
+        }
+        
+        // Make sure ethash directory exists
+        try? fileManager.createDirectory(at: ethashDirectory, withIntermediateDirectories: true)
+        
+        // For Geth 1.10.18, we'll use environment variables instead of flags
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: marscreditPath)
+        
+        // Build args array with reduced resource usage - Geth 1.10.18 compatible
+        let args = [
+            "--datadir", self.dataDirectory.path,
+            "--keystore", self.keystoreDirectory.path,
+            "--syncmode", "full",
+            "--http",
+            "--http.addr", "localhost",
+            "--http.port", "8546",
+            "--http.api", "personal,eth,net,web3,miner,admin",
+            "--http.vhosts", "*",
+            "--http.corsdomain", "*",
+            "--networkid", "110110",
+            "--ws",
+            "--ws.addr", "localhost",
+            "--ws.port", "8547",
+            "--port", "30304",
+            "--nat", "any",
+            "--mine",
+            "--miner.threads", "1",
+            "--miner.etherbase", address,
+            "--bootnodes", "enode://ca3639067a580a0f1db7412aeeef6d5d5e93606ed7f236a5343fe0d1115fb8c2bea2a22fa86e9794b544f886a4cb0de1afcbccf60960802bf00d81dab9553ec9@monorail.proxy.rlwy.net:26254,enode://7f2ee75a1c112735aaa43de1e5a6c4d7e07d03a5352b5782ed8e0c7cc046a8c8839ad093b09649e0b4a6ed8900211fb4438765c99d07bb00006ef080a1aa9ab6@viaduct.proxy.rlwy.net:30270,enode://98710174f4798dae1931e417944ac7a7fb3268d38ef8d3941c8fcc44fe178b118003d8b3d61d85af39c561235a1708f8dd61f8ba47df4c4a6b9156e272af2cfc@monorail.proxy.rlwy.net:29138",
+            "--verbosity", "3",
+            "--maxpeers", "25",
+            "--cache", "128",
+            "--nodiscover",
+            "--nousb"
+        ]
+        
+        // When starting the miner, we'll explicitly set our state to "syncing from zero"
+        // until we start getting accurate sync data from our local node
+        DispatchQueue.main.async {
+            self.networkStatus = NetworkStatus(
+                currentBlock: 0,
+                highestBlock: self.latestBlockNumber,
+                isConnected: true
+            )
+        }
+        
+        // Try to run DAG generation in a separate process first
+        let dagProcess = Process()
+        dagProcess.executableURL = URL(fileURLWithPath: marscreditPath)
+        dagProcess.arguments = [
+            "--datadir", self.dataDirectory.path,
+            "--maxpeers", "0",
+            "--cache", "128",
+            "--mine",
+            "--verbosity", "3",
+            "--nodiscover"
+        ]
+        
+        // Environment variable to set ethash dir location
+        dagProcess.environment = ProcessInfo.processInfo.environment
+        dagProcess.environment?["ETHASH_DAGDIR"] = ethashDirectory.path
+        
+        // Run the DAG generation process for a short time
+        LogManager.shared.log("Starting DAG pre-generation process...", type: .info)
+        try? dagProcess.run()
+        
+        // Wait for a few seconds then kill it
+        DispatchQueue.global().asyncAfter(deadline: .now() + 3) {
+            dagProcess.terminate()
+            
+            // Now run the main geth process
+            DispatchQueue.global().asyncAfter(deadline: .now() + 1) { [weak self] in
+                guard let self = self else { return }
+                
+                // Create the actual mining process
+                self.marscreditProcess = Process()
+                self.marscreditProcess?.executableURL = URL(fileURLWithPath: marscreditPath)
+                self.marscreditProcess?.arguments = args
+                
+                // Set environment variables for ethash dir
+                self.marscreditProcess?.environment = ProcessInfo.processInfo.environment
+                self.marscreditProcess?.environment?["ETHASH_DAGDIR"] = self.ethashDirectory.path
+                
+                // Create output pipes
+                let outputPipe = Pipe()
+                let errorPipe = Pipe()
+                
+                self.marscreditProcess?.standardOutput = outputPipe
+                self.marscreditProcess?.standardError = errorPipe
+                
+                // Set the current directory
+                self.marscreditProcess?.currentDirectoryURL = URL(fileURLWithPath: self.dataDirectory.path)
+                
+                // Start the process
+                do {
+                    try self.marscreditProcess?.run()
+                    
+                    if let pid = self.marscreditProcess?.processIdentifier {
+                        LogManager.shared.log("✨ Started Geth process with PID: \(pid)", type: .success)
+                        
+                        // Save PID to file for future reference
+                        let pidString = "\(pid)"
+                        try? pidString.write(to: self.dataDirectory.appendingPathComponent("geth.pid"), 
+                                       atomically: true, encoding: .utf8)
+                                       
+                        // Connect to the RPC after a delay
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 15) {
+                            self.setupEthereumClient()
+                        }
+                    }
+                } catch {
+                    LogManager.shared.log("Failed to start geth: \(error.localizedDescription)", type: .error)
+                }
+            }
+        }
     }
 }
 

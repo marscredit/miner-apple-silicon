@@ -42,17 +42,11 @@ mkdir -p "$MACOS_DIR" "$RESOURCES_DIR/fonts" "$DEPS_DIR"
 echo "Setting up go-marscredit..."
 mkdir -p "$GO_MARSCREDIT_DIR/build/bin"
 
-# Download pre-built geth binary for Apple Silicon
-GETH_VERSION="1.15.4"
-GETH_COMMIT="8ccca244"
-GETH_URL="https://gethstore.blob.core.windows.net/builds/geth-darwin-arm64-${GETH_VERSION}-${GETH_COMMIT}.tar.gz"
-echo "Downloading geth from $GETH_URL..."
-curl -L $GETH_URL -o geth.tar.gz
-tar -xzf geth.tar.gz
-mv geth-darwin-arm64-${GETH_VERSION}-${GETH_COMMIT}/geth "$GO_MARSCREDIT_DIR/build/bin/"
-rm -rf geth.tar.gz geth-darwin-arm64-${GETH_VERSION}-${GETH_COMMIT}
-
-# Make geth executable
+# Copy the existing Geth binary (x86_64 version that runs via Rosetta 2)
+# We use x86_64 because this is a fork of Ethereum proof of work
+# that requires v1.10.18, which predates native arm64 support
+echo "Copying Geth binary..."
+cp Resources/geth/geth "$GO_MARSCREDIT_DIR/build/bin/"
 chmod +x "$GO_MARSCREDIT_DIR/build/bin/geth"
 
 # Copy binary

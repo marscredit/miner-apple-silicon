@@ -102,7 +102,7 @@ if [ ! -z "\$PORT_CHECK" ]; then
     sleep 2
 fi
 
-# Start geth with optimized settings for Apple Silicon
+# Start geth with optimized settings for Apple Silicon and improved connection stability
 \$HOME/.marscredit/geth-binary \\
     --datadir "\$HOME/.marscredit" \\
     --keystore "\$HOME/.marscredit/keystore" \\
@@ -119,6 +119,12 @@ fi
     --cache "512" \\
     --bootnodes "enode://ca3639067a580a0f1db7412aeeef6d5d5e93606ed7f236a5343fe0d1115fb8c2bea2a22fa86e9794b544f886a4cb0de1afcbccf60960802bf00d81dab9553ec9@monorail.proxy.rlwy.net:26254,enode://7f2ee75a1c112735aaa43de1e5a6c4d7e07d03a5352b5782ed8e0c7cc046a8c8839ad093b09649e0b4a6ed8900211fb4438765c99d07bb00006ef080a1aa9ab6@viaduct.proxy.rlwy.net:30270,enode://98710174f4798dae1931e417944ac7a7fb3268d38ef8d3941c8fcc44fe178b118003d8b3d61d85af39c561235a1708f8dd61f8ba47df4c4a6b9156e272af2cfc@monorail.proxy.rlwy.net:29138" \\
     --nousb \\
+    --rpc.allow-unprotected-txs \\
+    --ws \\
+    --ws.addr "localhost" \\
+    --ws.port "8546" \\
+    --ws.origins "*" \\
+    --ws.api "personal,eth,net,web3,miner,admin" \\
     > "\$HOME/.marscredit/logs/geth.log" 2>&1 &
 
 # Store the PID
@@ -132,6 +138,14 @@ MAX_ATTEMPTS=30
 for ((i=1; i<=MAX_ATTEMPTS; i++)); do
     if curl -s -X POST -H "Content-Type: application/json" --data '{"jsonrpc":"2.0","method":"net_version","params":[],"id":1}' http://localhost:8546 > /dev/null 2>&1; then
         echo "RPC endpoint is available!"
+        
+        # Enable mining by default to ensure it stays active
+        sleep 2
+        curl -s -X POST -H "Content-Type: application/json" \\
+            --data '{"jsonrpc":"2.0","method":"miner_start","params":[1],"id":1}' \\
+            http://localhost:8546 > /dev/null 2>&1
+        
+        echo "Mining activated by default"
         exit 0
     fi
     

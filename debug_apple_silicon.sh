@@ -91,8 +91,9 @@ nohup ./Resources/geth/geth \
     --http \
     --http.addr "localhost" \
     --http.port "8546" \
-    --http.api "personal,eth,net,web3,miner" \
+    --http.api "personal,eth,net,web3,miner,admin" \
     --http.corsdomain "*" \
+    --http.vhosts "*" \
     --networkid "110110" \
     --port "30304" \
     --miner.etherbase "$MINING_ADDRESS" \
@@ -101,6 +102,12 @@ nohup ./Resources/geth/geth \
     --bootnodes "$BOOTNODES" \
     --nat "any" \
     --nousb \
+    --rpc.allow-unprotected-txs \
+    --ws \
+    --ws.addr "localhost" \
+    --ws.port "8546" \
+    --ws.origins "*" \
+    --ws.api "personal,eth,net,web3,miner,admin" \
     --verbosity 3 > "$LOG_DIR/geth.log" 2>&1 &
 
 # Save the PID

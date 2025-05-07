@@ -1,7 +1,7 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "2440d2d0306bc2d920bac64b93798eb7bb1c4702a90845f186c80fa9b066b340"
-build_start_time: [1744958227, 613364000]
-build_end_time: [1744958231, 43071000]
+build_start_time: [1745210130, 414340000]
+build_end_time: [1745210133, 755009000]
 inputs:
   "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Json/EthereumBlockObject.swift": [1741329924, 350453305]
   "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/Core/Json/EthereumCall.swift": [1741329924, 350529930]

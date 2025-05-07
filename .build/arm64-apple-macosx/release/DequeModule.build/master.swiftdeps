@@ -1,7 +1,7 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "d3440dc140612faa978c8989ac0c105db8781b0db7df3adeaa731b958c6cf238"
-build_start_time: [1744958205, 470034000]
-build_end_time: [1744958206, 377446000]
+build_start_time: [1745210110, 116026000]
+build_end_time: [1745210110, 842820000]
 inputs:
   "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/Deque+Codable.swift": [1741329923, 121366872]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/DequeModule/Deque+Collection.swift"

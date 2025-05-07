@@ -1,7 +1,7 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "65746662f20ab00f5a7154a6eac924dc702ee47c8bcbc90d5efc4ff996520d25"
-build_start_time: [1744958206, 221051000]
-build_end_time: [1744958208, 363105000]
+build_start_time: [1745210110, 198290000]
+build_end_time: [1745210112, 164534000]
 inputs:
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+BitwiseOperations.swift"
   : [1741329923, 115832871]

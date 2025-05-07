@@ -1,7 +1,7 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "4d26e73d876199056b9cc81419ce5d1945e4a9703aee3ad6d0b5d156977931e3"
-build_start_time: [1744958204, 489600000]
-build_end_time: [1744958215, 568124000]
+build_start_time: [1745210108, 930127000]
+build_end_time: [1745210119, 128161000]
 inputs:
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/CryptoSwift.build/DerivedSources/resource_bundle_accessor.swift"
   : [1741345660, 358007110]

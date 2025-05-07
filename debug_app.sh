@@ -130,8 +130,43 @@ if ps -p $(cat "$DATA_DIR/geth.pid") > /dev/null; then
         echo "Current hashrate: $HASHRATE"
         echo "Check logs at: $LOG_DIR/geth.log"
     else
-        echo "Mining failed to start"
-        tail -n 20 "$LOG_DIR/geth.log"
+        echo "Mining not active, starting mining..."
+        
+        # Explicitly start mining using RPC
+        START_MINING=$(curl -s -X POST -H "Content-Type: application/json" \
+            --data '{"jsonrpc":"2.0","method":"miner_start","params":[1],"id":1}' \
+            http://localhost:8546)
+        
+        echo "Mining start command response: $START_MINING"
+        
+        # Set coinbase address
+        SET_ETHERBASE=$(curl -s -X POST -H "Content-Type: application/json" \
+            --data "{\"jsonrpc\":\"2.0\",\"method\":\"miner_setEtherbase\",\"params\":[\"$MINING_ADDRESS\"],\"id\":1}" \
+            http://localhost:8546)
+        
+        echo "Set etherbase response: $SET_ETHERBASE"
+        
+        # Check mining status again
+        sleep 5
+        MINING_STATUS=$(curl -s -X POST -H "Content-Type: application/json" \
+            --data '{"jsonrpc":"2.0","method":"eth_mining","params":[],"id":1}' \
+            http://localhost:8546)
+        
+        if echo "$MINING_STATUS" | grep -q "true"; then
+            echo "Mining started successfully"
+            echo "Mining address: $MINING_ADDRESS"
+            
+            # Get initial hashrate
+            HASHRATE=$(curl -s -X POST -H "Content-Type: application/json" \
+                --data '{"jsonrpc":"2.0","method":"eth_hashrate","params":[],"id":1}' \
+                http://localhost:8546)
+            
+            echo "Current hashrate: $HASHRATE"
+            echo "Check logs at: $LOG_DIR/geth.log"
+        else
+            echo "Mining failed to start after explicit command"
+            tail -n 20 "$LOG_DIR/geth.log"
+        fi
     fi
 else
     echo "Failed to start Geth process"

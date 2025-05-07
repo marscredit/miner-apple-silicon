@@ -1597,89 +1597,108 @@ class MiningService: ObservableObject {
         // Update UI state immediately
         DispatchQueue.main.async {
             LogManager.shared.log("Starting mining process...", type: .info)
-            LogManager.shared.log("Initializing blockchain...", type: .info)
+            // Removed "Initializing blockchain..." log as it's handled by script
         }
-        
-        // Check if we have our wrapper script
-        let wrapperPath = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
-            .appendingPathComponent("run_geth_in_app.sh")
-        
-        if FileManager.default.fileExists(atPath: wrapperPath.path) {
-            // Use the wrapper script instead of directly managing Process
-            LogManager.shared.log("Found geth wrapper script - using it to launch geth", type: .info)
-            
-            // Make sure ethash directory exists
-            try? fileManager.createDirectory(at: ethashDirectory, withIntermediateDirectories: true)
-            LogManager.shared.log("Ensured ethash directory exists at: \(ethashDirectory.path)", type: .debug)
-            
-            // Create a simple Process to run the wrapper script
-            let wrapperProcess = Process()
-            wrapperProcess.executableURL = URL(fileURLWithPath: "/bin/bash")
-            wrapperProcess.arguments = [wrapperPath.path]
-            
-            do {
-                try wrapperProcess.run()
-                LogManager.shared.log("✨ Launched geth wrapper script", type: .success)
-                
-                // For Geth 1.10.18, we need to wait a bit longer for node startup
-                LogManager.shared.log("Waiting for Geth to start up (DAG generation may take time)...", type: .info)
-                
-                // Set up a timer to monitor the geth log file
-                let logMonitorTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
-                    self?.monitorGethLogFile()
-                }
-                
-                // Connection is delayed to give Geth time to start up - this is critical for Apple Silicon
-                // We'll use a longer delay to ensure DAG generation has time to progress
-                DispatchQueue.main.asyncAfter(deadline: .now() + 15) { [weak self] in
-                    guard let self = self else { return }
-                    LogManager.shared.log("Attempting to connect to Geth RPC endpoint...", type: .info)
-                    self.setupEthereumClient()
-                    
-                    // First connection attempt
-                    // We'll check again after a delay and set up auto-reconnect if needed
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 10) { [weak self] in
-                        guard let self = self else { return }
-                        
-                        if self.networkStatus.isConnected {
-                            LogManager.shared.log("Successfully connected to Geth node", type: .success)
-                            
-                            // Verify mining is running
-                            self.checkMiningStatus()
-                        } else {
-                            LogManager.shared.log("Still waiting for Geth node to be ready...", type: .warning)
-                            
-                            // Try checking the process status
-                            self.checkGethProcess()
-                            
-                            // Set up auto-reconnect
-                            self.setupReconnectionTimer()
-                            
-                            // One more attempt after a longer delay
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 20) { [weak self] in
-                                guard let self = self else { return }
-                                
-                                if !self.networkStatus.isConnected {
-                                    LogManager.shared.log("Trying one more time to connect to Geth...", type: .info)
-                                    self.setupEthereumClient()
-                                }
-                            }
-                        }
-                    }
-                }
-            } catch {
-                LogManager.shared.log("Error launching geth wrapper: \(error.localizedDescription)", type: .error)
+
+        // Find the wrapper script within the app bundle's Resources directory
+        guard let wrapperPathString = Bundle.main.path(forResource: "run_geth_in_app", ofType: "sh") else {
+            LogManager.shared.log("Error: run_geth_in_app.sh not found in the application bundle's Resources directory.", type: .error)
+            DispatchQueue.main.async {
+                // Optionally update UI to show failure
             }
-            
             return
         }
-        
-        // If wrapper is not found, use the fallback direct launch method
-        // (not recommended on Apple Silicon due to performance issues)
-        LogManager.shared.log("Wrapper script not found, using direct launch method - performance may be affected", type: .warning)
-        directLaunchGeth(address: address, password: password)
+        let wrapperPath = URL(fileURLWithPath: wrapperPathString)
+        LogManager.shared.log("Found geth wrapper script at: \(wrapperPath.path)", type: .info)
+
+        // Make sure the script is executable
+        do {
+            try FileManager.default.setAttributes([.posixPermissions: 0o755], ofItemAtPath: wrapperPath.path)
+            LogManager.shared.log("Ensured wrapper script is executable", type: .debug)
+        } catch {
+            LogManager.shared.log("Error setting execute permission on wrapper script: \(error.localizedDescription)", type: .error)
+            return
+        }
+
+        // Use the wrapper script to launch geth
+        LogManager.shared.log("Using geth wrapper script to launch geth", type: .info)
+
+        // ---- TEMPORARY TEST: Try running a simple echo command ----
+        let testProcess = Process()
+        testProcess.executableURL = URL(fileURLWithPath: "/bin/echo")
+        testProcess.arguments = ["Test OK"] // Arguments for echo
+        let testOutputFile = URL(fileURLWithPath: NSHomeDirectory() + "/script_test_output.log")
+        do {
+            testProcess.standardOutput = try FileHandle(forWritingTo: testOutputFile)
+        } catch {
+            LogManager.shared.log("Failed to create file handle for test output: \(error)", type: .error)
+            return
+        }
+        LogManager.shared.log("Attempting simple test: echo 'Test OK' > ~/script_test_output.log", type: .debug)
+        DispatchQueue.global(qos: .background).async {
+            do {
+                try testProcess.run()
+                testProcess.waitUntilExit()
+                if testProcess.terminationStatus == 0 {
+                    LogManager.shared.log("✅ Simple test script executed successfully.", type: .success)
+                } else {
+                    LogManager.shared.log("❌ Simple test script failed with status \(testProcess.terminationStatus).", type: .error)
+                }
+            } catch {
+                LogManager.shared.log("❌ Error running simple test script: \(error.localizedDescription)", type: .error)
+            }
+        }
+        // ---- END TEMPORARY TEST ----
+
+        // Create a simple Process to run the wrapper script
+        // Create a simple Process to run the wrapper script
+        let wrapperProcess = Process()
+        // Execute via /bin/bash
+        wrapperProcess.executableURL = URL(fileURLWithPath: "/bin/bash")
+        wrapperProcess.arguments = [wrapperPath.path] // Pass script path as argument
+
+        // Create pipes for output
+        let outputPipe = Pipe()
+        let errorPipe = Pipe()
+        wrapperProcess.standardOutput = outputPipe
+        wrapperProcess.standardError = errorPipe
+
+        // Dispatch the process launch to a background queue
+        DispatchQueue.global(qos: .background).async {
+            var errorMessage: String? = nil
+            var successMessage: String? = nil
+            do {
+                // Launch the script
+                try wrapperProcess.run()
+                // Don't wait here, script backgrounds Geth and exits quickly.
+                // wrapperProcess.waitUntilExit()
+
+                // Check if run() succeeded immediately
+                let pid = wrapperProcess.processIdentifier
+                successMessage = "✨ Launched geth wrapper script process (PID: \(pid)). Geth runs separately."
+
+                // Optional: Could add termination handler for bash process if needed
+                // wrapperProcess.terminationHandler = { process in ... }
+
+                // Removed reading pipes and checking exit status here,
+                // as the script should exit quickly with status 0 if launch is okay.
+                // Error handling within the script itself should log to files if needed.
+
+            } catch {
+                errorMessage = "Error launching geth wrapper: \(error.localizedDescription)"
+            }
+
+            // Log results safely on the main thread
+            DispatchQueue.main.async {
+                if let finalErrorMessage = errorMessage {
+                    LogManager.shared.log("Error during wrapper script execution: \(finalErrorMessage)", type: .error)
+                } else if let finalSuccessMessage = successMessage {
+                    LogManager.shared.log(finalSuccessMessage, type: .success)
+                }
+            }
+        }
     }
-    
+
     // Check if mining is actually running
     private func checkMiningStatus() {
         guard let client = ethClient else { return }
@@ -1715,7 +1734,7 @@ class MiningService: ObservableObject {
             // Silent fail - already logged in other methods
         }
     }
-    
+
     // Monitor Geth process status
     private func checkGethProcess() {
         // Check if PID file exists
@@ -1777,11 +1796,13 @@ class MiningService: ObservableObject {
         // If we get here, the Geth process is not running
         LogManager.shared.log("Geth process not found, mining may not work correctly", type: .error)
     }
-    
+
     // Monitor the geth log file to display in the app
     private func monitorGethLogFile() {
-        let logPath = dataDirectory.appendingPathComponent("logs/geth_output.log")
-        
+        // IMPORTANT: This needs to find the log path used by run_geth_in_app.sh
+        // Currently hardcoded: $HOME/.marscredit/logs/geth.log
+        let logPath = dataDirectory.appendingPathComponent("logs/geth.log")
+
         guard FileManager.default.fileExists(atPath: logPath.path) else {
             return
         }
@@ -1871,138 +1892,6 @@ class MiningService: ObservableObject {
         
         LogManager.shared.log("Created new wallet with address: \(address)", type: .success)
         return (address, mnemonicString)
-    }
-    
-    // Direct launch method as a fallback - more likely to cause app freezing
-    private func directLaunchGeth(address: String, password: String) {
-        LogManager.shared.log("WARNING: Using direct launch method, which may affect app stability", type: .warning)
-        
-        // Initialize blockchain if needed
-        self.initializeBlockchain()
-        
-        guard let marscreditPath = self.bundledMarscreditPath?.path,
-              self.fileManager.fileExists(atPath: marscreditPath) else {
-            DispatchQueue.main.async {
-                LogManager.shared.log("Error: go-marscredit binary not found at \(self.bundledMarscreditPath?.path ?? "unknown path")", type: .error)
-                self.isMining = false
-            }
-            return
-        }
-        
-        // Make sure ethash directory exists
-        try? fileManager.createDirectory(at: ethashDirectory, withIntermediateDirectories: true)
-        
-        // For Geth 1.10.18, we'll use environment variables instead of flags
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: marscreditPath)
-        
-        // Build args array with reduced resource usage - Geth 1.10.18 compatible
-        let args = [
-            "--datadir", self.dataDirectory.path,
-            "--keystore", self.keystoreDirectory.path,
-            "--syncmode", "full",
-            "--http",
-            "--http.addr", "localhost",
-            "--http.port", "8546",
-            "--http.api", "personal,eth,net,web3,miner,admin",
-            "--http.vhosts", "*",
-            "--http.corsdomain", "*",
-            "--networkid", "110110",
-            "--ws",
-            "--ws.addr", "localhost",
-            "--ws.port", "8547",
-            "--port", "30304",
-            "--nat", "any",
-            "--mine",
-            "--miner.threads", "1",
-            "--miner.etherbase", address,
-            "--bootnodes", "enode://ca3639067a580a0f1db7412aeeef6d5d5e93606ed7f236a5343fe0d1115fb8c2bea2a22fa86e9794b544f886a4cb0de1afcbccf60960802bf00d81dab9553ec9@monorail.proxy.rlwy.net:26254,enode://7f2ee75a1c112735aaa43de1e5a6c4d7e07d03a5352b5782ed8e0c7cc046a8c8839ad093b09649e0b4a6ed8900211fb4438765c99d07bb00006ef080a1aa9ab6@viaduct.proxy.rlwy.net:30270,enode://98710174f4798dae1931e417944ac7a7fb3268d38ef8d3941c8fcc44fe178b118003d8b3d61d85af39c561235a1708f8dd61f8ba47df4c4a6b9156e272af2cfc@monorail.proxy.rlwy.net:29138",
-            "--verbosity", "3",
-            "--maxpeers", "25",
-            "--cache", "128",
-            "--nodiscover",
-            "--nousb"
-        ]
-        
-        // When starting the miner, we'll explicitly set our state to "syncing from zero"
-        // until we start getting accurate sync data from our local node
-        DispatchQueue.main.async {
-            self.networkStatus = NetworkStatus(
-                currentBlock: 0,
-                highestBlock: self.latestBlockNumber,
-                isConnected: true
-            )
-        }
-        
-        // Try to run DAG generation in a separate process first
-        let dagProcess = Process()
-        dagProcess.executableURL = URL(fileURLWithPath: marscreditPath)
-        dagProcess.arguments = [
-            "--datadir", self.dataDirectory.path,
-            "--maxpeers", "0",
-            "--cache", "128",
-            "--mine",
-            "--verbosity", "3",
-            "--nodiscover"
-        ]
-        
-        // Environment variable to set ethash dir location
-        dagProcess.environment = ProcessInfo.processInfo.environment
-        dagProcess.environment?["ETHASH_DAGDIR"] = ethashDirectory.path
-        
-        // Run the DAG generation process for a short time
-        LogManager.shared.log("Starting DAG pre-generation process...", type: .info)
-        try? dagProcess.run()
-        
-        // Wait for a few seconds then kill it
-        DispatchQueue.global().asyncAfter(deadline: .now() + 3) {
-            dagProcess.terminate()
-            
-            // Now run the main geth process
-            DispatchQueue.global().asyncAfter(deadline: .now() + 1) { [weak self] in
-                guard let self = self else { return }
-                
-                // Create the actual mining process
-                self.marscreditProcess = Process()
-                self.marscreditProcess?.executableURL = URL(fileURLWithPath: marscreditPath)
-                self.marscreditProcess?.arguments = args
-                
-                // Set environment variables for ethash dir
-                self.marscreditProcess?.environment = ProcessInfo.processInfo.environment
-                self.marscreditProcess?.environment?["ETHASH_DAGDIR"] = self.ethashDirectory.path
-                
-                // Create output pipes
-                let outputPipe = Pipe()
-                let errorPipe = Pipe()
-                
-                self.marscreditProcess?.standardOutput = outputPipe
-                self.marscreditProcess?.standardError = errorPipe
-                
-                // Set the current directory
-                self.marscreditProcess?.currentDirectoryURL = URL(fileURLWithPath: self.dataDirectory.path)
-                
-                // Start the process
-                do {
-                    try self.marscreditProcess?.run()
-                    
-                    if let pid = self.marscreditProcess?.processIdentifier {
-                        LogManager.shared.log("✨ Started Geth process with PID: \(pid)", type: .success)
-                        
-                        // Save PID to file for future reference
-                        let pidString = "\(pid)"
-                        try? pidString.write(to: self.dataDirectory.appendingPathComponent("geth.pid"), 
-                                       atomically: true, encoding: .utf8)
-                                       
-                        // Connect to the RPC after a delay
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 15) {
-                            self.setupEthereumClient()
-                        }
-                    }
-                } catch {
-                    LogManager.shared.log("Failed to start geth: \(error.localizedDescription)", type: .error)
-                }
-            }
-        }
     }
 }
 

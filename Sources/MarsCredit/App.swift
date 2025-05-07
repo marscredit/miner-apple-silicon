@@ -13,6 +13,71 @@ struct MarsCreditApp: App {
         MiningService.shared = miningService // Set the shared instance
         setupGethBinary()
         setupApp()
+        
+        // Run the app_helper.sh script to ensure proper environment setup
+        runAppHelper()
+    }
+    
+    // Helper method to run the app_helper.sh script
+    private func runAppHelper() {
+        // First try to find the script in the app bundle's Resources directory
+        var appHelperPath: String?
+        
+        if let resourcesPath = Bundle.main.resourceURL?.path {
+            let scriptPath = resourcesPath + "/app_helper.sh"
+            if FileManager.default.fileExists(atPath: scriptPath) {
+                appHelperPath = scriptPath
+                LogManager.shared.log("Found app_helper.sh in resources: \(scriptPath)", type: .success)
+            }
+        }
+        
+        // If not found in the bundle, check the current directory
+        if appHelperPath == nil {
+            let currentPath = FileManager.default.currentDirectoryPath + "/Resources/app_helper.sh"
+            if FileManager.default.fileExists(atPath: currentPath) {
+                appHelperPath = currentPath
+                LogManager.shared.log("Found app_helper.sh in current path: \(currentPath)", type: .success)
+            }
+        }
+        
+        // If we found a script, execute it
+        if let scriptPath = appHelperPath {
+            LogManager.shared.log("Running app_helper.sh to ensure proper environment setup...", type: .info)
+            
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: "/bin/bash")
+            process.arguments = [scriptPath]
+            
+            let pipe = Pipe()
+            process.standardOutput = pipe
+            process.standardError = pipe
+            
+            do {
+                try process.run()
+                
+                // Read output in background
+                DispatchQueue.global(qos: .background).async {
+                    let data = pipe.fileHandleForReading.readDataToEndOfFile()
+                    if let output = String(data: data, encoding: .utf8) {
+                        // Log in chunks to avoid overwhelming the log
+                        let lines = output.components(separatedBy: .newlines)
+                        for line in lines {
+                            if !line.isEmpty {
+                                DispatchQueue.main.async {
+                                    LogManager.shared.log("Helper: \(line)", type: .debug)
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                LogManager.shared.log("App helper script is running in the background", type: .success)
+            } catch {
+                LogManager.shared.log("Failed to run app_helper.sh: \(error.localizedDescription)", type: .error)
+            }
+        } else {
+            LogManager.shared.log("app_helper.sh not found, skipping environment setup", type: .warning)
+        }
     }
     
     private func setupGethBinary() {

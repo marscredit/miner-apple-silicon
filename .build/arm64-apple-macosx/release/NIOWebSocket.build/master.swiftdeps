@@ -1,7 +1,7 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "8607eb29c6363f00dcdfbb218af5b96858e86850ffda314552ba32b1646cf880"
-build_start_time: [1744958224, 883195000]
-build_end_time: [1744958225, 939483000]
+build_start_time: [1745210127, 868333000]
+build_end_time: [1745210128, 890193000]
 inputs:
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOWebSocket/NIOWebSocketClientUpgrader.swift"
   : [1741329909, 44227760]

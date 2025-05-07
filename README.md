@@ -10,6 +10,7 @@ A native macOS application for mining Mars Credit (MARS) on Apple Silicon (arm64
 - Secure password storage in macOS keychain
 - One-click mining start/stop
 - Clean, modern SwiftUI interface
+- Optimized performance settings for Apple Silicon
 
 ## Requirements
 
@@ -20,60 +21,34 @@ A native macOS application for mining Mars Credit (MARS) on Apple Silicon (arm64
 - Ports 8546 (HTTP/WS) and 30304 (P2P) must be open
 - Xcode 14.0 or later (for building from source)
 
-## Technical Overview
+## Quick Test (Without Installation)
 
-The Mars Credit Miner implements an Ethereum mining node using Geth 1.10.18 with the following configuration:
+To quickly test the miner without full installation:
 
-### Blockchain Configuration
-- Custom private blockchain with chainID 110110
-- Proof-of-Work (PoW) with Ethash algorithm
-- Genesis block with low initial difficulty (0x400)
-- Block gas limit of 0x1c9c380
+```bash
+# Run the optimized Apple Silicon debug script
+chmod +x debug_apple_silicon.sh
+./debug_apple_silicon.sh
+```
 
-### Node Execution
-- Wrapper script (`run_geth_in_app.sh`) manages Geth execution
-- Geth binary (v1.10.18) is bundled with the application
-- Native arm64 support for optimal performance on Apple Silicon
-
-### Network Configuration
-- HTTP/WS RPC on port 8546
-- P2P port 30304
-- RPC URL: https://rpc.marscredit.xyz:443
-- Full node synchronization mode
-- Maximum 50 peers
-- Configured bootnodes:
-  ```
-  enode://bf93a274569cd009e4172c1a41b8bde1fb8d8e7cff1e5130707a0cf5be4ce0fc673c8a138ecb7705025ea4069da8c1d4b7ffc66e8666f7936aa432ce57693353@roundhouse.proxy.rlwy.net:50590
-  enode://ca3639067a580a0f1db7412aeeef6d5d5e93606ed7f236a5343fe0d1115fb8c2bea2a22fa86e9794b544f886a4cb0de1afcbccf60960802bf00d81dab9553ec9@monorail.proxy.rlwy.net:26254
-  enode://7f2ee75a1c112735aaa43de1e5a6c4d7e07d03a5352b5782ed8e0c7cc046a8c8839ad093b09649e0b4a6ed8900211fb4438765c99d07bb00006ef080a1aa9ab6@viaduct.proxy.rlwy.net:30270
-  enode://98710174f4798dae1931e417944ac7a7fb3268d38ef8d3941c8fcc44fe178b118003d8b3d61d85af39c561235a1708f8dd61f8ba47df4c4a6b9156e272af2cfc@monorail.proxy.rlwy.net:29138
-  ```
-
-### Mining Settings
-- Single mining thread to prevent resource overuse
-- 2GB cache for optimal performance
-- Mining rewards sent to configurable address
-- DAG directory: /data/.ethash
-- DAG generation progress tracking in UI
-
-### Data Storage
-- User data stored in ~/.marscredit
-- Separate directories for keystore, chaindata, and logs
-- Comprehensive logging for debugging
-
-### Error Handling
-- Process monitoring for crashes
-- Automatic chaindata reinitialization if needed
-- Log file monitoring with error detection
+This script will:
+- Start geth with optimized settings for Apple Silicon
+- Initialize a new blockchain if needed
+- Begin mining with appropriate parameters
+- Display real-time status and debug information
 
 ## Installation
 
-1. Download the latest release from the Releases page
+### Option 1: Use the pre-built DMG
+
+1. Download the latest release DMG file
 2. Mount the DMG file
 3. Drag Mars Credit Miner to your Applications folder
 4. Launch the application
 
-## Building from Source
+The DMG file is located in the `build/` directory with the name `Mars-Credit-Miner-apple-silicon.dmg`.
+
+### Option 2: Build from Source
 
 1. Clone the repository:
 ```bash
@@ -91,28 +66,98 @@ swift build -c release
 .build/release/MarsCredit
 ```
 
-## Usage
+## Building the DMG Package
 
-1. Launch the application
-2. Enter a secure password
-3. Click "Generate Account" to create a new mining account
-4. Save the displayed mnemonic seed phrase securely - this is required to access your funds!
-5. Click "Start Mining" to begin mining MARS coins
+To create a distributable DMG package:
 
-## Account Management
+1. Build a simple DMG (recommended):
+```bash
+chmod +x build_simple_dmg.sh
+./build_simple_dmg.sh
+```
 
-- New accounts are automatically generated with a 12-word mnemonic backup
-- Private keys are securely stored in /app/keystore
-- Mnemonic phrases can be viewed on-demand through the UI
-- Password is securely stored in macOS Keychain
+2. Build a more sophisticated DMG with background image (requires create-dmg):
+```bash
+chmod +x build_app_dmg.sh
+./build_app_dmg.sh
+```
 
-## Security Notes
+Both scripts will:
+- Build the Swift app
+- Create the app bundle
+- Update with optimized mining scripts
+- Generate a DMG file in the `build/` directory
 
-- Store your mnemonic seed phrase securely - it's the only way to recover your funds
-- Never share your mnemonic seed or password with anyone
-- The application stores your password securely in the macOS keychain
-- Private keys are encrypted at rest
-- All mining rewards are sent to your generated address automatically
+## Apple Silicon Optimization
+
+This miner has been specially optimized for Apple Silicon:
+
+- Reduced memory cache requirements (512MB)
+- Limited peer connections to 25 (from 50)
+- Custom Genesis block for faster syncing
+- RPC-based mining initiation for better stability
+- Resource usage tuning for optimal performance on M1/M2/M3 chips
+
+## Troubleshooting
+
+If you encounter any issues with the application, please check the [Troubleshooting Guide](./README.issues.md) for solutions to common problems.
+
+### Common Issues
+
+1. **Application freezes when starting mining**: This is usually caused by resource limitations. Try using the `debug_apple_silicon.sh` script which has optimized settings.
+
+2. **Mining doesn't start**: Check the logs in `~/.marscredit/logs/` to see if there are any errors.
+
+3. **Application crashes on startup**: Make sure you have Rosetta 2 installed on your system. This can be installed by running:
+   ```bash
+   softwareupdate --install-rosetta --agree-to-license
+   ```
+
+## Debugging Tools
+
+The application comes with several debugging scripts:
+
+- `debug_apple_silicon.sh`: Optimized for Apple Silicon with minimal resource usage
+- `debug_app.sh`: Standard debugging script with more detailed logging
+- `debug_minimal.sh`: Minimal debugging script for testing basic functionality
+- `test_mining_workflow.sh`: Tests the complete mining workflow
+- `test_account_workflow.sh`: Tests account creation and management
+
+## Status Checking
+
+You can check the status of your mining operation using the JSON-RPC API:
+
+```bash
+# Check if mining is active
+curl -s -X POST -H "Content-Type: application/json" \
+    --data '{"jsonrpc":"2.0","method":"eth_mining","params":[],"id":1}' \
+    http://localhost:8546
+
+# Check current hashrate
+curl -s -X POST -H "Content-Type: application/json" \
+    --data '{"jsonrpc":"2.0","method":"eth_hashrate","params":[],"id":1}' \
+    http://localhost:8546
+
+# Check balance
+curl -s -X POST -H "Content-Type: application/json" \
+    --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["YOUR_ADDRESS", "latest"],"id":1}' \
+    http://localhost:8546
+```
+
+## Technical Details
+
+### Mining Configuration
+
+- Single mining thread to prevent resource overuse
+- 512MB cache optimized for Apple Silicon
+- Mining rewards sent to configured address
+- Genesis block with minimal difficulty for faster start
+
+### Data Storage
+
+- User data stored in ~/.marscredit
+- Separate directories for keystore, chaindata, and logs
+- Comprehensive logging for debugging
 
 ## Contributing
 

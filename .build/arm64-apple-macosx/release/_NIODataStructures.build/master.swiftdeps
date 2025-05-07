@@ -1,7 +1,7 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "f47366b49000f2a1eca01fe06adbf1ab492dcd83f77a9ea0bea56723fa464c62"
-build_start_time: [1744958204, 428186000]
-build_end_time: [1744958205, 222400000]
+build_start_time: [1745210108, 915351000]
+build_end_time: [1745210109, 515457000]
 inputs:
   "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/_NIODataStructures/Heap.swift": [1741329909, 45546288]
   "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/_NIODataStructures/PriorityQueue.swift": [1741329909, 45610996]

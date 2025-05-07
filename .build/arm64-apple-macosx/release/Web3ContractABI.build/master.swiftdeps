@@ -1,7 +1,7 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "8330e678816657d4ed8592e2386fe23ea58dffc4da30cc817bb7b75467948cc9"
-build_start_time: [1744958231, 116282000]
-build_end_time: [1744958234, 273028000]
+build_start_time: [1745210133, 827162000]
+build_end_time: [1745210136, 830480000]
 inputs:
   "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/ABI.swift": [1741329924, 349144606]
   "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/ABIConvertible.swift": [1741329924, 349246522]

@@ -55,6 +55,13 @@ class MiningService: ObservableObject {
         }
     }
     
+    // Add connection tracking properties
+    private var lastSuccessfulConnection: Date?
+    private var connectionFailureCount: Int = 0
+    private var connectionCheckTimer: Timer?
+    private var connectionCheckInterval: TimeInterval = 5.0
+    private var maxFailuresBeforeDisconnect: Int = 3
+    
     private let fileManager = FileManager.default
     private let homeDirectory = FileManager.default.homeDirectoryForCurrentUser
     private var ethClient: EthereumClient?
@@ -153,6 +160,9 @@ class MiningService: ObservableObject {
         setupDirectoryStructure()
         setupEthereumClient()
         startLatestBlockPolling()
+        
+        // Set up more resilient connection checking
+        setupConnectionStatusTimer()
         
         // Set up reconnection timer
         setupReconnectionTimer()
@@ -292,6 +302,7 @@ class MiningService: ObservableObject {
                     LogManager.shared.log("Connected to remote RPC endpoint", type: .success)
                     DispatchQueue.main.async {
                         self.remoteClient = remote
+                        self.lastSuccessfulConnection = Date()
                     }
                     
                     // Get initial network status
@@ -322,8 +333,14 @@ class MiningService: ObservableObject {
             if localConnected {
                 DispatchQueue.main.async {
                     self.localClient = local
+                    self.lastSuccessfulConnection = Date()
                     self.startUpdatingStatus()
                     self.isReconnecting = false
+                    
+                    // Update network status immediately with connected state
+                    var updatedStatus = self.networkStatus
+                    updatedStatus.isConnected = true
+                    self.networkStatus = updatedStatus
                 }
             } else {
                 // Add exponential backoff for retry
@@ -347,6 +364,17 @@ class MiningService: ObservableObject {
             guard let self = self else { return }
             DispatchQueue.main.async {
                 self.latestBlockNumber = blockNumber
+                
+                // Update connection status on successful block retrieval
+                self.lastSuccessfulConnection = Date()
+                self.connectionFailureCount = 0
+                
+                // Only update connected status if not already connected
+                if !self.networkStatus.isConnected {
+                    var updatedStatus = self.networkStatus
+                    updatedStatus.isConnected = true
+                    self.networkStatus = updatedStatus
+                }
             }
         }.catch { error in
             LogManager.shared.log("Failed to get latest block from remote: \(error.localizedDescription)", type: .error)
@@ -358,6 +386,10 @@ class MiningService: ObservableObject {
                 guard let self = self else { return }
                 
                 DispatchQueue.main.async {
+                    // Update connection status on successful sync status retrieval
+                    self.lastSuccessfulConnection = Date()
+                    self.connectionFailureCount = 0
+                    
                     self.networkStatus = NetworkStatus(
                         currentBlock: syncStatus.currentBlock,
                         highestBlock: self.latestBlockNumber,
@@ -371,8 +403,14 @@ class MiningService: ObservableObject {
             // Get mining status and hashrate
             local.getHashRate().done { [weak self] hashRate in
                 DispatchQueue.main.async {
-                    self?.isMining = hashRate > 0
-                    self?.currentHashRate = Double(hashRate) / 1_000_000 // Convert to MH/s
+                    guard let self = self else { return }
+                    
+                    // Update connection status on successful hashrate retrieval
+                    self.lastSuccessfulConnection = Date()
+                    self.connectionFailureCount = 0
+                    
+                    self.isMining = hashRate > 0
+                    self.currentHashRate = Double(hashRate) / 1_000_000 // Convert to MH/s
                 }
             }.catch { error in
                 LogManager.shared.log("Failed to get hashrate: \(error.localizedDescription)", type: .error)
@@ -1454,6 +1492,7 @@ class MiningService: ObservableObject {
     
     deinit {
         stopMining()
+        connectionCheckTimer?.invalidate()
         MiningService.shared = nil
     }
     
@@ -1892,6 +1931,73 @@ class MiningService: ObservableObject {
         
         LogManager.shared.log("Created new wallet with address: \(address)", type: .success)
         return (address, mnemonicString)
+    }
+
+    private func setupConnectionStatusTimer() {
+        connectionCheckTimer?.invalidate()
+        connectionCheckTimer = Timer.scheduledTimer(withTimeInterval: connectionCheckInterval, repeats: true) { [weak self] _ in
+            self?.checkNetworkConnection()
+        }
+        connectionCheckTimer?.fire() // Check immediately on setup
+    }
+    
+    private func checkNetworkConnection() {
+        guard let client = localClient ?? remoteClient else {
+            // If no client is available, we're definitely disconnected
+            DispatchQueue.main.async {
+                self.updateNetworkStatusWithDebounce(isConnected: false)
+            }
+            return
+        }
+        
+        client.testConnection().done { [weak self] isConnected in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.updateNetworkStatusWithDebounce(isConnected: isConnected)
+            }
+        }.catch { [weak self] _ in
+            guard let self = self else { return }
+            DispatchQueue.main.async {
+                self.updateNetworkStatusWithDebounce(isConnected: false)
+            }
+        }
+    }
+    
+    private func updateNetworkStatusWithDebounce(isConnected: Bool) {
+        if isConnected {
+            // On successful connection, reset failure count and update last success time
+            connectionFailureCount = 0
+            lastSuccessfulConnection = Date()
+            
+            // Update network status if it wasn't already connected
+            if !networkStatus.isConnected {
+                var updatedStatus = networkStatus
+                updatedStatus.isConnected = true
+                networkStatus = updatedStatus
+                LogManager.shared.log("Connection to Mars Credit network (ID: 110110) established", type: .success)
+            }
+        } else {
+            // On connection failure, increment failure count
+            connectionFailureCount += 1
+            
+            // Only mark as disconnected after multiple consecutive failures
+            if connectionFailureCount >= maxFailuresBeforeDisconnect {
+                if networkStatus.isConnected {
+                    var updatedStatus = networkStatus
+                    updatedStatus.isConnected = false
+                    networkStatus = updatedStatus
+                    LogManager.shared.log("Connection to network lost after \(connectionFailureCount) failed attempts", type: .warning)
+                }
+                
+                // Try to reconnect if we've been disconnected for a while
+                if lastSuccessfulConnection == nil || Date().timeIntervalSince(lastSuccessfulConnection!) > 15.0 {
+                    scheduleReconnection()
+                }
+            } else {
+                // Log but don't change status yet
+                LogManager.shared.log("Connection check failed (\(connectionFailureCount)/\(maxFailuresBeforeDisconnect))", type: .debug)
+            }
+        }
     }
 }
 

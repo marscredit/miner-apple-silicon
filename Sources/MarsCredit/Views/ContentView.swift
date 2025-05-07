@@ -12,6 +12,23 @@ struct ContentView: View {
     @State private var showLogs = true
     @State private var showPerformanceMetrics = false
     
+    // Connection status calculation
+    private var connectionStatus: (color: Color, text: String) {
+        if miningService.isMining {
+            if miningService.networkStatus.isConnected {
+                return (.green, "Connected")
+            } else {
+                return (.yellow, "Connecting...")
+            }
+        } else {
+            if miningService.networkStatus.isConnected {
+                return (.green, "Connected")
+            } else {
+                return (.red, "Node not running")
+            }
+        }
+    }
+    
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
@@ -30,17 +47,14 @@ struct ContentView: View {
                     VStack(alignment: .trailing, spacing: 8) {
                         HStack {
                             Circle()
-                                .fill(miningService.networkStatus.isConnected ? Color.green : Color.red)
+                                .fill(connectionStatus.color)
                                 .frame(width: 8, height: 8)
-                            Text(miningService.isMining ? 
-                                 (miningService.networkStatus.isConnected ? "Connected" : "Starting node...") : 
-                                 (miningService.networkStatus.isConnected ? "Connected" : "Node not running"))
+                            Text(connectionStatus.text)
                                 .font(.system(.body, design: .default))
-                                .foregroundColor(miningService.networkStatus.isConnected ? .green : 
-                                               (miningService.isMining ? .yellow : .red))
+                                .foregroundColor(connectionStatus.color)
                         }
                         
-                        if miningService.networkStatus.isConnected {
+                        if miningService.networkStatus.isConnected || miningService.isMining {
                             HStack {
                                 Text("Block:")
                                     .font(.gunship(size: 14))

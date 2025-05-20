@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var moonAngle: Double = 0
     @State private var showLogs = true
     @State private var showPerformanceMetrics = false
+    @State private var appVersion = "Build: N/A"
     
     // Connection status calculation
     private var connectionStatus: (color: Color, text: String) {
@@ -178,7 +179,7 @@ struct ContentView: View {
                 }
                 
                 // Bottom Bar - Combined Mining Info and Buttons
-                HStack(alignment: .center, spacing: 16) { // Changed to .center
+                HStack(alignment: .center, spacing: 16) {
                     // Mining Information
                     VStack(alignment: .leading, spacing: 6) {
                         HStack(spacing: 6) {
@@ -193,8 +194,13 @@ struct ContentView: View {
                             Text("Hash Rate:").font(.caption).foregroundColor(.gray)
                             Text("\(String(format: "%.2f", miningService.currentHashRate)) MH/s").font(.caption).foregroundColor(.white)
                         }
+                        // Display App Version
+                        Text(appVersion)
+                            .font(.caption2)
+                            .foregroundColor(.gray)
+                            .padding(.top, 2)
                     }
-                    .padding(.leading) // Add padding to left of info
+                    .padding(.leading)
 
                     Spacer()
                     
@@ -259,6 +265,7 @@ struct ContentView: View {
                 }
             }
             .onAppear {
+                loadAppVersion()
                 generateAccountIfNeeded()
                 startAnimationTimers()
                 MiningService.shared = miningService // Keep this for signal handling
@@ -300,6 +307,20 @@ struct ContentView: View {
     }
     
     private func stopAnimationTimers() {}
+    
+    private func loadAppVersion() {
+        if let versionPath = Bundle.main.path(forResource: "VERSION", ofType: "txt") {
+            do {
+                let versionString = try String(contentsOfFile: versionPath, encoding: .utf8)
+                self.appVersion = versionString.trimmingCharacters(in: .whitespacesAndNewlines)
+            } catch {
+                self.appVersion = "Build: Error"
+                LogManager.shared.log("Error loading version file: \(error.localizedDescription)", type: .error)
+            }
+        } else {
+            self.appVersion = "Build: Not Found"
+        }
+    }
 }
 
 // Preview for development (optional)

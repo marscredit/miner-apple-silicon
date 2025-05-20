@@ -168,12 +168,15 @@ class MiningService: ObservableObject {
         setupReconnectionTimer()
         
         // Set up signal handling for graceful shutdown
+        // Re-enabled
         signal(SIGTERM) { _ in
+            LogManager.shared.log("SIGTERM received by app", type: .warning)
             MiningService.shared?.stopMining()
             exit(0)
         }
         
         signal(SIGINT) { _ in
+            LogManager.shared.log("SIGINT received by app", type: .warning)
             MiningService.shared?.stopMining()
             exit(0)
         }
@@ -1716,31 +1719,25 @@ class MiningService: ObservableObject {
         DispatchQueue.global(qos: .background).async {
             var errorMessage: String? = nil
             var successMessage: String? = nil
-            var scriptOutput: String? = nil
-            var scriptErrorOutput: String? = nil
+            // var scriptOutput: String? = nil // No longer attempting to read pipe here
+            // var scriptErrorOutput: String? = nil // No longer attempting to read pipe here
 
             do {
                 // Launch the script
                 LogManager.shared.log("Attempting to launch geth wrapper script: \(wrapperPath.path)", type: .debug)
                 try wrapperProcess.run()
                 
-                // Capture output (non-blocking read)
-                let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile() // Reads until EOF
-                let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()   // Reads until EOF
-                
-                scriptOutput = String(data: outputData, encoding: .utf8)
-                scriptErrorOutput = String(data: errorData, encoding: .utf8)
-
-                // It's better to wait for the script to complete to get its termination status
-                // The script is short-lived (it backgrounds Geth).
-                wrapperProcess.waitUntilExit()
+                // DO NOT WAIT FOR SCRIPT TO EXIT FOR THIS TEST
+                // wrapperProcess.waitUntilExit()
+                // INSTEAD, WE WILL RELY ON SCRIPT'S OWN LOGGING AND RPC CHECK
 
                 let pid = wrapperProcess.processIdentifier // PID of bash
-                if wrapperProcess.terminationStatus == 0 {
-                    successMessage = "✨ Launched geth wrapper script process (PID: \(pid)). Termination status: \(wrapperProcess.terminationStatus). Geth should be running separately."
-                } else {
-                    errorMessage = "Geth wrapper script (PID: \(pid)) terminated with status: \(wrapperProcess.terminationStatus)."
-                }
+                // Since we are not waiting, terminationStatus is not reliably available here.
+                // The script needs to be robust enough to log its own success/failure to the Geth log.
+                successMessage = "✨ Dispatched geth wrapper script process (PID: \(pid)). Script runs in background."
+                
+                // Output pipes will likely not be readable here as script is backgrounded by Swift immediately.
+                // Rely on script logging to files.
 
             } catch {
                 errorMessage = "Error trying to run geth wrapper: \(error.localizedDescription)"
@@ -1754,12 +1751,12 @@ class MiningService: ObservableObject {
                 if let msg = errorMessage {
                     LogManager.shared.log("❌ \(msg)", type: .error) // Added ❌ for emphasis
                 }
-                if let output = scriptOutput, !output.isEmpty {
-                    LogManager.shared.log("Wrapper script stdout:\\n\(output)", type: .debug)
-                }
-                if let errOutput = scriptErrorOutput, !errOutput.isEmpty {
-                    LogManager.shared.log("Wrapper script stderr:\\n\(errOutput)", type: .error)
-                }
+                // if let output = scriptOutput, !output.isEmpty {
+                //     LogManager.shared.log("Wrapper script stdout:\\n\(output)", type: .debug)
+                // }
+                // if let errOutput = scriptErrorOutput, !errOutput.isEmpty {
+                //     LogManager.shared.log("Wrapper script stderr:\\n\(errOutput)", type: .error)
+                // }
                 
                 // After attempting to start, check the actual Geth log file
                 // This is a bit delayed, but useful.

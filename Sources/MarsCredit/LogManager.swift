@@ -8,6 +8,9 @@ class LogManager: ObservableObject {
     
     static let shared = LogManager()
     
+    private var logFileURL: URL?
+    private var logFileHandle: FileHandle?
+    
     struct LogEntry: Identifiable {
         let id = UUID()
         let timestamp: Date
@@ -39,15 +42,52 @@ class LogManager: ObservableObject {
         if let debugIndex = selectedLogTypes.firstIndex(of: .debug) {
             selectedLogTypes.remove(.debug)
         }
+        setupLogFile()
+    }
+    
+    private func setupLogFile() {
+        guard let appSupportURL = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else {
+            print("LogManager Error: Could not find application support directory.")
+            return
+        }
+
+        let logDirectory = appSupportURL.appendingPathComponent("Logs") // Changed from "com.yourappname.logs"
+        do {
+            try FileManager.default.createDirectory(at: logDirectory, withIntermediateDirectories: true, attributes: nil)
+            self.logFileURL = logDirectory.appendingPathComponent("app.log")
+
+            if let url = self.logFileURL {
+                if !FileManager.default.fileExists(atPath: url.path) {
+                    FileManager.default.createFile(atPath: url.path, contents: nil, attributes: nil)
+                }
+                self.logFileHandle = try FileHandle(forWritingTo: url)
+                self.logFileHandle?.seekToEndOfFile() // Start writing at the end of the file
+                print("LogManager: Logging to file: \(url.path)")
+            }
+        } catch {
+            print("LogManager Error: Could not create log file: \(error.localizedDescription)")
+            self.logFileURL = nil
+            self.logFileHandle = nil
+        }
     }
     
     func log(_ message: String, type: LogType = .info) {
+        let entry = LogEntry(timestamp: Date(), message: message, type: type)
+        let fileMessage = "\(entry.formattedTimestamp) \(entry.formattedMessage)\n"
+
         DispatchQueue.main.async {
-            self.logs.append(LogEntry(timestamp: Date(), message: message, type: type))
+            self.logs.append(entry)
             
-            // Keep only the last 1000 logs
+            // Keep only the last 1000 logs in memory
             if self.logs.count > 1000 {
                 self.logs.removeFirst(self.logs.count - 1000)
+            }
+        }
+
+        // Write to file on a background thread to avoid blocking UI
+        DispatchQueue.global(qos: .background).async {
+            if let handle = self.logFileHandle, let data = fileMessage.data(using: .utf8) {
+                handle.write(data)
             }
         }
     }
@@ -84,5 +124,10 @@ class LogManager: ObservableObject {
         DispatchQueue.main.async {
             self.showPrefixes.toggle()
         }
+    }
+    
+    // Add a deinit to close the file handle
+    deinit {
+        logFileHandle?.closeFile()
     }
 } 

@@ -7,9 +7,23 @@ APP_NAME="Mars Credit Miner.app"
 CONTENTS_DIR="$APP_NAME/Contents"
 MACOS_DIR="$CONTENTS_DIR/MacOS"
 RESOURCES_DIR="$CONTENTS_DIR/Resources"
+VERSION_FILE="build_version.txt"
+BUNDLE_VERSION_FILE="$RESOURCES_DIR/VERSION.txt"
+
+# Increment build number
+BUILD_NUMBER=0
+if [ -f "$VERSION_FILE" ]; then
+    BUILD_NUMBER=$(cat "$VERSION_FILE")
+fi
+BUILD_NUMBER=$((BUILD_NUMBER + 1))
+echo "$BUILD_NUMBER" > "$VERSION_FILE"
 
 # Create directories
 mkdir -p "$MACOS_DIR" "$RESOURCES_DIR"
+
+# Write version to bundle
+echo "Build: $BUILD_NUMBER" > "$BUNDLE_VERSION_FILE"
+echo "App version $BUILD_NUMBER written to $BUNDLE_VERSION_FILE"
 
 # Create geth subdirectory in Resources
 mkdir -p "$RESOURCES_DIR/geth"
@@ -74,3 +88,7 @@ EOF
 #     --app-drop-link 600 185 \
 #     "Mars Credit Miner.dmg" \
 #     "$APP_NAME" 
+
+echo "Re-signing the app bundle with an ad-hoc signature..."
+codesign --force --deep --sign - "$APP_NAME" || echo "Warning: Ad-hoc codesign failed. This might be an issue on some systems."
+echo "App bundle re-signed." 

@@ -32,20 +32,38 @@ struct ContentView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack(spacing: 0) {
-                // Top Bar - Fixed height
+                // Top Bar - Modified
                 HStack(alignment: .top) {
                     // Left side - Title
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Mars Credit Miner")
-                            .font(.gunship(size: 32))
-                            .foregroundColor(.white)
-                    }
-                    
+                    Text("Mars Credit Miner")
+                        .font(.gunship(size: 32))
+                        .foregroundColor(.white)
+                        .padding(.leading)
+
                     Spacer()
-                    
-                    // Right side - Network Status
+
+                    // Right side - Status, Animation, Performance
                     VStack(alignment: .trailing, spacing: 8) {
                         HStack {
+                            // Spinning Mars/Moon animation (if mining)
+                            if miningService.isMining {
+                                ZStack {
+                                    Circle() // Mars
+                                        .fill(Color.red) // Explicitly red for Mars
+                                        .frame(width: 20, height: 20)
+                                    Circle() // Moon orbit path
+                                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                                        .frame(width: 30, height: 30)
+                                    Circle() // Moon
+                                        .fill(Color.white)
+                                        .frame(width: 6, height: 6)
+                                        .offset(y: -15)
+                                        .rotationEffect(.degrees(moonAngle))
+                                }
+                                .frame(width: 30, height: 30) // Constrain animation size
+                                .padding(.trailing, 8)
+                            }
+                            
                             Circle()
                                 .fill(connectionStatus.color)
                                 .frame(width: 8, height: 8)
@@ -59,18 +77,15 @@ struct ContentView: View {
                                 Text("Block:")
                                     .font(.gunship(size: 14))
                                     .foregroundColor(.white)
-                                
                                 Text("\(miningService.networkStatus.currentBlock)")
                                     .font(.gunship(size: 14))
                                     .foregroundColor(.green)
-                                
                                 if miningService.networkStatus.currentBlock != miningService.networkStatus.highestBlock {
                                     Text("/ \(miningService.networkStatus.highestBlock)")
                                         .font(.gunship(size: 14))
                                         .foregroundColor(.yellow)
                                 }
                             }
-                            
                             if miningService.networkStatus.currentBlock < miningService.networkStatus.highestBlock {
                                 HStack(spacing: 4) {
                                     Text("Syncing:")
@@ -79,318 +94,184 @@ struct ContentView: View {
                                 }
                             }
                         }
+                        
+                        // Optional Performance Metrics Panel (now at top)
+                        if showPerformanceMetrics && miningService.isMining {
+                            VStack(alignment: .trailing, spacing: 4) { // Changed to trailing
+                                Text("Mining Performance")
+                                    .font(.gunship(size: 16)) // Slightly smaller
+                                    .foregroundColor(.white)
+                                HStack {
+                                    Text("Avg Block Time:")
+                                        .font(.caption).foregroundColor(.gray)
+                                    Text(miningService.formattedAverageBlockTime())
+                                        .font(.caption).foregroundColor(.white)
+                                }
+                                HStack {
+                                    Text("Blocks Found:")
+                                        .font(.caption).foregroundColor(.gray)
+                                    Text("\(miningService.blocksFound)")
+                                        .font(.caption).foregroundColor(.white)
+                                }
+                                HStack {
+                                    Text("Est. Earnings/Day:")
+                                        .font(.caption).foregroundColor(.gray)
+                                    Text("\(String(format: "%.2f", miningService.estimatedEarningsPerDay())) MARS")
+                                        .font(.caption).foregroundColor(.white)
+                                }
+                            }
+                            .padding(.top, 4)
+                        }
                     }
+                    .padding(.trailing)
                 }
                 .padding(.horizontal)
-                .padding(.top, 32)
-                .frame(height: 80)
+                .padding(.top, 20) // Adjusted padding
+                .frame(minHeight: 80) // Use minHeight
                 
                 // Center Content - Logs (Flexible height)
                 if showLogs {
                     VStack(spacing: 0) {
-                        // Log filter controls
                         HStack {
                             Text("Filter Logs:")
                                 .font(.system(.caption))
                                 .foregroundColor(.gray)
-                            
-                            // Quick filter buttons
                             ForEach(LogType.allCases.sorted(), id: \.self) { logType in
-                                Button(action: {
-                                    logManager.toggleLogType(logType)
-                                }) {
+                                Button(action: { logManager.toggleLogType(logType) }) {
                                     HStack(spacing: 2) {
-                                        Circle()
-                                            .fill(logType.color)
-                                            .frame(width: 8, height: 8)
+                                        Circle().fill(logType.color).frame(width: 8, height: 8)
                                         Text(String(describing: logType).uppercased())
                                             .font(.system(.caption))
                                             .foregroundColor(logManager.selectedLogTypes.contains(logType) ? .white : .gray)
                                     }
                                 }
-                                .buttonStyle(PlainButtonStyle())
-                                .opacity(logManager.selectedLogTypes.contains(logType) ? 1.0 : 0.5)
+                                .buttonStyle(PlainButtonStyle()).opacity(logManager.selectedLogTypes.contains(logType) ? 1.0 : 0.5)
                             }
-                            
                             Spacer()
-                            
-                            Button(action: {
-                                logManager.togglePrefixes()
-                            }) {
+                            Button(action: { logManager.togglePrefixes() }) {
                                 Text(logManager.showPrefixes ? "Hide Prefixes" : "Show Prefixes")
-                                    .font(.system(.caption))
-                                    .foregroundColor(.gray)
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                            
-                            Button(action: {
-                                logManager.clear()
-                            }) {
-                                Text("Clear")
-                                    .font(.system(.caption))
-                                    .foregroundColor(.red)
-                            }
-                            .buttonStyle(PlainButtonStyle())
+                                    .font(.system(.caption)).foregroundColor(.gray)
+                            }.buttonStyle(PlainButtonStyle())
+                            Button(action: { logManager.clear() }) {
+                                Text("Clear").font(.system(.caption)).foregroundColor(.red)
+                            }.buttonStyle(PlainButtonStyle())
                         }
-                        .padding(.horizontal)
-                        .padding(.vertical, 4)
-                        .background(Color.black.opacity(0.5))
-                        
+                        .padding(.horizontal).padding(.vertical, 4).background(Color.black.opacity(0.5))
                         ScrollView {
                             ScrollViewReader { proxy in
                                 LazyVStack(alignment: .leading, spacing: 4) {
                                     ForEach(logManager.filteredLogs) { log in
                                         HStack(spacing: 8) {
-                                            Text(log.formattedTimestamp)
-                                                .font(.system(.caption, design: .monospaced))
-                                                .foregroundColor(log.type.color)
-                                            
-                                            Text(logManager.showPrefixes ? log.formattedMessage : log.message)
-                                                .font(.system(.caption, design: .monospaced))
-                                                .foregroundColor(log.type.color)
-                                                .lineLimit(nil)
+                                            Text(log.formattedTimestamp).font(.system(.caption, design: .monospaced)).foregroundColor(log.type.color)
+                                            Text(logManager.showPrefixes ? log.formattedMessage : log.message).font(.system(.caption, design: .monospaced)).foregroundColor(log.type.color).lineLimit(nil)
                                         }
-                                        .textSelection(.enabled)
-                                        .id(log.id)
+                                        .textSelection(.enabled).id(log.id)
                                     }
                                 }
                                 .padding()
-                                .onChange(of: logManager.logs.count) { _ in
-                                    if let lastLog = logManager.filteredLogs.last {
-                                        proxy.scrollTo(lastLog.id, anchor: .bottom)
-                                    }
-                                }
-                                .onChange(of: logManager.selectedLogTypes) { _ in
-                                    if let lastLog = logManager.filteredLogs.last {
-                                        proxy.scrollTo(lastLog.id, anchor: .bottom)
-                                    }
-                                }
+                                .onChange(of: logManager.logs.count) { _ in if let lastLog = logManager.filteredLogs.last { proxy.scrollTo(lastLog.id, anchor: .bottom) } }
+                                .onChange(of: logManager.selectedLogTypes) { _ in if let lastLog = logManager.filteredLogs.last { proxy.scrollTo(lastLog.id, anchor: .bottom) } }
                             }
                         }
                         .background(Color.black.opacity(0.3))
                     }
                 }
                 
-                // Optional Performance Metrics Panel
-                if showPerformanceMetrics && miningService.isMining {
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("Mining Performance")
-                            .font(.gunship(size: 18))
-                            .foregroundColor(.white)
-                        
-                        HStack(spacing: 32) {
-                            VStack(alignment: .leading, spacing: 8) {
-                                HStack {
-                                    Text("Avg Block Time:")
-                                        .font(.gunship(size: 14))
-                                        .foregroundColor(.gray)
-                                    
-                                    Text(miningService.formattedAverageBlockTime())
-                                        .font(.gunship(size: 14))
-                                        .foregroundColor(.white)
-                                }
-                                
-                                HStack {
-                                    Text("Blocks Found:")
-                                        .font(.gunship(size: 14))
-                                        .foregroundColor(.gray)
-                                    
-                                    Text("\(miningService.blocksFound)")
-                                        .font(.gunship(size: 14))
-                                        .foregroundColor(.white)
-                                }
-                            }
-                            
-                            VStack(alignment: .leading, spacing: 8) {
-                                HStack {
-                                    Text("Est. Earnings/Day:")
-                                        .font(.gunship(size: 14))
-                                        .foregroundColor(.gray)
-                                    
-                                    Text("\(String(format: "%.2f", miningService.estimatedEarningsPerDay())) MARS")
-                                        .font(.gunship(size: 14))
-                                        .foregroundColor(.white)
-                                }
-                                
-                                HStack {
-                                    Text("Connection Attempts:")
-                                        .font(.gunship(size: 14))
-                                        .foregroundColor(.gray)
-                                    
-                                    Text("\(miningService.connectionAttempts)")
-                                        .font(.gunship(size: 14))
-                                        .foregroundColor(.white)
-                                }
-                            }
+                // Bottom Bar - Combined Mining Info and Buttons
+                HStack(alignment: .center, spacing: 16) { // Changed to .center
+                    // Mining Information
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack(spacing: 6) {
+                            Text("Address:").font(.caption).foregroundColor(.gray)
+                            Text(miningAddress).font(.caption).foregroundColor(.white).lineLimit(1).truncationMode(.middle)
+                        }
+                        HStack(spacing: 6) {
+                            Text("Balance:").font(.caption).foregroundColor(.gray)
+                            Text("\(String(format: "%.2f", miningService.currentBalance)) MARS").font(.caption).foregroundColor(.white)
+                        }
+                        HStack(spacing: 6) {
+                            Text("Hash Rate:").font(.caption).foregroundColor(.gray)
+                            Text("\(String(format: "%.2f", miningService.currentHashRate)) MH/s").font(.caption).foregroundColor(.white)
                         }
                     }
-                    .padding()
-                    .frame(width: geometry.size.width)
-                    .background(Color.black.opacity(0.5))
-                }
-                
-                // Bottom Content - Fixed height
-                HStack(alignment: .top, spacing: 20) {
-                    // Left side - Mining info and animation
-                    VStack(alignment: .leading, spacing: 16) {
-                        // Mars and Moon Animation
-                        if miningService.isMining {
-                            ZStack {
-                                Circle() // Mars
-                                    .fill(Color(red: 1, green: 0, blue: 0))
-                                    .frame(width: 40, height: 40)
-                                
-                                Circle() // Moon orbit path
-                                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                                    .frame(width: 80, height: 80)
-                                
-                                Circle() // Moon
-                                    .fill(Color.white)
-                                    .frame(width: 12, height: 12)
-                                    .offset(y: -40)
-                                    .rotationEffect(.degrees(moonAngle))
-                            }
-                            .padding(.bottom, 8)
-                        }
-                        
-                        // Mining Information
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack(spacing: 8) {
-                                Text("Mining Address:")
-                                    .font(.gunship(size: 14))
-                                    .foregroundColor(.gray)
-                                
-                                Text(miningAddress)
-                                    .font(.gunship(size: 14))
-                                    .foregroundColor(.white)
-                                    .lineLimit(1)
-                                    .truncationMode(.middle)
-                            }
-                            
-                            HStack(spacing: 8) {
-                                Text("Balance:")
-                                    .font(.gunship(size: 14))
-                                    .foregroundColor(.gray)
-                                
-                                Text("\(String(format: "%.2f", miningService.currentBalance)) MARS")
-                                    .font(.gunship(size: 14))
-                                    .foregroundColor(.white)
-                            }
-                            
-                            HStack(spacing: 8) {
-                                Text("Hash Rate:")
-                                    .font(.gunship(size: 14))
-                                    .foregroundColor(.gray)
-                                
-                                Text("\(String(format: "%.2f", miningService.currentHashRate)) MH/s")
-                                    .font(.gunship(size: 14))
-                                    .foregroundColor(.white)
-                            }
-                        }
-                    }
-                    
+                    .padding(.leading) // Add padding to left of info
+
                     Spacer()
                     
-                    // Right side - Buttons
-                    VStack(alignment: .trailing) {
-                        HStack(spacing: 16) {
+                    // Buttons (grouped in a FlowLayout-like manner if needed, or just HStack)
+                    // For simplicity, using a VStack for button column, then an HStack for rows
+                    VStack(alignment: .trailing, spacing: 8) {
+                        HStack(spacing: 10) {
                             if miningService.isMining {
                                 Button("Stop Mining") {
-                                    withAnimation {
-                                        miningService.stopMining()
-                                        isAnimating = false
-                                    }
-                                }
-                                .miningButtonStyle(isDestructive: true)
-                                .font(.gunship(size: 14))
-                                
-                                // Performance Button
+                                    withAnimation { miningService.stopMining(); isAnimating = false }
+                                }.miningButtonStyle(isDestructive: true).font(.caption)
                                 Button(showPerformanceMetrics ? "Hide Metrics" : "Show Metrics") {
-                                    withAnimation {
-                                        showPerformanceMetrics.toggle()
-                                    }
-                                }
-                                .miningButtonStyle()
-                                .font(.gunship(size: 14))
+                                    withAnimation { showPerformanceMetrics.toggle() }
+                                }.miningButtonStyle().font(.caption)
                             } else {
                                 Button("Start Mining") {
-                                    withAnimation {
-                                        miningService.startMining(address: miningAddress, password: password)
-                                        isAnimating = true
-                                    }
-                                }
-                                .miningButtonStyle()
-                                .font(.gunship(size: 14))
+                                    withAnimation { miningService.startMining(address: miningAddress, password: password); isAnimating = true }
+                                }.miningButtonStyle().font(.caption)
                             }
-                            
+                        }
+                        HStack(spacing: 10) {
                             Button("See Backup Phrase") {
-                                showingMnemonicSheet = true
-                            }
-                            .miningButtonStyle()
-                            .font(.gunship(size: 14))
-                            
-                            Button(showLogs ? "Hide Logs" : "Show Logs") {
-                                withAnimation {
-                                    showLogs.toggle()
+                                let newMnemonic = miningService.getCurrentAccountMnemonic()
+                                if let mnemonicValue = newMnemonic, !mnemonicValue.starts(with: "Mnemonic not found"), !mnemonicValue.starts(with: "Error loading"), !mnemonicValue.isEmpty {
+                                    generatedMnemonic = mnemonicValue
+                                } else {
+                                    generatedMnemonic = newMnemonic ?? "No active account to retrieve mnemonic."
                                 }
-                            }
-                            .miningButtonStyle()
-                            .font(.gunship(size: 14))
+                                showingMnemonicSheet = true
+                            }.miningButtonStyle().font(.caption)
+                            Button("Reset Wallet") {
+                                do {
+                                    let (newAddress, newMnemonic) = try miningService.resetWallet(password: password)
+                                    miningAddress = newAddress
+                                    generatedMnemonic = newMnemonic
+                                    LogManager.shared.log("Wallet reset. New address: \(newAddress).", type: .warning)
+                                } catch {
+                                    LogManager.shared.log("Error resetting wallet: \(error.localizedDescription)", type: .error)
+                                }
+                            }.miningButtonStyle(isDestructive: true).font(.caption)
+                            Button(showLogs ? "Hide Logs" : "Show Logs") {
+                                withAnimation { showLogs.toggle() }
+                            }.miningButtonStyle().font(.caption)
                         }
                     }
+                    .padding(.trailing) // Add padding to right of buttons
                 }
-                .padding(.horizontal)
-                .padding(.bottom, 32)
-                .padding(.top, 16)
-                .frame(height: 120)
+                .padding()
+                .frame(height: 100) // Adjusted height
             }
             .background(Color.black)
             .sheet(isPresented: $showingMnemonicSheet) {
                 ZStack {
                     Color.black.ignoresSafeArea()
-                    
                     VStack(spacing: 16) {
-                        Text("Recovery Phrase")
-                            .font(.gunship(size: 24))
-                            .foregroundColor(.white)
-                        
+                        Text("Recovery Phrase").font(.gunship(size: 24)).foregroundColor(.white)
                         Text("These 12 words are the only way to recover your account if you lose access. Keep them safe and never share them with anyone.")
-                            .font(.system(.body, design: .default))
-                            .foregroundColor(.gray)
-                            .multilineTextAlignment(.center)
-                        
-                        Text(generatedMnemonic)
-                            .font(.system(.body, design: .monospaced))
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.gray.opacity(0.2))
-                            .cornerRadius(8)
-                            .fixedSize(horizontal: false, vertical: true)
-                        
-                        Button("Close") {
-                            showingMnemonicSheet = false
-                        }
-                        .miningButtonStyle()
-                    }
-                    .padding()
+                            .font(.system(.body, design: .default)).foregroundColor(.gray).multilineTextAlignment(.center)
+                        Text(generatedMnemonic).font(.system(.body, design: .monospaced)).foregroundColor(.white).padding().background(Color.gray.opacity(0.2)).cornerRadius(8).fixedSize(horizontal: false, vertical: true)
+                        Button("Close") { showingMnemonicSheet = false }.miningButtonStyle()
+                    }.padding()
                 }
             }
-        }
-        .onAppear {
-            generateAccountIfNeeded()
-            startAnimationTimers()
-            // We no longer automatically start mining - let the user click the button
-            MiningService.shared = miningService
-            LogManager.shared.log("App started. Click 'Start Mining' to begin mining.", type: .info)
-        }
-        .onDisappear {
-            stopAnimationTimers()
+            .onAppear {
+                generateAccountIfNeeded()
+                startAnimationTimers()
+                MiningService.shared = miningService // Keep this for signal handling
+                // LogManager.shared.log("App started. Click 'Start Mining' to begin mining.", type: .info) // Already logged by ContentView
+            }
+            .onDisappear {
+                stopAnimationTimers()
+            }
         }
     }
     
     private func generateAccountIfNeeded() {
         if miningAddress.isEmpty || generatedMnemonic.isEmpty {
-            // Use a default password for simplicity
             do {
                 let (address, mnemonic) = try miningService.generateAccount(password: password)
                 miningAddress = address
@@ -399,8 +280,7 @@ struct ContentView: View {
                 LogManager.shared.log("Backup phrase created (accessible via the 'See Backup Phrase' button)", type: .info)
             } catch {
                 LogManager.shared.log("Error generating account: \(error.localizedDescription)", type: .error)
-                // Fallback to a default address if generation fails
-                miningAddress = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+                miningAddress = "0xDEADBEEF...ACCOUNT_ERROR"
             }
         }
     }
@@ -408,24 +288,25 @@ struct ContentView: View {
     private func startAnimationTimers() {
         Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
             if isAnimating {
-                withAnimation {
-                    moonAngle += 1
-                    if moonAngle >= 360 {
-                        moonAngle = 0
-                    }
+                withAnimation(.linear(duration: 0.05)) {
+                    moonAngle += 2 // Speed up animation slightly
+                    if moonAngle >= 360 { moonAngle = 0 }
                 }
             }
         }
-        
-        // Check for blocks found by this miner every 30 seconds
         Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
-            if miningService.isMining {
-                miningService.checkMinerBlocks()
-            }
+            if miningService.isMining { miningService.checkMinerBlocks() }
         }
     }
     
-    private func stopAnimationTimers() {
-        // If needed, we could store timer references and invalidate them here
-    }
-} 
+    private func stopAnimationTimers() {}
+}
+
+// Preview for development (optional)
+// struct ContentView_Previews: PreviewProvider {
+//     static var previews: some View {
+//         ContentView()
+//             .environmentObject(LogManager())
+//             .frame(width: 700, height: 500)
+//     }
+// } 

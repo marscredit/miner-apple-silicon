@@ -313,6 +313,40 @@ class MiningService: ObservableObject {
             }
             
             // Now try local endpoint for mining
+            LogManager.shared.log("Attempting raw URLSession connection to http://localhost:8546...", type: .debug)
+            let testURL = URL(string: "http://localhost:8546")!
+            let sessionConfig = URLSessionConfiguration.default
+            sessionConfig.timeoutIntervalForRequest = 5.0 // 5 second timeout for the test
+            sessionConfig.timeoutIntervalForResource = 5.0
+            let testSession = URLSession(configuration: sessionConfig)
+            
+            let task = testSession.dataTask(with: testURL) { data, response, error in
+                if let error = error {
+                    LogManager.shared.log("RAW URLSession to localhost:8546 FAILED: \(error.localizedDescription)", type: .error)
+                    // Log more details if it's a URLError
+                    if let urlError = error as? URLError {
+                        LogManager.shared.log("URLError code: \(urlError.code.rawValue)", type: .error)
+                        // To get the domain, you might use: (error as NSError).domain
+                        LogManager.shared.log("URLError underlying error: \(urlError.userInfo[NSUnderlyingErrorKey] ?? "N/A")", type: .error)
+                        if let failingURL = urlError.failureURLString {
+                            LogManager.shared.log("Failing URL: \(failingURL)", type: .error)
+                        }
+                    }
+                } else if let httpResponse = response as? HTTPURLResponse {
+                    LogManager.shared.log("RAW URLSession to localhost:8546 SUCCEEDED with status: \(httpResponse.statusCode)", type: .success)
+                    if let data = data, let dataString = String(data: data, encoding: .utf8) {
+                        LogManager.shared.log("RAW URLSession response data (first 100 chars): \(String(dataString.prefix(100)))", type: .debug)
+                    }
+                } else {
+                    LogManager.shared.log("RAW URLSession to localhost:8546 got non-HTTP response.", type: .warning)
+                }
+            }
+            task.resume()
+            
+            // Give the raw test a moment to complete and log, before proceeding with EthereumClient
+            // This sleep is on a background thread from queue.async, so it won't freeze UI.
+            Thread.sleep(forTimeInterval: 2.0) 
+
             let local = EthereumClient(rpcURL: "http://localhost:8546")
             
             var localConnected = false
@@ -897,7 +931,11 @@ class MiningService: ObservableObject {
     }
     
     func stopMining() {
-        guard isMining else { return }
+        LogManager.shared.log("--- stopMining() CALLED ---", type: .warning)
+        guard isMining else { 
+            LogManager.shared.log("stopMining(): called but isMining is false, returning.", type: .debug)
+            return
+        }
         
         LogManager.shared.log("Stopping mining process...", type: .info)
         
@@ -1662,34 +1700,6 @@ class MiningService: ObservableObject {
         // Use the wrapper script to launch geth
         LogManager.shared.log("Using geth wrapper script to launch geth", type: .info)
 
-        // ---- TEMPORARY TEST: Try running a simple echo command ----
-        let testProcess = Process()
-        testProcess.executableURL = URL(fileURLWithPath: "/bin/echo")
-        testProcess.arguments = ["Test OK"] // Arguments for echo
-        let testOutputFile = URL(fileURLWithPath: NSHomeDirectory() + "/script_test_output.log")
-        do {
-            testProcess.standardOutput = try FileHandle(forWritingTo: testOutputFile)
-        } catch {
-            LogManager.shared.log("Failed to create file handle for test output: \(error)", type: .error)
-            return
-        }
-        LogManager.shared.log("Attempting simple test: echo 'Test OK' > ~/script_test_output.log", type: .debug)
-        DispatchQueue.global(qos: .background).async {
-            do {
-                try testProcess.run()
-                testProcess.waitUntilExit()
-                if testProcess.terminationStatus == 0 {
-                    LogManager.shared.log("✅ Simple test script executed successfully.", type: .success)
-                } else {
-                    LogManager.shared.log("❌ Simple test script failed with status \(testProcess.terminationStatus).", type: .error)
-                }
-            } catch {
-                LogManager.shared.log("❌ Error running simple test script: \(error.localizedDescription)", type: .error)
-            }
-        }
-        // ---- END TEMPORARY TEST ----
-
-        // Create a simple Process to run the wrapper script
         // Create a simple Process to run the wrapper script
         let wrapperProcess = Process()
         // Execute via /bin/bash
@@ -1706,35 +1716,73 @@ class MiningService: ObservableObject {
         DispatchQueue.global(qos: .background).async {
             var errorMessage: String? = nil
             var successMessage: String? = nil
+            var scriptOutput: String? = nil
+            var scriptErrorOutput: String? = nil
+
             do {
                 // Launch the script
+                LogManager.shared.log("Attempting to launch geth wrapper script: \(wrapperPath.path)", type: .debug)
                 try wrapperProcess.run()
-                // Don't wait here, script backgrounds Geth and exits quickly.
-                // wrapperProcess.waitUntilExit()
+                
+                // Capture output (non-blocking read)
+                let outputData = outputPipe.fileHandleForReading.readDataToEndOfFile() // Reads until EOF
+                let errorData = errorPipe.fileHandleForReading.readDataToEndOfFile()   // Reads until EOF
+                
+                scriptOutput = String(data: outputData, encoding: .utf8)
+                scriptErrorOutput = String(data: errorData, encoding: .utf8)
 
-                // Check if run() succeeded immediately
-                let pid = wrapperProcess.processIdentifier
-                successMessage = "✨ Launched geth wrapper script process (PID: \(pid)). Geth runs separately."
+                // It's better to wait for the script to complete to get its termination status
+                // The script is short-lived (it backgrounds Geth).
+                wrapperProcess.waitUntilExit()
 
-                // Optional: Could add termination handler for bash process if needed
-                // wrapperProcess.terminationHandler = { process in ... }
-
-                // Removed reading pipes and checking exit status here,
-                // as the script should exit quickly with status 0 if launch is okay.
-                // Error handling within the script itself should log to files if needed.
+                let pid = wrapperProcess.processIdentifier // PID of bash
+                if wrapperProcess.terminationStatus == 0 {
+                    successMessage = "✨ Launched geth wrapper script process (PID: \(pid)). Termination status: \(wrapperProcess.terminationStatus). Geth should be running separately."
+                } else {
+                    errorMessage = "Geth wrapper script (PID: \(pid)) terminated with status: \(wrapperProcess.terminationStatus)."
+                }
 
             } catch {
-                errorMessage = "Error launching geth wrapper: \(error.localizedDescription)"
+                errorMessage = "Error trying to run geth wrapper: \(error.localizedDescription)"
             }
 
             // Log results safely on the main thread
             DispatchQueue.main.async {
-                if let finalErrorMessage = errorMessage {
-                    LogManager.shared.log("Error during wrapper script execution: \(finalErrorMessage)", type: .error)
-                } else if let finalSuccessMessage = successMessage {
-                    LogManager.shared.log(finalSuccessMessage, type: .success)
+                if let msg = successMessage {
+                    LogManager.shared.log(msg, type: .success)
+                }
+                if let msg = errorMessage {
+                    LogManager.shared.log("❌ \(msg)", type: .error) // Added ❌ for emphasis
+                }
+                if let output = scriptOutput, !output.isEmpty {
+                    LogManager.shared.log("Wrapper script stdout:\\n\(output)", type: .debug)
+                }
+                if let errOutput = scriptErrorOutput, !errOutput.isEmpty {
+                    LogManager.shared.log("Wrapper script stderr:\\n\(errOutput)", type: .error)
+                }
+                
+                // After attempting to start, check the actual Geth log file
+                // This is a bit delayed, but useful.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { // Wait 2s for Geth to potentially log
+                    self.checkGethLogFileContent()
                 }
             }
+        }
+    }
+
+    private func checkGethLogFileContent() {
+        let logPath = dataDirectory.appendingPathComponent("logs/geth.log")
+        do {
+            let logContent = try String(contentsOf: logPath, encoding: .utf8)
+            if logContent.contains("Starting Geth node...") || logContent.contains("HTTP server started") {
+                LogManager.shared.log("Geth log file indicates Geth started or attempted to start. Contents:\\n\(logContent.prefix(500))", type: .info)
+            } else if logContent.contains("Geth log cleared") {
+                 LogManager.shared.log("Geth log file only contains 'cleared' message. Geth wrapper script likely didn't run properly.", type: .warning)
+            } else {
+                LogManager.shared.log("Geth log file content (first 500 chars):\\n\(logContent.prefix(500))", type: .debug)
+            }
+        } catch {
+            LogManager.shared.log("Could not read Geth log file at \(logPath.path): \(error.localizedDescription)", type: .error)
         }
     }
 
@@ -1997,6 +2045,25 @@ class MiningService: ObservableObject {
                 // Log but don't change status yet
                 LogManager.shared.log("Connection check failed (\(connectionFailureCount)/\(maxFailuresBeforeDisconnect))", type: .debug)
             }
+        }
+    }
+
+    public func getCurrentAccountMnemonic() -> String? {
+        guard !self.miningAddress.isEmpty else {
+            LogManager.shared.log("No active mining address to fetch mnemonic for.", type: .debug)
+            return nil
+        }
+        do {
+            if let mnemonic = try loadSavedMnemonic(forAddress: self.miningAddress) {
+                LogManager.shared.log("Successfully loaded mnemonic for \(self.miningAddress) on demand.", type: .debug)
+                return mnemonic
+            } else {
+                LogManager.shared.log("Mnemonic not found for \(self.miningAddress) in saved file.", type: .warning)
+                return "Mnemonic not found for this account."
+            }
+        } catch {
+            LogManager.shared.log("Error loading saved mnemonic for \(self.miningAddress): \(error.localizedDescription)", type: .error)
+            return "Error occurred while loading mnemonic."
         }
     }
 }

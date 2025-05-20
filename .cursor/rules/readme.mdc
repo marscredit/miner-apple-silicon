@@ -11,6 +11,7 @@ version: 1.0.0
 description: |
   A native macOS application for mining Mars Credit (MARS) on Apple Silicon Macs.
   This application interfaces with a custom Ethereum fork (v1.10.18) to perform proof-of-work mining and allows secure account generation and management.
+  Optimized specifically for Apple Silicon with reduced resource requirements and improved connection stability.
 
 requirements:
   - macOS >= 12.0
@@ -35,32 +36,36 @@ mining:
     - enode://ca3639067a580a0f1db7412aeeef6d5d5e93606ed7f236a5343fe0d1115fb8c2bea2a22fa86e9794b544f886a4cb0de1afcbccf60960802bf00d81dab9553ec9@monorail.proxy.rlwy.net:26254
     - enode://7f2ee75a1c112735aaa43de1e5a6c4d7e07d03a5352b5782ed8e0c7cc046a8c8839ad093b09649e0b4a6ed8900211fb4438765c99d07bb00006ef080a1aa9ab6@viaduct.proxy.rlwy.net:30270
     - enode://98710174f4798dae1931e417944ac7a7fb3268d38ef8d3941c8fcc44fe178b118003d8b3d61d85af39c561235a1708f8dd61f8ba47df4c4a6b9156e272af2cfc@monorail.proxy.rlwy.net:29138
-  dagdir: /data/.ethash
+  dagdir: ~/.marscredit/.ethash
+  binary_path: ~/.marscredit/geth-binary
 
 geth_startup_script: |
-  geth --datadir /data \
-       --keystore /app/keystore \
+  geth --datadir ~/.marscredit \
+       --keystore ~/.marscredit/keystore \
        --syncmode "full" \
        --http \
-       --http.addr "0.0.0.0" \
+       --http.addr "localhost" \
        --http.port 8546 \
        --http.api personal,eth,net,web3,miner,admin \
        --http.vhosts=* \
        --http.corsdomain=* \
        --networkid 110110 \
        --ws \
-       --ws.addr "0.0.0.0" \
+       --ws.addr "localhost" \
        --ws.port 8546 \
+       --ws.origins "*" \
+       --ws.api "personal,eth,net,web3,miner,admin" \
        --port 30304 \
        --nat "any" \
        --mine \
        --miner.threads=1 \
        --miner.etherbase YOUR_WALLET_ADDRESS_HERE_FOR_MINING_REWARDS \
        --bootnodes="<see above>" \
-       --verbosity 6 \
-       --maxpeers 50 \
-       --cache 2048 \
-       --ethash.dagdir /data/.ethash
+       --verbosity 3 \
+       --maxpeers 25 \
+       --cache 512 \
+       --rpc.allow-unprotected-txs \
+       --nousb
 
 features:
   - Native Apple Silicon Support
@@ -70,11 +75,13 @@ features:
   - macOS Keychain password integration
   - Secure RPC-based syncing and block monitoring
   - Clean, modern macOS GUI
+  - Connection stability with debounce mechanism
+  - Optimized resource usage for Apple Silicon
 
 account_management:
   - On "Generate Account":
       - Generate a new wallet address
-      - Save private key to /app/keystore
+      - Save private key to ~/.marscredit/keystore
       - Display 12-word mnemonic for backup
   - Mnemonic must be viewable on-demand through UI (one-click)
 
@@ -94,6 +101,27 @@ ui:
     - Click "Generate Account"
     - Save displayed mnemonic
     - Click "Start Mining"
+  network_status:
+    - Green: Connected to network
+    - Yellow: Temporarily disconnected (reconnecting)
+    - Red: Disconnected (not running)
+
+apple_silicon_optimizations:
+  - Reduced memory cache from 2048MB to 512MB
+  - Limited peer connections to 25 (from 50)
+  - WebSocket API on same port as HTTP
+  - Added connection debounce mechanism (3 failures before disconnect)
+  - Yellow "Connecting..." visual state during temporary disconnections
+  - Keeps block info visible during connection fluctuations
+  - Auto-reconnection after 15 seconds of disconnection
+
+stability_enhancements:
+  - Environment setup via app_helper.sh
+  - Binary location at ~/.marscredit/geth-binary
+  - Genesis block auto-initialization
+  - Wrapper script for proper process management
+  - Connection status check every 5 seconds
+  - Enhanced error handling and recovery
 
 security:
   mnemonic_display: one-click reveal

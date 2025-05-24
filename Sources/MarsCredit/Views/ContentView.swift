@@ -87,6 +87,7 @@ struct ContentView: View {
                                 withAnimation { showLogs.toggle() }
                             }.compactButtonStyle()
                         }
+                        .padding(.bottom, 60) // ADD: 60px margin below buttons
                     }
                         .padding(.leading)
                     
@@ -367,7 +368,8 @@ struct ContentView: View {
     
     private func startAnimationTimers() {
         Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { timer in
-            if isAnimating {
+            // IMPROVED: Sync animation with actual mining status
+            if isAnimating || miningService.isMining {
                 withAnimation(.linear(duration: 0.05)) {
                     moonAngle += 2 // Speed up animation slightly
                     if moonAngle >= 360 { moonAngle = 0 }
@@ -375,7 +377,20 @@ struct ContentView: View {
             }
         }
         Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
-            if miningService.isMining { miningService.checkMinerBlocks() }
+            if miningService.isMining { 
+                miningService.checkMinerBlocks() 
+                // Update balance when mining
+                miningService.updateBalance(address: miningAddress)
+            }
+        }
+        
+        // ADDED: Sync isAnimating with mining status
+        Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { _ in
+            if miningService.isMining && !isAnimating {
+                isAnimating = true
+            } else if !miningService.isMining && isAnimating {
+                isAnimating = false
+            }
         }
     }
     

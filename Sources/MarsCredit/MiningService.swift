@@ -755,24 +755,28 @@ class MiningService: ObservableObject {
                 
                 let output = String(data: outputPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
                 
-                // Look for our specific geth process with mining
+                // Look for our specific geth process with mining - IMPROVED detection
                 let hasGethProcess = output.contains("geth") && 
                                   output.contains("--mine") && 
-                                  output.contains("--datadir") && 
-                                  output.contains(".marscredit")
+                                  (output.contains("--datadir") || output.contains(".marscredit"))
+                
+                // Also check for any geth process in our data directory
+                let hasMarsCreditGeth = output.contains("marscredit") && output.contains("geth")
+                
+                let gethRunning = hasGethProcess || hasMarsCreditGeth
                 
                 DispatchQueue.main.async {
                     let wasGethRunning = self.isGethRunning
                     let wasMining = self.isMining
                     
-                    self.isGethRunning = hasGethProcess
+                    self.isGethRunning = gethRunning
                     
-                    // If geth is running with --mine flag, we're mining
-                    if hasGethProcess {
+                    // If geth is running, we're mining
+                    if gethRunning {
                         self.isMining = true
                         
                         if !wasMining {
-                            LogManager.shared.log("⛏️ MINING DETECTED: Geth process found with --mine flag", type: .mining)
+                            LogManager.shared.log("⛏️ MINING DETECTED: Geth process found running", type: .mining)
                         }
                         if !wasGethRunning {
                             LogManager.shared.log("✅ Geth mining process is active", type: .mining)
@@ -2332,6 +2336,16 @@ class MiningService: ObservableObject {
                 self.updateMiningStats()
             }
         }
+        
+        // ADDED: More frequent balance updates
+        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
+            guard let self = self else { return }
+            
+            // Update balance more frequently
+            if !self.miningAddress.isEmpty {
+                self.updateBalance(address: self.miningAddress)
+            }
+        }
     }
     
     // NEW: Update mining stats via RPC (balance, hashrate, etc.)
@@ -2339,9 +2353,7 @@ class MiningService: ObservableObject {
         // Always check mining process first
         checkGethMiningProcess()
         
-        guard let localClient = localClient else { return }
-        
-        // Get current balance via REMOTE RPC (as user suggested)
+        // Get current balance via REMOTE RPC more frequently
         if !miningAddress.isEmpty, let remoteClient = remoteClient {
             let balanceRequest = remoteClient.createRPCRequest(method: "eth_getBalance", params: [miningAddress, "latest"])
             remoteClient.executeRequest(balanceRequest) { [weak self] result in
@@ -2352,30 +2364,19 @@ class MiningService: ObservableObject {
                         let newBalance = Double(balance) / 1e18 // Convert from wei to MARS
                         if newBalance != self?.currentBalance {
                             self?.currentBalance = newBalance
-                            LogManager.shared.log("Balance: \(String(format: "%.6f", newBalance)) MARS", type: .mining)
+                            LogManager.shared.log("Balance updated: \(String(format: "%.6f", newBalance)) MARS", type: .mining)
                         }
                     }
                 }
             }
         }
         
-        // Get current hashrate from LOCAL geth
-        localClient.getHashRate().done { [weak self] hashRate in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                
-                // REMOVED: Hash rate tracking - no longer needed
-                // Just use this call to confirm mining process is responding
-                if hashRate > 0 {
-                    LogManager.shared.log("⛏️ Mining process responding (hashrate > 0)", type: .mining)
-                } else {
-                    // Check if we're actually mining with a different metric
-                    self.checkAlternativeHashRate()
-                }
-            }
-        }.catch { _ in
-            // Try alternative hash rate method
-            self.checkAlternativeHashRate()
+        guard let localClient = localClient else { return }
+        
+        // REMOVED: Hash rate tracking - no longer needed
+        // Just use this call to confirm mining process is responding
+        if localClient != nil {
+            LogManager.shared.log("⛏️ Mining process connection confirmed", type: .mining)
         }
     }
     

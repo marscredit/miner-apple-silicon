@@ -13,6 +13,12 @@ struct ContentView: View {
     @State private var showPerformanceMetrics = false
     @State private var appVersion = "Build: N/A"
     
+    // ADDED: Multi-step reset wallet protection
+    @State private var showResetConfirmation = false
+    @State private var showResetTypeConfirmation = false
+    @State private var resetConfirmationText = ""
+    @State private var resetStep = 1
+    
     // Connection status calculation - UPDATED for Build 18
     private var connectionStatus: (color: Color, text: String) {
         // Prioritize remote RPC connection status for the main indicator
@@ -73,14 +79,10 @@ struct ContentView: View {
                             }.compactButtonStyle()
                             
                             Button("Reset Wallet") {
-                                do {
-                                    let (newAddress, newMnemonic) = try miningService.resetWallet(password: password)
-                                    miningAddress = newAddress
-                                    generatedMnemonic = newMnemonic
-                                    LogManager.shared.log("Wallet reset. New address: \(newAddress).", type: .warning)
-                                } catch {
-                                    LogManager.shared.log("Error resetting wallet: \(error.localizedDescription)", type: .error)
-                                }
+                                // IMPROVED: Multi-step reset confirmation
+                                showResetConfirmation = true
+                                resetStep = 1
+                                resetConfirmationText = ""
                             }.compactButtonStyle(isDestructive: true)
                             
                             Button(showLogs ? "Hide Logs" : "Show Logs") {
@@ -164,25 +166,39 @@ struct ContentView: View {
                         // Optional Performance Metrics Panel (now at top)
                         if showPerformanceMetrics && miningService.isMining {
                             VStack(alignment: .trailing, spacing: 4) { // Changed to trailing
-                                Text("Mining Performance")
+                                Text("Live Mining Stats")
                                     .font(.gunship(size: 16)) // Slightly smaller
                                     .foregroundColor(.white)
                                 HStack {
-                                    Text("Avg Block Time:")
+                                    Text("Network Block:")
                                         .font(.caption).foregroundColor(.gray)
-                                    Text(miningService.formattedAverageBlockTime())
+                                    Text("\(miningService.networkStatus.highestBlock)")
+                                        .font(.caption).foregroundColor(.green)
+                                }
+                                HStack {
+                                    Text("Sync Status:")
+                                        .font(.caption).foregroundColor(.gray)
+                                    if miningService.networkStatus.currentBlock >= miningService.networkStatus.highestBlock {
+                                        Text("100% Synced")
+                                            .font(.caption).foregroundColor(.green)
+                                    } else {
+                                        let progress = Int((Double(miningService.networkStatus.currentBlock) / Double(max(1, miningService.networkStatus.highestBlock))) * 100)
+                                        Text("\(progress)% Syncing")
+                                            .font(.caption).foregroundColor(.blue)
+                                    }
+                                }
+                                HStack {
+                                    Text("Mining Since:")
+                                        .font(.caption).foregroundColor(.gray)
+                                    Text(miningService.gethStartupTime?.timeIntervalSinceNow.magnitude.formatted(.number.precision(.fractionLength(0))) ?? "0")
                                         .font(.caption).foregroundColor(.white)
+                                    Text("min ago")
+                                        .font(.caption).foregroundColor(.gray)
                                 }
                                 HStack {
                                     Text("Blocks Found:")
                                         .font(.caption).foregroundColor(.gray)
                                     Text("\(miningService.blocksFound)")
-                                        .font(.caption).foregroundColor(.white)
-                                }
-                                HStack {
-                                    Text("Est. Earnings/Day:")
-                                        .font(.caption).foregroundColor(.gray)
-                                    Text("\(String(format: "%.2f", miningService.estimatedEarningsPerDay())) MARS")
                                         .font(.caption).foregroundColor(.white)
                                 }
                             }
@@ -249,7 +265,21 @@ struct ContentView: View {
                     VStack(alignment: .leading, spacing: 6) {
                         HStack(spacing: 6) {
                             Text("Address:").font(.caption).foregroundColor(.gray)
-                            Text(miningAddress).font(.caption).foregroundColor(.white).lineLimit(1).truncationMode(.middle)
+                            // IMPROVED: Clickable address that opens block explorer
+                            Button(action: {
+                                if let url = URL(string: "https://blockscan.marscredit.xyz/address/\(miningAddress)") {
+                                    NSWorkspace.shared.open(url)
+                                }
+                            }) {
+                                Text(miningAddress)
+                                    .font(.caption)
+                                    .foregroundColor(.blue)
+                                    .underline()
+                                    .lineLimit(1)
+                                    .truncationMode(.middle)
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .help("Click to view on Mars Credit Explorer")
                         }
                         HStack(spacing: 6) {
                             Text("Balance:").font(.caption).foregroundColor(.gray)
@@ -336,6 +366,116 @@ struct ContentView: View {
                         Text(generatedMnemonic).font(.system(.body, design: .monospaced)).foregroundColor(.white).padding().background(Color.gray.opacity(0.2)).cornerRadius(8).fixedSize(horizontal: false, vertical: true)
                         Button("Close") { showingMnemonicSheet = false }.miningButtonStyle()
                     }.padding()
+                }
+            }
+            // ADDED: Multi-step reset wallet confirmation modals
+            .sheet(isPresented: $showResetConfirmation) {
+                ZStack {
+                    Color.black.ignoresSafeArea()
+                    VStack(spacing: 20) {
+                        Text("⚠️ Reset Wallet Warning")
+                            .font(.gunship(size: 24))
+                            .foregroundColor(.red)
+                        
+                        VStack(spacing: 12) {
+                            Text("IMPORTANT: Resetting your wallet will:")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                            
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("• Create a new wallet address")
+                                Text("• Generate a new backup phrase")
+                                Text("• PERMANENTLY DELETE your current backup phrase")
+                                Text("• You will LOSE ACCESS to your current MARS balance")
+                            }
+                            .font(.body)
+                            .foregroundColor(.gray)
+                            .padding(.leading)
+                            
+                            Text("Before proceeding, make sure you have saved your current backup phrase if you have any MARS to recover!")
+                                .font(.body)
+                                .foregroundColor(.orange)
+                                .multilineTextAlignment(.center)
+                                .padding()
+                                .background(Color.orange.opacity(0.1))
+                                .cornerRadius(8)
+                        }
+                        
+                        HStack(spacing: 16) {
+                            Button("Cancel") {
+                                showResetConfirmation = false
+                            }
+                            .miningButtonStyle()
+                            
+                            Button("Yes, Continue") {
+                                showResetConfirmation = false
+                                showResetTypeConfirmation = true
+                            }
+                            .miningButtonStyle(isDestructive: true)
+                        }
+                    }
+                    .padding()
+                }
+            }
+            .sheet(isPresented: $showResetTypeConfirmation) {
+                ZStack {
+                    Color.black.ignoresSafeArea()
+                    VStack(spacing: 20) {
+                        Text("🔑 Final Confirmation")
+                            .font(.gunship(size: 24))
+                            .foregroundColor(.red)
+                        
+                        Text("To confirm wallet reset, type:")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                        
+                        Text("RESET WALLET")
+                            .font(.system(.title, design: .monospaced))
+                            .foregroundColor(.red)
+                            .padding()
+                            .background(Color.red.opacity(0.1))
+                            .cornerRadius(8)
+                        
+                        TextField("Type here...", text: $resetConfirmationText)
+                            .textFieldStyle(.roundedBorder)
+                            .font(.system(.body, design: .monospaced))
+                            .multilineTextAlignment(.center)
+                        
+                        Text("This action cannot be undone!")
+                            .font(.caption)
+                            .foregroundColor(.red)
+                        
+                        HStack(spacing: 16) {
+                            Button("Cancel") {
+                                showResetTypeConfirmation = false
+                                resetConfirmationText = ""
+                            }
+                            .miningButtonStyle()
+                            
+                            Button("Reset Wallet") {
+                                if resetConfirmationText == "RESET WALLET" {
+                                    // Perform the actual wallet reset
+                                    do {
+                                        let (newAddress, newMnemonic) = try miningService.resetWallet(password: password)
+                                        miningAddress = newAddress
+                                        generatedMnemonic = newMnemonic
+                                        LogManager.shared.log("⚠️ Wallet reset completed. New address: \(newAddress)", type: .warning)
+                                        LogManager.shared.log("🔑 New backup phrase generated. Click 'Backup Phrase' to view it.", type: .warning)
+                                        
+                                        // Close modal and reset state
+                                        showResetTypeConfirmation = false
+                                        resetConfirmationText = ""
+                                    } catch {
+                                        LogManager.shared.log("Error resetting wallet: \(error.localizedDescription)", type: .error)
+                                    }
+                                }
+                            }
+                            .miningButtonStyle(isDestructive: true)
+                            .disabled(resetConfirmationText != "RESET WALLET")
+                            .opacity(resetConfirmationText == "RESET WALLET" ? 1.0 : 0.5)
+                        }
+                    }
+                    .padding()
                 }
             }
         }

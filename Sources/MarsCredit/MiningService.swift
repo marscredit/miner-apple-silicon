@@ -872,8 +872,17 @@ class MiningService: ObservableObject {
         return mnemonicDict[address]
     }
     
+    // Add process tracking properties
+    private var gethStartupTime: Date?
+    private var gethProcessPID: Int?
+    
     func startMining(address: String, password: String) {
-        guard !isMining else { return }
+        guard !isMining else { 
+            LogManager.shared.log("startMining() called but already mining, ignoring", type: .debug)
+            return 
+        }
+        
+        LogManager.shared.log("=== STARTING MINING PROCESS ===", type: .info)
         
         // First test that the geth binary actually works
         testGethBinary { [weak self] success, error in
@@ -889,6 +898,7 @@ class MiningService: ObservableObject {
             DispatchQueue.main.async {
                 self.isMining = true
                 self.miningAddress = address
+                self.gethStartupTime = Date() // Track startup time
             }
             
             // Try to wait for any previous mining operation to clean up
@@ -932,11 +942,17 @@ class MiningService: ObservableObject {
             }
         }
     }
-    
+
     func stopMining() {
         LogManager.shared.log("--- stopMining() CALLED ---", type: .warning)
         guard isMining else { 
             LogManager.shared.log("stopMining(): called but isMining is false, returning.", type: .debug)
+            return
+        }
+        
+        // PROTECTION: Don't stop if geth just started (give it at least 10 seconds)
+        if let startTime = gethStartupTime, Date().timeIntervalSince(startTime) < 10.0 {
+            LogManager.shared.log("🛡️ Geth started recently (\(Int(Date().timeIntervalSince(startTime)))s ago), protecting from premature shutdown", type: .warning)
             return
         }
         
@@ -946,6 +962,8 @@ class MiningService: ObservableObject {
         DispatchQueue.main.async {
             self.isMining = false
             self.currentHashRate = 0
+            self.gethStartupTime = nil // Clear startup tracking
+            self.gethProcessPID = nil
         }
         
         // Stop the geth process - both the direct process and potentially running scripts
@@ -953,11 +971,61 @@ class MiningService: ObservableObject {
         marscreditProcess = nil
         marscreditOutput = nil
         
-        // Kill any geth process using pkill
-        let killTask = Process()
-        killTask.executableURL = URL(fileURLWithPath: "/usr/bin/pkill")
-        killTask.arguments = ["-f", "geth"]
-        try? killTask.run()
+        // IMPROVED: Only kill our specific geth process using PID file, not all geth processes
+        let pidFilePath = dataDirectory.appendingPathComponent("geth.pid")
+        if FileManager.default.fileExists(atPath: pidFilePath.path) {
+            do {
+                let pidString = try String(contentsOf: pidFilePath, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines)
+                if let pid = Int(pidString) {
+                    LogManager.shared.log("Attempting to stop geth process with PID: \(pid)", type: .info)
+                    
+                    // First try SIGTERM for graceful shutdown
+                    let termTask = Process()
+                    termTask.executableURL = URL(fileURLWithPath: "/bin/kill")
+                    termTask.arguments = ["-TERM", "\(pid)"]
+                    try? termTask.run()
+                    termTask.waitUntilExit()
+                    
+                    // Wait a moment for graceful shutdown
+                    Thread.sleep(forTimeInterval: 2.0)
+                    
+                    // Check if process is still running, then force kill if needed
+                    let checkTask = Process()
+                    checkTask.executableURL = URL(fileURLWithPath: "/bin/ps")
+                    checkTask.arguments = ["-p", "\(pid)"]
+                    let checkPipe = Pipe()
+                    checkTask.standardOutput = checkPipe
+                    try? checkTask.run()
+                    checkTask.waitUntilExit()
+                    
+                    let output = String(data: checkPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+                    if output.contains("\(pid)") {
+                        LogManager.shared.log("Process \(pid) still running, force killing...", type: .warning)
+                        let killTask = Process()
+                        killTask.executableURL = URL(fileURLWithPath: "/bin/kill")
+                        killTask.arguments = ["-KILL", "\(pid)"]
+                        try? killTask.run()
+                    } else {
+                        LogManager.shared.log("Geth process \(pid) stopped gracefully", type: .success)
+                    }
+                    
+                    // Clean up PID file
+                    try? FileManager.default.removeItem(at: pidFilePath)
+                } else {
+                    LogManager.shared.log("Invalid PID in geth.pid file", type: .warning)
+                }
+            } catch {
+                LogManager.shared.log("Error reading geth.pid file: \(error.localizedDescription)", type: .error)
+            }
+        } else {
+            LogManager.shared.log("No geth.pid file found, trying fallback process termination", type: .warning)
+            
+            // Fallback: only kill geth processes from our specific data directory
+            let killTask = Process()
+            killTask.executableURL = URL(fileURLWithPath: "/usr/bin/pkill")
+            killTask.arguments = ["-f", "\(dataDirectory.path).*geth"]
+            try? killTask.run()
+        }
         
         // Clear the processed log lines
         processedLogLines.removeAll()
@@ -1684,7 +1752,8 @@ class MiningService: ObservableObject {
         guard let wrapperPathString = Bundle.main.path(forResource: "run_geth_in_app", ofType: "sh") else {
             LogManager.shared.log("Error: run_geth_in_app.sh not found in the application bundle's Resources directory.", type: .error)
             DispatchQueue.main.async {
-                // Optionally update UI to show failure
+                self.isMining = false
+                self.gethStartupTime = nil
             }
             return
         }
@@ -1719,25 +1788,19 @@ class MiningService: ObservableObject {
         DispatchQueue.global(qos: .background).async {
             var errorMessage: String? = nil
             var successMessage: String? = nil
-            // var scriptOutput: String? = nil // No longer attempting to read pipe here
-            // var scriptErrorOutput: String? = nil // No longer attempting to read pipe here
 
             do {
                 // Launch the script
                 LogManager.shared.log("Attempting to launch geth wrapper script: \(wrapperPath.path)", type: .debug)
                 try wrapperProcess.run()
                 
-                // DO NOT WAIT FOR SCRIPT TO EXIT FOR THIS TEST
-                // wrapperProcess.waitUntilExit()
-                // INSTEAD, WE WILL RELY ON SCRIPT'S OWN LOGGING AND RPC CHECK
-
                 let pid = wrapperProcess.processIdentifier // PID of bash
-                // Since we are not waiting, terminationStatus is not reliably available here.
-                // The script needs to be robust enough to log its own success/failure to the Geth log.
                 successMessage = "✨ Dispatched geth wrapper script process (PID: \(pid)). Script runs in background."
                 
-                // Output pipes will likely not be readable here as script is backgrounded by Swift immediately.
-                // Rely on script logging to files.
+                // Set up monitoring for the actual geth process
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) { [weak self] in
+                    self?.startGethProcessMonitoring()
+                }
 
             } catch {
                 errorMessage = "Error trying to run geth wrapper: \(error.localizedDescription)"
@@ -1750,18 +1813,104 @@ class MiningService: ObservableObject {
                 }
                 if let msg = errorMessage {
                     LogManager.shared.log("❌ \(msg)", type: .error) // Added ❌ for emphasis
+                    self.isMining = false
+                    self.gethStartupTime = nil
                 }
-                // if let output = scriptOutput, !output.isEmpty {
-                //     LogManager.shared.log("Wrapper script stdout:\\n\(output)", type: .debug)
-                // }
-                // if let errOutput = scriptErrorOutput, !errOutput.isEmpty {
-                //     LogManager.shared.log("Wrapper script stderr:\\n\(errOutput)", type: .error)
-                // }
                 
                 // After attempting to start, check the actual Geth log file
-                // This is a bit delayed, but useful.
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { // Wait 2s for Geth to potentially log
                     self.checkGethLogFileContent()
+                }
+            }
+        }
+    }
+    
+    private func startGethProcessMonitoring() {
+        LogManager.shared.log("Starting geth process monitoring...", type: .debug)
+        
+        // Monitor for PID file creation and track the process
+        let pidFilePath = dataDirectory.appendingPathComponent("geth.pid")
+        
+        // Check every second for up to 30 seconds for the PID file to appear
+        var attempts = 0
+        let maxAttempts = 30
+        
+        let monitorTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
+            guard let self = self else {
+                timer.invalidate()
+                return
+            }
+            
+            attempts += 1
+            
+            if FileManager.default.fileExists(atPath: pidFilePath.path) {
+                do {
+                    let pidString = try String(contentsOf: pidFilePath, encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines)
+                    if let pid = Int(pidString) {
+                        DispatchQueue.main.async {
+                            self.gethProcessPID = pid
+                            LogManager.shared.log("🎯 Geth process detected with PID: \(pid)", type: .success)
+                        }
+                        
+                        // Verify the process is actually running
+                        let checkTask = Process()
+                        checkTask.executableURL = URL(fileURLWithPath: "/bin/ps")
+                        checkTask.arguments = ["-p", "\(pid)", "-o", "pid,command"]
+                        let checkPipe = Pipe()
+                        checkTask.standardOutput = checkPipe
+                        
+                        try? checkTask.run()
+                        checkTask.waitUntilExit()
+                        
+                        let output = String(data: checkPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+                        if output.contains("geth") {
+                            LogManager.shared.log("✅ Confirmed geth process is running: \(output.components(separatedBy: .newlines).last ?? "")", type: .success)
+                        } else {
+                            LogManager.shared.log("⚠️ PID file exists but geth process not found in process list", type: .warning)
+                        }
+                    }
+                    timer.invalidate()
+                } catch {
+                    LogManager.shared.log("Error reading PID file: \(error.localizedDescription)", type: .error)
+                }
+            } else if attempts >= maxAttempts {
+                LogManager.shared.log("⚠️ Geth PID file not created after \(maxAttempts) seconds", type: .warning)
+                timer.invalidate()
+            }
+        }
+        
+        // Also start periodic health checking after the initial monitoring
+        DispatchQueue.main.asyncAfter(deadline: .now() + 35.0) { [weak self] in
+            self?.startGethHealthMonitoring()
+        }
+    }
+    
+    private func startGethHealthMonitoring() {
+        // Monitor geth health every 30 seconds
+        Timer.scheduledTimer(withTimeInterval: 30.0, repeats: true) { [weak self] _ in
+            guard let self = self, self.isMining else { return }
+            
+            if let pid = self.gethProcessPID {
+                // Check if the process is still running
+                let checkTask = Process()
+                checkTask.executableURL = URL(fileURLWithPath: "/bin/ps")
+                checkTask.arguments = ["-p", "\(pid)"]
+                let checkPipe = Pipe()
+                checkTask.standardOutput = checkPipe
+                checkTask.standardError = Pipe() // Silence stderr
+                
+                try? checkTask.run()
+                checkTask.waitUntilExit()
+                
+                if checkTask.terminationStatus != 0 {
+                    LogManager.shared.log("🚨 Geth process (PID: \(pid)) has died unexpectedly!", type: .error)
+                    DispatchQueue.main.async {
+                        self.isMining = false
+                        self.gethProcessPID = nil
+                        self.gethStartupTime = nil
+                    }
+                } else {
+                    LogManager.shared.log("💓 Geth process (PID: \(pid)) is healthy", type: .debug)
                 }
             }
         }
@@ -1777,7 +1926,7 @@ class MiningService: ObservableObject {
                  LogManager.shared.log("Geth log file only contains 'cleared' message. Geth wrapper script likely didn't run properly.", type: .warning)
             } else {
                 LogManager.shared.log("Geth log file content (first 500 chars):\\n\(logContent.prefix(500))", type: .debug)
-            }
+                }
         } catch {
             LogManager.shared.log("Could not read Geth log file at \(logPath.path): \(error.localizedDescription)", type: .error)
         }
@@ -1980,10 +2129,29 @@ class MiningService: ObservableObject {
 
     private func setupConnectionStatusTimer() {
         connectionCheckTimer?.invalidate()
-        connectionCheckTimer = Timer.scheduledTimer(withTimeInterval: connectionCheckInterval, repeats: true) { [weak self] _ in
-            self?.checkNetworkConnection()
+        
+        // IMPROVEMENT: Delay connection checking if geth was just started
+        let delay: TimeInterval
+        if let startTime = gethStartupTime, Date().timeIntervalSince(startTime) < 30.0 {
+            // If geth started recently, wait longer before beginning aggressive connection checking
+            delay = 30.0 - Date().timeIntervalSince(startTime)
+            LogManager.shared.log("Delaying connection monitoring for \(Int(delay))s to allow geth startup", type: .info)
+        } else {
+            delay = 0.0
         }
-        connectionCheckTimer?.fire() // Check immediately on setup
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            guard let self = self else { return }
+            
+            self.connectionCheckTimer = Timer.scheduledTimer(withTimeInterval: self.connectionCheckInterval, repeats: true) { [weak self] _ in
+                self?.checkNetworkConnection()
+            }
+            self.connectionCheckTimer?.fire() // Check immediately after delay
+            
+            if delay > 0 {
+                LogManager.shared.log("Connection monitoring started after geth startup delay", type: .success)
+            }
+        }
     }
     
     private func checkNetworkConnection() {
@@ -2025,8 +2193,20 @@ class MiningService: ObservableObject {
             // On connection failure, increment failure count
             connectionFailureCount += 1
             
+            // IMPROVEMENT: Be more tolerant during geth startup period
+            let failureThreshold: Int
+            if let startTime = gethStartupTime, Date().timeIntervalSince(startTime) < 60.0 {
+                // During startup (first 60 seconds), require more failures before disconnecting
+                failureThreshold = 8  // More tolerant during startup
+                LogManager.shared.log("Startup period: connection check failed (\(connectionFailureCount)/\(failureThreshold)) - being tolerant", type: .debug)
+            } else {
+                // Normal operation - use standard threshold
+                failureThreshold = maxFailuresBeforeDisconnect
+                LogManager.shared.log("Connection check failed (\(connectionFailureCount)/\(failureThreshold))", type: .debug)
+            }
+            
             // Only mark as disconnected after multiple consecutive failures
-            if connectionFailureCount >= maxFailuresBeforeDisconnect {
+            if connectionFailureCount >= failureThreshold {
                 if networkStatus.isConnected {
                     var updatedStatus = networkStatus
                     updatedStatus.isConnected = false
@@ -2038,9 +2218,6 @@ class MiningService: ObservableObject {
                 if lastSuccessfulConnection == nil || Date().timeIntervalSince(lastSuccessfulConnection!) > 15.0 {
                     scheduleReconnection()
                 }
-            } else {
-                // Log but don't change status yet
-                LogManager.shared.log("Connection check failed (\(connectionFailureCount)/\(maxFailuresBeforeDisconnect))", type: .debug)
             }
         }
     }

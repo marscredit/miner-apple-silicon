@@ -36,13 +36,13 @@ struct ContentView: View {
                 // Top Bar - Modified
                 HStack(alignment: .top) {
                     // Left side - Title
-                    Text("Mars Credit Miner")
-                        .font(.gunship(size: 32))
-                        .foregroundColor(.white)
+                        Text("Mars Credit Miner")
+                            .font(.gunship(size: 32))
+                            .foregroundColor(.white)
                         .padding(.leading)
-
+                    
                     Spacer()
-
+                    
                     // Right side - Status, Animation, Performance
                     VStack(alignment: .trailing, spacing: 8) {
                         HStack {
@@ -185,11 +185,11 @@ struct ContentView: View {
                         HStack(spacing: 6) {
                             Text("Address:").font(.caption).foregroundColor(.gray)
                             Text(miningAddress).font(.caption).foregroundColor(.white).lineLimit(1).truncationMode(.middle)
-                        }
+                            }
                         HStack(spacing: 6) {
                             Text("Balance:").font(.caption).foregroundColor(.gray)
                             Text("\(String(format: "%.2f", miningService.currentBalance)) MARS").font(.caption).foregroundColor(.white)
-                        }
+                            }
                         HStack(spacing: 6) {
                             Text("Hash Rate:").font(.caption).foregroundColor(.gray)
                             Text("\(String(format: "%.2f", miningService.currentHashRate)) MH/s").font(.caption).foregroundColor(.white)
@@ -199,9 +199,9 @@ struct ContentView: View {
                             .font(.caption2)
                             .foregroundColor(.gray)
                             .padding(.top, 2)
-                    }
+                            }
                     .padding(.leading)
-
+                    
                     Spacer()
                     
                     // Buttons (grouped in a FlowLayout-like manner if needed, or just HStack)
@@ -244,8 +244,8 @@ struct ContentView: View {
                             Button(showLogs ? "Hide Logs" : "Show Logs") {
                                 withAnimation { showLogs.toggle() }
                             }.miningButtonStyle().font(.caption)
-                        }
                     }
+                }
                     .padding(.trailing) // Add padding to right of buttons
                 }
                 .padding()
@@ -262,17 +262,17 @@ struct ContentView: View {
                         Text(generatedMnemonic).font(.system(.body, design: .monospaced)).foregroundColor(.white).padding().background(Color.gray.opacity(0.2)).cornerRadius(8).fixedSize(horizontal: false, vertical: true)
                         Button("Close") { showingMnemonicSheet = false }.miningButtonStyle()
                     }.padding()
-                }
             }
-            .onAppear {
+        }
+        .onAppear {
                 loadAppVersion()
-                generateAccountIfNeeded()
-                startAnimationTimers()
+            generateAccountIfNeeded()
+            startAnimationTimers()
                 MiningService.shared = miningService // Keep this for signal handling
                 // LogManager.shared.log("App started. Click 'Start Mining' to begin mining.", type: .info) // Already logged by ContentView
-            }
-            .onDisappear {
-                stopAnimationTimers()
+        }
+        .onDisappear {
+            stopAnimationTimers()
             }
         }
     }

@@ -54,6 +54,31 @@ echo "run_geth_in_app.sh: Geth binary found and is executable. Launching via dou
 BOOTNODES="enode://bf93a274569cd009e4172c1a41b8bde1fb8d8e7cff1e5130707a0cf5be4ce0fc673c8a138ecb7705025ea4069da8c1d4b7ffc66e8666f7936aa432ce57693353@roundhouse.proxy.rlwy.net:50590,enode://ca3639067a580a0f1db7412aeeef6d5d5e93606ed7f236a5343fe0d1115fb8c2bea2a22fa86e9794b544f886a4cb0de1afcbccf60960802bf00d81dab9553ec9@monorail.proxy.rlwy.net:26254,enode://7f2ee75a1c112735aaa43de1e5a6c4d7e07d03a5352b5782ed8e0c7cc046a8c8839ad093b09649e0b4a6ed8900211fb4438765c99d07bb00006ef080a1aa9ab6@viaduct.proxy.rlwy.net:30270,enode://98710174f4798dae1931e417944ac7a7fb3268d38ef8d3941c8fcc44fe178b118003d8b3d61d85af39c561235a1708f8dd61f8ba47df4c4a6b9156e272af2cfc@monorail.proxy.rlwy.net:29138"
 echo "run_geth_in_app.sh: Using BOOTNODES: $BOOTNODES" >> "$LOG_FILE"
 
+# Initialize geth with Mars Credit genesis if not already done
+GENESIS_FILE="$SCRIPT_DIR/mars_credit_genesis.json"
+echo "run_geth_in_app.sh: Forcing Mars Credit genesis initialization..." >> "$LOG_FILE"
+
+# Always remove and reinitialize to ensure correct genesis
+if [ -d "$DATA_DIR/geth" ]; then
+    echo "run_geth_in_app.sh: Removing existing geth directory to force Mars Credit genesis" >> "$LOG_FILE"
+    rm -rf "$DATA_DIR/geth"
+fi
+
+if [ -f "$GENESIS_FILE" ]; then
+    echo "run_geth_in_app.sh: Initializing geth with Mars Credit genesis: $GENESIS_FILE" >> "$LOG_FILE"
+    "$GETH_BINARY_PATH" --datadir "$DATA_DIR" init "$GENESIS_FILE" >> "$LOG_FILE" 2>&1
+    INIT_EXIT_CODE=$?
+    if [ $INIT_EXIT_CODE -eq 0 ]; then
+        echo "run_geth_in_app.sh: Mars Credit genesis initialization SUCCESSFUL" >> "$LOG_FILE"
+    else
+        echo "run_geth_in_app.sh: ERROR - Genesis initialization failed with exit code $INIT_EXIT_CODE" >> "$LOG_FILE"
+        exit 1
+    fi
+else
+    echo "run_geth_in_app.sh: ERROR - Mars Credit genesis file not found: $GENESIS_FILE" >> "$LOG_FILE"
+    exit 1
+fi
+
 # Double fork to detach Geth completely
 ( ( nohup "$GETH_BINARY_PATH" \
     --datadir "$DATA_DIR" \
@@ -69,7 +94,6 @@ echo "run_geth_in_app.sh: Using BOOTNODES: $BOOTNODES" >> "$LOG_FILE"
     --port 30304 \
     --nat "any" \
     --mine --miner.threads 1 \
-    --nodiscover \
     --verbosity 3 \
     --maxpeers 50 \
     --cache 2048 \
@@ -98,7 +122,7 @@ done
 if [ "$RPC_AVAILABLE" = true ]; then
     echo "run_geth_in_app.sh: RPC check loop finished successfully." >> "$LOG_FILE"
     echo "run_geth_in_app.sh: Exiting with status 0." >> "$LOG_FILE"
-    exit 0
+exit 0 
 else
     echo "run_geth_in_app.sh: ERROR - RPC endpoint NOT available after all attempts." >> "$LOG_FILE"
     echo "run_geth_in_app.sh: Exiting with status 1 (RPC unavailable)." >> "$LOG_FILE"

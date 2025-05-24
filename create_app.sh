@@ -49,6 +49,14 @@ else
     echo "Warning: ./Resources/run_geth_in_app.sh not found. Geth may not start correctly from the app."
 fi
 
+# Copy the Mars Credit genesis file
+if [ -f "./Resources/mars_credit_genesis.json" ]; then
+    cp "./Resources/mars_credit_genesis.json" "$RESOURCES_DIR/"
+    echo "Mars Credit genesis file copied to app bundle: $RESOURCES_DIR/mars_credit_genesis.json"
+else
+    echo "Warning: ./Resources/mars_credit_genesis.json not found. Geth may not initialize with correct genesis."
+fi
+
 # Copy executable
 cp .build/release/MarsCredit "$MACOS_DIR/"
 

@@ -1,6 +1,5 @@
 # pack-refs with: peeled fully-peeled sorted 
 9ea086d68314ebcf5ae8e48acbf306f6fdd6347d refs/heads/enable-swift-format
-4bd141c54f2c6ac358a2563f075d8d7849acd4da refs/heads/github-actions-support
 9e6597236356dadea31b681cea6a09e8e065fc85 refs/heads/main
 b6c32c13cd7a6cc161c4818e44c60d812e58a016 refs/pull/100/head
 9db6c56d8d7ddd561b03fa2f872d94993308aa13 refs/pull/101/head
@@ -15,7 +14,6 @@ d0e0a4ad9da665183c246f7884355790d93a3239 refs/pull/113/head
 14e0302666a11b1b04fe754aa6a866544817a338 refs/pull/114/head
 b7dbe0b387ffd70948ed802fc31f70245759cb0d refs/pull/114/merge
 4bd141c54f2c6ac358a2563f075d8d7849acd4da refs/pull/115/head
-26aac063254dbda577f81c87e1603b6b05afae15 refs/pull/115/merge
 7658766e6137f85ba027ac4789317b725b8dc652 refs/pull/12/head
 55a062c4a86102455fc32e1d1fec7672a165e7ca refs/pull/14/head
 47c88d732f0769bd7d4534781e172733c1cb621f refs/pull/17/head

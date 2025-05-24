@@ -6,11 +6,7 @@
 	<dict>
 		<key>Resources/VERSION.txt</key>
 		<data>
-		Fw0Nnq572Q3e9VAK2KNVSj0LwrE=
-		</data>
-		<key>Resources/debug_apple_silicon.sh</key>
-		<data>
-		Yje+sDPTehE+uBwg7ayYn9yDfk8=
+		O9tXd89tqrnydF0G56Vd1FrbvHE=
 		</data>
 		<key>Resources/geth/geth</key>
 		<data>
@@ -31,14 +27,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			okzLuRwcwIK0Wb9I1pw01a9pWMiqPMZ3Em8p1iEcLA4=
-			</data>
-		</dict>
-		<key>Resources/debug_apple_silicon.sh</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			jY+yD5K1JxrERqNnhjbRv6ObBRJvGbG/peHp8kBGKEc=
+			/FEybxGKKpcuw8XFLjTRuKRRJUZuLwvjSxLq6cuRDf4=
 			</data>
 		</dict>
 		<key>Resources/geth/geth</key>

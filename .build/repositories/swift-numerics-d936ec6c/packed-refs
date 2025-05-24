@@ -1,7 +1,6 @@
 # pack-refs with: peeled fully-peeled sorted 
 bab8d4eefaacde7c194c4d962e120ba24ca62f22 refs/heads/Quaternions
 0098c438ebc687aec80c7fef15482f4b38e3583d refs/heads/biginteger
-06e2bf1f76e9f718309ad24a801742845394f26f refs/heads/github-actions-support
 c4cc31ea95e25bd443dd9137721521914d6f5766 refs/heads/main
 e29c31deb4c58bd33a4000853a729dec8b7de733 refs/heads/release/1.0
 b97297c027d0332b4990d49306ac878f213667ae refs/pull/1/head
@@ -202,7 +201,6 @@ ddc8ce302bd8e2420660046db4334627981263de refs/pull/297/head
 37253aa0b6fbd77402f79ad2759155f991a39ed2 refs/pull/30/head
 7b1e0db43786395636b112f41dd500163b58459b refs/pull/300/head
 06e2bf1f76e9f718309ad24a801742845394f26f refs/pull/301/head
-f0e2c5df808e85e9abbe5f67b5a45b432754438a refs/pull/301/merge
 4bc7b7723914d89f02ba7e1efe95ad002b2b64bb refs/pull/31/head
 7169586e0286947bb540635b888e26ce2f7ab3f1 refs/pull/32/head
 67528d4a5398e3f420a02ef1be4501d72275d2f4 refs/pull/33/head

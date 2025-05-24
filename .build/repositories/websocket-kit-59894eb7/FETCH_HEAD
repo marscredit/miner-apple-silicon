@@ -1,6 +1,6 @@
 2947fa9e0c243df9fe95c108683b823e76ab55c1	not-for-merge	branch 'crash-fix' of https://github.com/vapor/websocket-kit
 0ba2f8a548e8c67e75e36069830b6ee1e2222e41	not-for-merge	branch 'feature/jo/revert-sendable-take-2' of https://github.com/vapor/websocket-kit
-b49c32141dd71469605856febce62811579c567c	not-for-merge	branch 'main' of https://github.com/vapor/websocket-kit
+8666c92dbbb3c8eefc8008c9c8dcf50bfd302167	not-for-merge	branch 'main' of https://github.com/vapor/websocket-kit
 1525fbe15ffcff079591c819e6f8364a03c06110	not-for-merge	'refs/pull/1/head' of https://github.com/vapor/websocket-kit
 13ddd1362ae6bae0778ee1a1d406551b3c1f38f0	not-for-merge	'refs/pull/100/head' of https://github.com/vapor/websocket-kit
 1962d08f3541bc77e182dc13e4cf312fed37e20b	not-for-merge	'refs/pull/101/head' of https://github.com/vapor/websocket-kit
@@ -40,16 +40,20 @@ fe58e9513ea13b83f3815774b5804aec6501db1d	not-for-merge	'refs/pull/138/head' of h
 ba118adc83374e0cc59cac00f7643f51dc7afaec	not-for-merge	'refs/pull/142/merge' of https://github.com/vapor/websocket-kit
 54a419dbbce8af9f48c3bb54c84c1fe811153248	not-for-merge	'refs/pull/143/head' of https://github.com/vapor/websocket-kit
 49b4437f2a58cdc72c957b0e15ac0b76201a5b22	not-for-merge	'refs/pull/144/head' of https://github.com/vapor/websocket-kit
-a0f2d6623787337dc407eaf376b7305f5ecbe66a	not-for-merge	'refs/pull/144/merge' of https://github.com/vapor/websocket-kit
+646609916c402728dc264617a9f89a8c7b271ed4	not-for-merge	'refs/pull/144/merge' of https://github.com/vapor/websocket-kit
 2fea4f3c70ee6da80ddd0039eda5efbc7adfca00	not-for-merge	'refs/pull/145/head' of https://github.com/vapor/websocket-kit
 8d2d799eb0318789af1792bcecd1f0193791d15c	not-for-merge	'refs/pull/146/head' of https://github.com/vapor/websocket-kit
 d145fc21cdbb56f935bc1dc7f7c5b431aafe570e	not-for-merge	'refs/pull/148/head' of https://github.com/vapor/websocket-kit
 d5961c13f5a7ca9da175b3b964e1a093e6703b9d	not-for-merge	'refs/pull/148/merge' of https://github.com/vapor/websocket-kit
 0f36ebe2125c47f400ae13ea3f61e34760c99931	not-for-merge	'refs/pull/149/head' of https://github.com/vapor/websocket-kit
-feb67f9c7471080d7c7953497599bf7eccb96d10	not-for-merge	'refs/pull/149/merge' of https://github.com/vapor/websocket-kit
+5c6d2ca10fd0020cf625fb8637b57df48eb62696	not-for-merge	'refs/pull/149/merge' of https://github.com/vapor/websocket-kit
 281522353671e0cb395001c41e776d166cfaac14	not-for-merge	'refs/pull/154/head' of https://github.com/vapor/websocket-kit
 28594541823441d9d5fd29ade821efab1ffdeb3a	not-for-merge	'refs/pull/155/head' of https://github.com/vapor/websocket-kit
 035d4c7799685acd918329d781353b6ced6a1ab0	not-for-merge	'refs/pull/155/merge' of https://github.com/vapor/websocket-kit
+a0672648f9393072d3f07665a03b0ac5903cccbf	not-for-merge	'refs/pull/157/head' of https://github.com/vapor/websocket-kit
+e271e9510f41c2244dc04433961d0102d9a7c580	not-for-merge	'refs/pull/157/merge' of https://github.com/vapor/websocket-kit
+3b0e71617815c995b6a3d970be15026e1e1f82f1	not-for-merge	'refs/pull/158/head' of https://github.com/vapor/websocket-kit
+a2f80481c2c9b74b8507f18cf94d99b98c2bdc63	not-for-merge	'refs/pull/159/head' of https://github.com/vapor/websocket-kit
 a6e2d45a0a9222eec9b34aeaa6f7408f522a4df9	not-for-merge	'refs/pull/17/head' of https://github.com/vapor/websocket-kit
 be37e7bc2744e2258d597c1fd634ed4e943b1f62	not-for-merge	'refs/pull/2/head' of https://github.com/vapor/websocket-kit
 61254783818a7bc39ff15f32a4576128ebab0001	not-for-merge	'refs/pull/20/head' of https://github.com/vapor/websocket-kit
@@ -128,6 +132,8 @@ a8f3ec804f84cce2384d4b52db3267e4d51c9cda	not-for-merge	tag '2.12.0' of https://g
 2ec14506d5f8199926906dc5a620ac22b147db86	not-for-merge	tag '2.13.0' of https://github.com/vapor/websocket-kit
 53fe0639a98903858d0196b699720decb42aee7b	not-for-merge	tag '2.14.0' of https://github.com/vapor/websocket-kit
 4232d34efa49f633ba61afde365d3896fc7f8740	not-for-merge	tag '2.15.0' of https://github.com/vapor/websocket-kit
+014ccd52891b8c098d7e1033d5e72ed76fef7a86	not-for-merge	tag '2.16.0' of https://github.com/vapor/websocket-kit
+8666c92dbbb3c8eefc8008c9c8dcf50bfd302167	not-for-merge	tag '2.16.1' of https://github.com/vapor/websocket-kit
 b1c4df8f6c848c2e977726903bbe6578eed723ad	not-for-merge	tag '2.2.0' of https://github.com/vapor/websocket-kit
 ff8fbce837ef01a93d49c6fb49a72be0f150dac7	not-for-merge	tag '2.3.0' of https://github.com/vapor/websocket-kit
 e32033ad3c68ebec1b761bc961be7bd56bad02f8	not-for-merge	tag '2.3.1' of https://github.com/vapor/websocket-kit

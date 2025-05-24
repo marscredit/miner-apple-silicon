@@ -1,13 +1,13 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "eb9d380abbb5a8d330ee179c079baaa13e01952b562ee38555ddd95be8fa8468"
-build_start_time: [1745210124, 846719000]
-build_end_time: [1745210125, 460825000]
+build_start_time: [1748128969, 452722000]
+build_end_time: [1748128970, 155386000]
 inputs:
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOTLS/ApplicationProtocolNegotiationHandler.swift"
-  : [1741329909, 43313936]
+  : [1748128914, 657954596]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOTLS/NIOTypedApplicationProtocolNegotiationHandler.swift"
-  : [1741329909, 43378560]
+  : [1748128914, 658051930]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOTLS/ProtocolNegotiationHandlerStateMachine.swift"
-  : [1741329909, 43447226]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOTLS/SNIHandler.swift": [1741329909, 43516975]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOTLS/TLSEvents.swift": [1741329909, 43580433]
+  : [1748128914, 658161638]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOTLS/SNIHandler.swift": [1748128914, 658242513]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-nio/Sources/NIOTLS/TLSEvents.swift": [1748128914, 658320972]

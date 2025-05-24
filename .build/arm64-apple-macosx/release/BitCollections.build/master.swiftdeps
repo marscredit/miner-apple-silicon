@@ -1,122 +1,122 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "65746662f20ab00f5a7154a6eac924dc702ee47c8bcbc90d5efc4ff996520d25"
-build_start_time: [1745210110, 198290000]
-build_end_time: [1745210112, 164534000]
+build_start_time: [1748128950, 221993000]
+build_end_time: [1748128953, 312653000]
 inputs:
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+BitwiseOperations.swift"
-  : [1741329923, 115832871]
+  : [1748128914, 884033129]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+ChunkedBitsIterators.swift"
-  : [1741329923, 115885662]
+  : [1748128914, 884266963]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+Codable.swift"
-  : [1741329923, 115934662]
+  : [1748128914, 884323463]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+Collection.swift"
-  : [1741329923, 116026911]
+  : [1748128914, 884433671]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+Copy.swift"
-  : [1741329923, 116099827]
+  : [1748128914, 884519463]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+CustomReflectable.swift"
-  : [1741329923, 116184618]
+  : [1748128914, 884606672]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+Descriptions.swift"
-  : [1741329923, 116232743]
+  : [1748128914, 884662422]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+Equatable.swift"
-  : [1741329923, 116288243]
+  : [1748128914, 884722047]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+ExpressibleByArrayLiteral.swift"
-  : [1741329923, 116342867]
+  : [1748128914, 884781547]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+ExpressibleByStringLiteral.swift"
-  : [1741329923, 116395117]
+  : [1748128914, 884833839]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+Extras.swift"
-  : [1741329923, 116449575]
+  : [1748128914, 884884006]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+Fill.swift"
-  : [1741329923, 116499616]
+  : [1748128914, 884941214]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+Hashable.swift"
-  : [1741329923, 116569741]
+  : [1748128914, 885004173]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+Initializers.swift"
-  : [1741329923, 116670531]
+  : [1748128914, 885138048]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+Invariants.swift"
-  : [1741329923, 116725448]
+  : [1748128914, 885195631]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+LosslessStringConvertible.swift"
-  : [1741329923, 116794947]
+  : [1748128914, 885256506]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+RandomBits.swift"
-  : [1741329923, 116851947]
+  : [1748128914, 885306840]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+RangeReplaceableCollection.swift"
-  : [1741329923, 116920405]
+  : [1748128914, 885368798]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+Shifts.swift"
-  : [1741329923, 117037904]
+  : [1748128914, 885463215]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray+Testing.swift"
-  : [1741329923, 117099903]
+  : [1748128914, 885541757]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray._UnsafeHandle.swift"
-  : [1741329923, 117180528]
+  : [1748128914, 885630632]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitArray/BitArray.swift"
-  : [1741329923, 117234902]
+  : [1748128914, 885687090]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+BidirectionalCollection.swift"
-  : [1741329923, 117654483]
+  : [1748128914, 886140716]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+Codable.swift"
-  : [1741329923, 117710899]
+  : [1748128914, 886202841]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+CustomDebugStringConvertible.swift"
-  : [1741329923, 117773732]
+  : [1748128914, 886269092]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+CustomReflectable.swift"
-  : [1741329923, 117822815]
+  : [1748128914, 886325509]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+CustomStringConvertible.swift"
-  : [1741329923, 117879106]
+  : [1748128914, 886384842]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+Equatable.swift"
-  : [1741329923, 117951981]
+  : [1748128914, 886459925]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+ExpressibleByArrayLiteral.swift"
-  : [1741329923, 117997564]
+  : [1748128914, 886510217]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+Extras.swift"
-  : [1741329923, 118075980]
+  : [1748128914, 886605009]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+Hashable.swift"
-  : [1741329923, 118130146]
+  : [1748128914, 886653051]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+Initializers.swift"
-  : [1741329923, 118215854]
+  : [1748128914, 886745801]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+Invariants.swift"
-  : [1741329923, 118265895]
+  : [1748128914, 886794260]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+Random.swift"
-  : [1741329923, 118316936]
+  : [1748128914, 886849760]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra basics.swift"
-  : [1741329923, 118403977]
+  : [1748128914, 886945051]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra conformance.swift"
-  : [1741329923, 118473602]
+  : [1748128914, 886993218]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra formIntersection.swift"
-  : [1741329923, 118539810]
+  : [1748128914, 887058343]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra formSymmetricDifference.swift"
-  : [1741329923, 118636809]
+  : [1748128914, 887159552]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra formUnion.swift"
-  : [1741329923, 118695767]
+  : [1748128914, 887229760]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra intersection.swift"
-  : [1741329923, 118761850]
+  : [1748128914, 887297260]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isDisjoint.swift"
-  : [1741329923, 118814308]
+  : [1748128914, 887361094]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isEqualSet.swift"
-  : [1741329923, 118867265]
+  : [1748128914, 887422136]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isStrictSubset.swift"
-  : [1741329923, 118949015]
+  : [1748128914, 887532261]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isStrictSuperset.swift"
-  : [1741329923, 119027306]
+  : [1748128914, 887621178]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isSubset.swift"
-  : [1741329923, 119103472]
+  : [1748128914, 887716219]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isSuperset.swift"
-  : [1741329923, 119155597]
+  : [1748128914, 887777803]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra subtract.swift"
-  : [1741329923, 119199346]
+  : [1748128914, 887825678]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra subtracting.swift"
-  : [1741329923, 119276679]
+  : [1748128914, 887896262]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra symmetricDifference.swift"
-  : [1741329923, 119333137]
+  : [1748128914, 887953970]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra union.swift"
-  : [1741329923, 119377845]
+  : [1748128914, 888004054]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet+Sorted Collection APIs.swift"
-  : [1741329923, 119426845]
+  : [1748128914, 888052720]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet.Counted.swift"
-  : [1741329923, 119505053]
+  : [1748128914, 888116262]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet.Index.swift"
-  : [1741329923, 119566219]
+  : [1748128914, 888179512]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet._UnsafeHandle.swift"
-  : [1741329923, 119629593]
+  : [1748128914, 888263137]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/BitSet/BitSet.swift"
-  : [1741329923, 119687260]
+  : [1748128914, 888331096]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/Shared/Range+Utilities.swift"
-  : [1741329923, 119833217]
+  : [1748128914, 888463929]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/Shared/Slice+Utilities.swift"
-  : [1741329923, 119884633]
+  : [1748128914, 888511388]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/Shared/UInt+Tricks.swift"
-  : [1741329923, 119934550]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/Shared/_Word.swift": [1741329923, 120008382]
+  : [1748128914, 888564346]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/BitCollections/Shared/_Word.swift": [1748128914, 888622930]

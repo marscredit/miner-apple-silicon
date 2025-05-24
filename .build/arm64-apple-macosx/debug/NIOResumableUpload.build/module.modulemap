@@ -1,4 +1,0 @@
-module NIOResumableUpload {
-    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/NIOResumableUpload.build/NIOResumableUpload-Swift.h"
-    requires objc
-}

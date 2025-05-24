@@ -1,4 +1,0 @@
-module CryptoSwift {
-    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/CryptoSwift.build/CryptoSwift-Swift.h"
-    requires objc
-}

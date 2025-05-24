@@ -1,14 +1,14 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "aeea204840061eb4a2475e305cae15f032407c42b55c39968e8cbdc7eaacfb2b"
-build_start_time: [1745210109, 763047000]
-build_end_time: [1745210110, 84415000]
+build_start_time: [1748128932, 117626000]
+build_end_time: [1748128932, 633240000]
 inputs:
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HeapModule/Heap+Descriptions.swift"
-  : [1741329923, 129164024]
+  : [1748128914, 899258242]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HeapModule/Heap+ExpressibleByArrayLiteral.swift"
-  : [1741329923, 129212440]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HeapModule/Heap+Invariants.swift": [1741329923, 129265107]
+  : [1748128914, 899312826]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HeapModule/Heap+Invariants.swift": [1748128914, 899369451]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HeapModule/Heap+UnsafeHandle.swift"
-  : [1741329923, 129366273]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HeapModule/Heap.swift": [1741329923, 129484564]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HeapModule/_HeapNode.swift": [1741329923, 129781061]
+  : [1748128914, 899504201]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HeapModule/Heap.swift": [1748128914, 899645785]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/HeapModule/_HeapNode.swift": [1748128914, 900404036]

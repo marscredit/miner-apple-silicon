@@ -1,4 +1,5 @@
-5d11d382305158bfd92f750b0211682c64184537	not-for-merge	branch 'main' of https://github.com/apple/swift-http-types
+3faa71f2b71af4be36bd64113edab62097bf058c	not-for-merge	branch 'main' of https://github.com/apple/swift-http-types
+549ff1bbb0810f79a661f652ec4c03ebdb284150	not-for-merge	'refs/pull/100/head' of https://github.com/apple/swift-http-types
 57140e3abc697722a713b2fcb6345760cdee720b	not-for-merge	'refs/pull/11/head' of https://github.com/apple/swift-http-types
 14ecbebc65740a1d239619f14db140aa41feeaba	not-for-merge	'refs/pull/14/head' of https://github.com/apple/swift-http-types
 4b54b0f29228a35de0d5877664bf4612be53a17d	not-for-merge	'refs/pull/17/head' of https://github.com/apple/swift-http-types
@@ -22,7 +23,7 @@ a114507558bd1a6a7947cba8c7a6c9f8fea43c67	not-for-merge	'refs/pull/41/head' of ht
 be3407abefe60749cce7298003edac868514d8fb	not-for-merge	'refs/pull/43/head' of https://github.com/apple/swift-http-types
 363f7aee95888b8fcadff6d9aa463bfbfecd8d41	not-for-merge	'refs/pull/44/head' of https://github.com/apple/swift-http-types
 23b85b12462b939c3b0bdb038ae2a630b3045395	not-for-merge	'refs/pull/45/head' of https://github.com/apple/swift-http-types
-348b961771971d634f412a12a066ae27b98e1bb4	not-for-merge	'refs/pull/45/merge' of https://github.com/apple/swift-http-types
+b133ee630c08d9268442c74b464f7804d874f9aa	not-for-merge	'refs/pull/45/merge' of https://github.com/apple/swift-http-types
 8fb12e8d82c63d0ff6df969b82a0ae9c7b045161	not-for-merge	'refs/pull/47/head' of https://github.com/apple/swift-http-types
 c8357002a154177713885fa8ed1b5e5125557e17	not-for-merge	'refs/pull/48/head' of https://github.com/apple/swift-http-types
 146ca95fbbc0af0f4697d1ae88d3c4015fe81973	not-for-merge	'refs/pull/49/head' of https://github.com/apple/swift-http-types
@@ -60,7 +61,7 @@ c8db38bb7f112a48a0925da97407c750241633a4	not-for-merge	'refs/pull/79/head' of ht
 ddf3eb1a630ced7389d7772e00a37a8200e3169b	not-for-merge	'refs/pull/8/head' of https://github.com/apple/swift-http-types
 cbdce00c927594dd004171d445c1eaeffb60de44	not-for-merge	'refs/pull/80/head' of https://github.com/apple/swift-http-types
 ba487ef2f580428452e3e5009ae7f3978dd30769	not-for-merge	'refs/pull/81/head' of https://github.com/apple/swift-http-types
-736f0a714a368fe65ac2707452c3192a6091d660	not-for-merge	'refs/pull/81/merge' of https://github.com/apple/swift-http-types
+cbef831be3ed8f71fab1ba7b4af4210076e587ca	not-for-merge	'refs/pull/81/merge' of https://github.com/apple/swift-http-types
 a806d839558b8d340a8fd3428ee1dfe4a0ae54ce	not-for-merge	'refs/pull/82/head' of https://github.com/apple/swift-http-types
 adcafaf852f8a0ab33b829799cf720aa84f59220	not-for-merge	'refs/pull/83/head' of https://github.com/apple/swift-http-types
 58d16c8a3c01db004c8d3fdf7b981af21893c8a5	not-for-merge	'refs/pull/84/head' of https://github.com/apple/swift-http-types
@@ -71,7 +72,12 @@ adcafaf852f8a0ab33b829799cf720aa84f59220	not-for-merge	'refs/pull/83/head' of ht
 c57cbce65dd2d12016a30fc47c5b4702613c408f	not-for-merge	'refs/pull/89/merge' of https://github.com/apple/swift-http-types
 419be7bd6a7118960eaa52751062d78ffaa82aab	not-for-merge	'refs/pull/91/head' of https://github.com/apple/swift-http-types
 43d6a454735b3e48bef53a899d1960c959df28f5	not-for-merge	'refs/pull/92/head' of https://github.com/apple/swift-http-types
-e2a1c1e9ac610d6100479f980e87743f59a6f896	not-for-merge	'refs/pull/92/merge' of https://github.com/apple/swift-http-types
+1d0c1677ee3d74cc5d012323a8a8a0c0d59455f4	not-for-merge	'refs/pull/92/merge' of https://github.com/apple/swift-http-types
+4a50dd1eb1758d024a78546719bc2c57b3056e30	not-for-merge	'refs/pull/93/head' of https://github.com/apple/swift-http-types
+83a77dd8389c4fe74160e954b04c9cf83542b835	not-for-merge	'refs/pull/95/head' of https://github.com/apple/swift-http-types
+c59318411cb6d35c52e11bb330f9696d1d3689d2	not-for-merge	'refs/pull/96/head' of https://github.com/apple/swift-http-types
+25f841f9332d4978f2f91f2aeb960126e9dae995	not-for-merge	'refs/pull/97/head' of https://github.com/apple/swift-http-types
+cc07df96f4c838cc6f95feeb4ca7edd90a13b06f	not-for-merge	'refs/pull/99/head' of https://github.com/apple/swift-http-types
 ae848811f9b1b0e79d429e1df8fa60eac5587d81	not-for-merge	tag '0.1.0' of https://github.com/apple/swift-http-types
 39661f4ca82db8ad050cc060a471c8e2c542b24f	not-for-merge	tag '0.1.1' of https://github.com/apple/swift-http-types
 6861b096b0bd0cc339b9c5d34d55c665c7490703	not-for-merge	tag '0.2.0' of https://github.com/apple/swift-http-types
@@ -84,3 +90,4 @@ ae848811f9b1b0e79d429e1df8fa60eac5587d81	not-for-merge	tag '0.1.0' of https://gi
 1ddbea1ee34354a6a2532c60f98501c35ae8edfa	not-for-merge	tag '1.2.0' of https://github.com/apple/swift-http-types
 ae67c8178eb46944fd85e4dc6dd970e1f3ed6ccd	not-for-merge	tag '1.3.0' of https://github.com/apple/swift-http-types
 ef18d829e8b92d731ad27bb81583edd2094d1ce3	not-for-merge	tag '1.3.1' of https://github.com/apple/swift-http-types
+a0a57e949a8903563aba4615869310c0ebf14c03	not-for-merge	tag '1.4.0' of https://github.com/apple/swift-http-types

@@ -1,28 +1,28 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "8330e678816657d4ed8592e2386fe23ea58dffc4da30cc817bb7b75467948cc9"
-build_start_time: [1745210133, 827162000]
-build_end_time: [1745210136, 830480000]
+build_start_time: [1748128981, 771959000]
+build_end_time: [1748128985, 893368000]
 inputs:
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/ABI.swift": [1741329924, 349144606]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/ABIConvertible.swift": [1741329924, 349246522]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/ABIDecoder.swift": [1741329924, 349346896]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/ABIEncoder.swift": [1741329924, 349399063]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/Eth+ABI.swift": [1741329924, 349451187]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/SolidityTuple.swift": [1741329924, 349497520]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/ABI.swift": [1748128929, 54345292]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/ABIConvertible.swift": [1748128929, 54532501]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/ABIDecoder.swift": [1748128929, 54739460]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/ABIEncoder.swift": [1748128929, 54818668]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/Eth+ABI.swift": [1748128929, 54989335]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/SolidityTuple.swift": [1748128929, 55048460]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/SolidityType+Codable.swift"
-  : [1741329924, 349570936]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/SolidityType.swift": [1741329924, 349628936]
+  : [1748128929, 55157627]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/SolidityType.swift": [1748128929, 55220169]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/ABI/SolidityWrappedValue.swift"
-  : [1741329924, 349717769]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/ABIObject.swift": [1741329924, 349798310]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/ERC165.swift": [1741329924, 349844393]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/ERC20.swift": [1741329924, 349926476]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/ERC721.swift": [1741329924, 349996642]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/Eth+Contract.swift": [1741329924, 350048600]
+  : [1748128929, 55332919]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/ABIObject.swift": [1748128929, 55416878]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/ERC165.swift": [1748128929, 55467669]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/ERC20.swift": [1748128929, 55577461]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/ERC721.swift": [1748128929, 55672878]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/Eth+Contract.swift": [1748128929, 55728920]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/EthereumContract.swift"
-  : [1741329924, 350122599]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/SolidityEvent.swift": [1741329924, 350174265]
+  : [1748128929, 55836129]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/SolidityEvent.swift": [1748128929, 55892170]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/SolidityFunction.swift"
-  : [1741329924, 350253098]
+  : [1748128929, 55999212]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/Web3.swift/Sources/ContractABI/Contract/SolidityInvocation.swift"
-  : [1741329924, 350315014]
+  : [1748128929, 56077879]

@@ -1,4 +1,0 @@
-module BigInt {
-    header "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/debug/BigInt.build/BigInt-Swift.h"
-    requires objc
-}

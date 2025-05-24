@@ -1,156 +1,156 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "4aa8275aadb6484f01fb8d5799c7bc9f07827f972447a40e099ed2c1267c6d44"
-build_start_time: [1745210109, 756784000]
-build_end_time: [1745210114, 900993000]
+build_start_time: [1748128932, 89731000]
+build_end_time: [1748128943, 300438000]
 inputs:
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Basics/BigString+Builder.swift"
-  : [1741329923, 137456756]
+  : [1748128914, 908612970]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Basics/BigString+Contents.swift"
-  : [1741329923, 137523088]
+  : [1748128914, 908693720]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Basics/BigString+Debugging.swift"
-  : [1741329923, 137597921]
+  : [1748128914, 908766136]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Basics/BigString+Index.swift"
-  : [1741329923, 137674212]
+  : [1748128914, 908857970]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Basics/BigString+Ingester.swift"
-  : [1741329923, 137752587]
+  : [1748128914, 909082387]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Basics/BigString+Invariants.swift"
-  : [1741329923, 137800795]
+  : [1748128914, 909147971]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Basics/BigString+Iterators.swift"
-  : [1741329923, 137855961]
+  : [1748128914, 909201596]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Basics/BigString+Metrics.swift"
-  : [1741329923, 137931919]
+  : [1748128914, 909424554]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Basics/BigString+Summary.swift"
-  : [1741329923, 137979168]
+  : [1748128914, 909473013]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Basics/BigString.swift"
-  : [1741329923, 138029001]
+  : [1748128914, 909538471]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+Append and Insert.swift"
-  : [1741329923, 138143667]
+  : [1748128914, 909657846]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+Breaks.swift"
-  : [1741329923, 138198833]
+  : [1748128914, 909716638]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+Counts.swift"
-  : [1741329923, 138273833]
+  : [1748128914, 909808638]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+Description.swift"
-  : [1741329923, 138333791]
+  : [1748128914, 909877805]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+Indexing by Characters.swift"
-  : [1741329923, 138395582]
+  : [1748128914, 909935139]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+Indexing by UTF16.swift"
-  : [1741329923, 138453623]
+  : [1748128914, 910000680]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+RopeElement.swift"
-  : [1741329923, 138627247]
+  : [1748128914, 910091056]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+Splitting.swift"
-  : [1741329923, 138706288]
+  : [1748128914, 910183306]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk.swift"
-  : [1741329923, 138765788]
+  : [1748128914, 910236764]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Conformances/BigString+BidirectionalCollection.swift"
-  : [1741329923, 138852287]
+  : [1748128914, 910333223]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Conformances/BigString+Comparable.swift"
-  : [1741329923, 138918453]
+  : [1748128914, 910394140]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Conformances/BigString+CustomDebugStringConvertible.swift"
-  : [1741329923, 138965370]
+  : [1748128914, 910455098]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Conformances/BigString+CustomStringConvertible.swift"
-  : [1741329923, 139016244]
+  : [1748128914, 910503182]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Conformances/BigString+Equatable.swift"
-  : [1741329923, 139060286]
+  : [1748128914, 910548723]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Conformances/BigString+ExpressibleByStringLiteral.swift"
-  : [1741329923, 139111785]
+  : [1748128914, 910602182]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Conformances/BigString+Hashing.swift"
-  : [1741329923, 139157285]
+  : [1748128914, 910662349]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Conformances/BigString+LosslessStringConvertible.swift"
-  : [1741329923, 139204035]
+  : [1748128914, 910710849]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Conformances/BigString+RangeReplaceableCollection.swift"
-  : [1741329923, 139280659]
+  : [1748128914, 910809515]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Conformances/BigString+Sequence.swift"
-  : [1741329923, 139357742]
+  : [1748128914, 910905016]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Conformances/BigString+TextOutputStream.swift"
-  : [1741329923, 139441991]
+  : [1748128914, 910995474]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Operations/BigString+Append.swift"
-  : [1741329923, 139546782]
+  : [1748128914, 911116808]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Operations/BigString+Initializers.swift"
-  : [1741329923, 139612323]
+  : [1748128914, 911197975]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Operations/BigString+Insert.swift"
-  : [1741329923, 139661364]
+  : [1748128914, 911249558]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Operations/BigString+Managing Breaks.swift"
-  : [1741329923, 139754697]
+  : [1748128914, 911395100]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Operations/BigString+RemoveSubrange.swift"
-  : [1741329923, 139809155]
+  : [1748128914, 911446433]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Operations/BigString+ReplaceSubrange.swift"
-  : [1741329923, 139861988]
+  : [1748128914, 911500642]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Operations/BigString+Split.swift"
-  : [1741329923, 139917863]
+  : [1748128914, 911561017]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Operations/Range+BigString.swift"
-  : [1741329923, 139970029]
+  : [1748128914, 911650434]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Views/BigString+UTF16View.swift"
-  : [1741329923, 140082320]
+  : [1748128914, 911881726]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Views/BigString+UTF8View.swift"
-  : [1741329923, 140159236]
+  : [1748128914, 911977059]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Views/BigString+UnicodeScalarView.swift"
-  : [1741329923, 140226027]
+  : [1748128914, 912043060]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Views/BigSubstring+UTF16View.swift"
-  : [1741329923, 140332860]
+  : [1748128914, 912157768]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Views/BigSubstring+UTF8View.swift"
-  : [1741329923, 140403568]
+  : [1748128914, 912244685]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Views/BigSubstring+UnicodeScalarView.swift"
-  : [1741329923, 140520108]
+  : [1748128914, 912374977]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/BigString/Views/BigSubstring.swift"
-  : [1741329923, 140580733]
+  : [1748128914, 912442727]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Basics/Rope+Builder.swift"
-  : [1741329923, 140807440]
+  : [1748128914, 912688269]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Basics/Rope+Debugging.swift"
-  : [1741329923, 140860314]
+  : [1748128914, 912746769]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Basics/Rope+Invariants.swift"
-  : [1741329923, 140914355]
+  : [1748128914, 912799186]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Basics/Rope+_Node.swift"
-  : [1741329923, 140989563]
+  : [1748128914, 912871478]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Basics/Rope+_Storage.swift"
-  : [1741329923, 141068771]
+  : [1748128914, 912937395]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Basics/Rope+_UnmanagedLeaf.swift"
-  : [1741329923, 141143854]
+  : [1748128914, 913005936]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Basics/Rope+_UnsafeHandle.swift"
-  : [1741329923, 141231520]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Basics/Rope.swift": [1741329923, 141297894]
+  : [1748128914, 913104312]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Basics/Rope.swift": [1748128914, 913160687]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Basics/RopeElement.swift"
-  : [1741329923, 141357561]
+  : [1748128914, 913217770]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Basics/RopeMetric.swift"
-  : [1741329923, 141429435]
+  : [1748128914, 913273437]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Basics/RopeSummary.swift"
-  : [1741329923, 141493976]
+  : [1748128914, 913332979]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Basics/_RopeItem.swift"
-  : [1741329923, 141566392]
+  : [1748128914, 913391021]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Basics/_RopePath.swift"
-  : [1741329923, 141623100]
+  : [1748128914, 913446437]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Basics/_RopeVersion.swift"
-  : [1741329923, 141678892]
+  : [1748128914, 913500229]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Conformances/Rope+Collection.swift"
-  : [1741329923, 141777808]
+  : [1748128914, 913613604]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Conformances/Rope+Index.swift"
-  : [1741329923, 141833099]
+  : [1748128914, 913678313]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Conformances/Rope+Sequence.swift"
-  : [1741329923, 141895848]
+  : [1748128914, 913743521]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Operations/Rope+Append.swift"
-  : [1741329923, 141983348]
+  : [1748128914, 913835813]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Operations/Rope+Extract.swift"
-  : [1741329923, 142039764]
+  : [1748128914, 913898813]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Operations/Rope+Find.swift"
-  : [1741329923, 142095597]
+  : [1748128914, 913959772]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Operations/Rope+ForEachWhile.swift"
-  : [1741329923, 142181888]
+  : [1748128914, 914034522]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Operations/Rope+Insert.swift"
-  : [1741329923, 142316804]
+  : [1748128914, 914138605]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Operations/Rope+Join.swift"
-  : [1741329923, 142371178]
+  : [1748128914, 914198397]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Operations/Rope+MutatingForEach.swift"
-  : [1741329923, 142428220]
+  : [1748128914, 914256397]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Operations/Rope+Remove.swift"
-  : [1741329923, 142508969]
+  : [1748128914, 914354898]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Operations/Rope+RemoveSubrange.swift"
-  : [1741329923, 142618260]
+  : [1748128914, 914493148]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Rope/Operations/Rope+Split.swift"
-  : [1741329923, 142674718]
+  : [1748128914, 914552523]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Utilities/Optional Utilities.swift"
-  : [1741329923, 142762342]
+  : [1748128914, 914648981]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Utilities/String Utilities.swift"
-  : [1741329923, 142844842]
+  : [1748128914, 914751898]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Utilities/String.Index+ABI.swift"
-  : [1741329923, 142915299]
+  : [1748128914, 914808898]
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/checkouts/swift-collections/Sources/RopeModule/Utilities/_CharacterRecognizer.swift"
-  : [1741329923, 143007840]
+  : [1748128914, 914909690]

@@ -19,11 +19,6 @@ class MiningService: ObservableObject {
             objectWillChange.send()
         }
     }
-    @Published private(set) var currentHashRate: Double = 0.0 {
-        didSet {
-            objectWillChange.send()
-        }
-    }
     @Published private(set) var networkStatus = NetworkStatus(currentBlock: 0, highestBlock: 0, isConnected: false) {
         didSet {
             objectWillChange.send()
@@ -729,12 +724,12 @@ class MiningService: ObservableObject {
                 self.lastSuccessfulConnection = Date()
                 self.connectionFailureCount = 0
                 
-                // Update hashrate but don't change mining status here
-                self.currentHashRate = Double(hashRate) / 1_000_000 // Convert to MH/s
+                // REMOVED: Hash rate tracking - no longer needed
+                // Just use this call to confirm connection is working
                 
-                // Log hashrate updates
+                // Log mining confirmation if hashrate > 0
                 if hashRate > 0 {
-                    LogManager.shared.log("Current hashrate: \(String(format: "%.2f", self.currentHashRate)) MH/s", type: .mining)
+                    LogManager.shared.log("⛏️ Mining confirmed with network hashrate response", type: .mining)
                 }
             }
         }.catch { error in
@@ -816,26 +811,21 @@ class MiningService: ObservableObject {
     private func updateDirectHashrate() {
         guard let client = ethClient else { return }
         
-        // Try to get hashrate directly using eth.hashrate
+        // REMOVED: Hash rate tracking - no longer needed
+        // Just confirm the mining RPC is responding
         client.executeJS(script: "eth.hashrate").done { [weak self] result in
             guard let self = self, !result.isEmpty else { return }
             
-            if let hashRate = Double(result.trimmingCharacters(in: .whitespacesAndNewlines)) {
-                DispatchQueue.main.async {
-                    self.currentHashRate = hashRate / 1_000_000 // Convert to MH/s
-                }
-                LogManager.shared.log("Direct hashrate: \(hashRate / 1_000_000) MH/s", type: .mining)
+            if let hashRate = Double(result.trimmingCharacters(in: .whitespacesAndNewlines)), hashRate > 0 {
+                LogManager.shared.log("⛏️ Mining RPC responding with hashrate data", type: .mining)
             }
         }.catch { error in
             // Try another approach using miner.getHashrate
             client.executeJS(script: "miner.getHashrate()").done { [weak self] result in
                 guard let self = self, !result.isEmpty else { return }
                 
-                if let hashRate = Double(result.trimmingCharacters(in: .whitespacesAndNewlines)) {
-                    DispatchQueue.main.async {
-                        self.currentHashRate = hashRate / 1_000_000 // Convert to MH/s
-                    }
-                    LogManager.shared.log("Miner hashrate: \(hashRate / 1_000_000) MH/s", type: .mining)
+                if let hashRate = Double(result.trimmingCharacters(in: .whitespacesAndNewlines)), hashRate > 0 {
+                    LogManager.shared.log("⛏️ Miner module responding with hashrate data", type: .mining)
                 }
             }.catch { _ in
                 // If everything fails, we at least tried
@@ -982,7 +972,6 @@ class MiningService: ObservableObject {
             sleep(1)
             
             // Reset stats
-            self.currentHashRate = 0
             self.blocksFound = 0
             
             // Set the mining address
@@ -1038,7 +1027,6 @@ class MiningService: ObservableObject {
         // Update UI immediately
         DispatchQueue.main.async {
             self.isMining = false
-            self.currentHashRate = 0
             self.gethStartupTime = nil // Clear startup tracking
             self.gethProcessPID = nil
         }
@@ -1387,7 +1375,6 @@ class MiningService: ObservableObject {
             
             Mining Status:
             Is Mining: \(isMining)
-            Current Hashrate: \(currentHashRate) MH/s
             
             """
             
@@ -1602,38 +1589,21 @@ class MiningService: ObservableObject {
     
     // Helper function to estimate earnings
     func estimatedEarningsPerDay() -> Double {
-        guard averageBlockTime > 0, currentHashRate > 0 else {
+        guard averageBlockTime > 0 else {
             return 0
         }
         
         let blocksPerDay = 86400 / averageBlockTime
         
-        // Get network hashrate from EthereumClient when available
-        if let client = ethClient {
-            client.getNetworkHashrate().done { [weak self] networkHashRate in
-                guard let self = self else { return }
-                
-                // Calculate with the actual network hashrate
-                let minerHashRate = self.currentHashRate * 1_000_000 // Convert to H/s
-                let networkHashRateDouble = Double(networkHashRate)
-                let minerShare = networkHashRateDouble > 0 ? (minerHashRate / networkHashRateDouble) : 0
-                
-                // Update logs with network information
-                LogManager.shared.log("Network hashrate: \(networkHashRateDouble / 1_000_000) MH/s", type: .info)
-                LogManager.shared.log("Your mining share: \(String(format: "%.6f", minerShare * 100))%", type: .info)
-                
-            }.catch { _ in
-                // Silently fail, we'll use the default calculation
-            }
-        }
-        
-        // Default calculation if the client call fails
-        let networkHashRate = 10_000_000.0 // Assume 10 GH/s network hashrate
+        // REMOVED: Hash rate based calculations - no longer available
+        // Return a simple estimate based on average block time
         let blockReward = 3.0 // 3 MARS per block
+        let networkEstimate = 10_000_000.0 // Assume 10 GH/s network hashrate
+        let basicMinerEstimate = 100_000.0 // Assume basic miner rate
         
-        // Expected blocks per day based on hashrate share
-        let minerShare = (currentHashRate * 1_000_000) / networkHashRate
-        let expectedBlocksPerDay = blocksPerDay * minerShare
+        // Simple estimate without real hashrate
+        let estimatedMinerShare = basicMinerEstimate / networkEstimate
+        let expectedBlocksPerDay = blocksPerDay * estimatedMinerShare
         
         return expectedBlocksPerDay * blockReward
     }
@@ -1655,21 +1625,10 @@ class MiningService: ObservableObject {
     // Check miner stats periodically
     func startMinerStatsTracking() {
         Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { [weak self] _ in
-            guard let self = self, self.isMining, let client = self.ethClient else { return }
+            guard let self = self, self.isMining else { return }
             
-            // Check network hashrate to estimate earnings
-            client.getNetworkHashrate().done { networkHashRate in
-                if networkHashRate > 0 {
-                    let minerShare = (self.currentHashRate * 1_000_000) / Double(networkHashRate)
-                    
-                    // Only log if there's a significant share
-                    if minerShare > 0.0001 { // More than 0.01% of network
-                        LogManager.shared.log("Your mining share: \(String(format: "%.4f", minerShare * 100))%", type: .info)
-                    }
-                }
-            }.catch { _ in
-                // Silently fail
-            }
+            // REMOVED: Hash rate based calculations - no longer available
+            // Focus on block mining success and network participation
             
             // Check for total rewards occasionally
             self.getAllMinerRewards()
@@ -2404,12 +2363,11 @@ class MiningService: ObservableObject {
         localClient.getHashRate().done { [weak self] hashRate in
             DispatchQueue.main.async {
                 guard let self = self else { return }
-                let newHashRate = Double(hashRate) / 1_000_000 // Convert to MH/s
                 
-                // Always update hashrate, even if 0
-                self.currentHashRate = newHashRate
-                if newHashRate > 0 {
-                    LogManager.shared.log("Mining hashrate: \(String(format: "%.2f", newHashRate)) MH/s", type: .mining)
+                // REMOVED: Hash rate tracking - no longer needed
+                // Just use this call to confirm mining process is responding
+                if hashRate > 0 {
+                    LogManager.shared.log("⛏️ Mining process responding (hashrate > 0)", type: .mining)
                 } else {
                     // Check if we're actually mining with a different metric
                     self.checkAlternativeHashRate()
@@ -2435,15 +2393,13 @@ class MiningService: ObservableObject {
                     LogManager.shared.log("⛏️ Active mining detected (getWork responding)", type: .mining)
                 }
             case .failure:
-                // Try checking if miner module is working
+                // Try checking if miner module is working  
                 let minerRequest = localClient.createRPCRequest(method: "miner_hashrate", params: [])
                 localClient.executeRequest(minerRequest) { result in
-                    if case .success(let response) = result,
-                       let hashRateHex = response["result"] as? String,
-                       let hashRate = BigInt(hashRateHex.dropFirst(2), radix: 16) {
+                    if case .success = result {
+                        // Just confirm the miner module is responding, don't track actual hash rate
                         DispatchQueue.main.async {
-                            self?.currentHashRate = Double(hashRate) / 1_000_000
-                            LogManager.shared.log("Miner hashrate: \(String(format: "%.2f", Double(hashRate) / 1_000_000)) MH/s", type: .mining)
+                            LogManager.shared.log("⛏️ Miner module responding", type: .mining)
                         }
                     }
                 }
@@ -2462,7 +2418,7 @@ class MiningService: ObservableObject {
             let startBlock = max(0, latestBlock - 10) // Check last 10 blocks
             
             for blockNum in startBlock...latestBlock {
-                let blockHex = String(format: "0x%x", blockNum)
+                let blockHex = "0x" + String(blockNum, radix: 16)
                 let request = client.createRPCRequest(method: "eth_getBlockByNumber", params: [blockHex, false])
                 
                 client.executeRequest(request) { [weak self] result in

@@ -21,8 +21,35 @@ struct MiningButtonStyle: ButtonStyle {
     }
 }
 
+// NEW: Compact button style for top header area
+struct CompactButtonStyle: ButtonStyle {
+    let isDestructive: Bool
+    
+    init(isDestructive: Bool = false) {
+        self.isDestructive = isDestructive
+    }
+    
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(size: 12, weight: .medium))
+            .foregroundColor(.white)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 6)
+            .frame(maxHeight: 30) // Ensures max 30px height
+            .background(
+                RoundedRectangle(cornerRadius: 6)
+                    .fill(isDestructive ? Color.red.opacity(0.8) : Color.blue.opacity(0.8))
+                    .opacity(configuration.isPressed ? 0.7 : 1.0)
+            )
+    }
+}
+
 extension View {
     func miningButtonStyle(isDestructive: Bool = false) -> some View {
         buttonStyle(MiningButtonStyle(isDestructive: isDestructive))
+    }
+    
+    func compactButtonStyle(isDestructive: Bool = false) -> some View {
+        buttonStyle(CompactButtonStyle(isDestructive: isDestructive))
     }
 } 

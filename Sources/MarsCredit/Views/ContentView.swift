@@ -39,10 +39,55 @@ struct ContentView: View {
             VStack(spacing: 0) {
                 // Top Bar - Modified
                 HStack(alignment: .top) {
-                    // Left side - Title
+                    // Left side - Title and Buttons
+                    VStack(alignment: .leading, spacing: 12) {
                         Text("Mars Credit Miner")
                             .font(.gunship(size: 32))
                             .foregroundColor(.white)
+                        
+                        // MOVED: Compact buttons under title
+                        HStack(spacing: 8) {
+                            // UPDATED: Better mining state detection for Build 18
+                            if miningService.isMining || miningService.isGethRunning {
+                                Button("Stop Mining") {
+                                    withAnimation { miningService.stopMining(); isAnimating = false }
+                                }.compactButtonStyle(isDestructive: true)
+                                
+                                Button(showPerformanceMetrics ? "Hide Metrics" : "Show Metrics") {
+                                    withAnimation { showPerformanceMetrics.toggle() }
+                                }.compactButtonStyle()
+                            } else {
+                                Button("Start Mining") {
+                                    withAnimation { miningService.startMining(address: miningAddress, password: password); isAnimating = true }
+                                }.compactButtonStyle()
+                            }
+                            
+                            Button("Backup Phrase") {
+                                let newMnemonic = miningService.getCurrentAccountMnemonic()
+                                if let mnemonicValue = newMnemonic, !mnemonicValue.starts(with: "Mnemonic not found"), !mnemonicValue.starts(with: "Error loading"), !mnemonicValue.isEmpty {
+                                    generatedMnemonic = mnemonicValue
+                                } else {
+                                    generatedMnemonic = newMnemonic ?? "No active account to retrieve mnemonic."
+                                }
+                                showingMnemonicSheet = true
+                            }.compactButtonStyle()
+                            
+                            Button("Reset Wallet") {
+                                do {
+                                    let (newAddress, newMnemonic) = try miningService.resetWallet(password: password)
+                                    miningAddress = newAddress
+                                    generatedMnemonic = newMnemonic
+                                    LogManager.shared.log("Wallet reset. New address: \(newAddress).", type: .warning)
+                                } catch {
+                                    LogManager.shared.log("Error resetting wallet: \(error.localizedDescription)", type: .error)
+                                }
+                            }.compactButtonStyle(isDestructive: true)
+                            
+                            Button(showLogs ? "Hide Logs" : "Show Logs") {
+                                withAnimation { showLogs.toggle() }
+                            }.compactButtonStyle()
+                        }
+                    }
                         .padding(.leading)
                     
                     Spacer()
@@ -197,76 +242,84 @@ struct ContentView: View {
                     }
                 }
                 
-                // Bottom Bar - Combined Mining Info and Buttons
+                // Bottom Bar - Mining Info and Status Indicators
                 HStack(alignment: .center, spacing: 16) {
-                    // Mining Information
+                    // Mining Information - LEFT SIDE
                     VStack(alignment: .leading, spacing: 6) {
                         HStack(spacing: 6) {
                             Text("Address:").font(.caption).foregroundColor(.gray)
                             Text(miningAddress).font(.caption).foregroundColor(.white).lineLimit(1).truncationMode(.middle)
-                            }
+                        }
                         HStack(spacing: 6) {
                             Text("Balance:").font(.caption).foregroundColor(.gray)
                             Text("\(String(format: "%.2f", miningService.currentBalance)) MARS").font(.caption).foregroundColor(.white)
-                            }
-                        HStack(spacing: 6) {
-                            Text("Hash Rate:").font(.caption).foregroundColor(.gray)
-                            Text("\(String(format: "%.2f", miningService.currentHashRate)) MH/s").font(.caption).foregroundColor(.white)
                         }
+                        // REMOVED: Hash Rate - replaced with better indicators below
+                    }
+                    .padding(.leading)
+                    
+                    Spacer()
+                    
+                    // IMPROVED: Better Mining Indicators - RIGHT SIDE
+                    VStack(alignment: .trailing, spacing: 6) {
+                        // Process Status Indicator
+                        HStack(spacing: 6) {
+                            Text("Process:").font(.caption).foregroundColor(.gray)
+                            if miningService.isGethRunning {
+                                HStack(spacing: 4) {
+                                    Circle().fill(.green).frame(width: 6, height: 6)
+                                    Text("Geth Active").font(.caption).foregroundColor(.green)
+                                }
+                            } else {
+                                HStack(spacing: 4) {
+                                    Circle().fill(.red).frame(width: 6, height: 6)
+                                    Text("Offline").font(.caption).foregroundColor(.red)
+                                }
+                            }
+                        }
+                        
+                        // Sync Progress Indicator
+                        if miningService.networkStatus.isConnected {
+                            HStack(spacing: 6) {
+                                Text("Sync:").font(.caption).foregroundColor(.gray)
+                                if miningService.networkStatus.currentBlock >= miningService.networkStatus.highestBlock {
+                                    HStack(spacing: 4) {
+                                        Circle().fill(.green).frame(width: 6, height: 6)
+                                        Text("Synced").font(.caption).foregroundColor(.green)
+                                    }
+                                } else {
+                                    let progress = Int((Double(miningService.networkStatus.currentBlock) / Double(max(1, miningService.networkStatus.highestBlock))) * 100)
+                                    HStack(spacing: 4) {
+                                        Circle().fill(.blue).frame(width: 6, height: 6)
+                                        Text("\(progress)%").font(.caption).foregroundColor(.blue)
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // Connection Quality Indicator  
+                        HStack(spacing: 6) {
+                            Text("Network:").font(.caption).foregroundColor(.gray)
+                            if miningService.remoteRpcConnected {
+                                HStack(spacing: 4) {
+                                    Circle().fill(.green).frame(width: 6, height: 6)
+                                    Text("Connected").font(.caption).foregroundColor(.green)
+                                }
+                            } else {
+                                HStack(spacing: 4) {
+                                    Circle().fill(.red).frame(width: 6, height: 6)
+                                    Text("Disconnected").font(.caption).foregroundColor(.red)
+                                }
+                            }
+                        }
+                        
                         // Display App Version
                         Text(appVersion)
                             .font(.caption2)
                             .foregroundColor(.gray)
                             .padding(.top, 2)
-                            }
-                    .padding(.leading)
-                    
-                    Spacer()
-                    
-                    // Buttons (grouped in a FlowLayout-like manner if needed, or just HStack)
-                    // For simplicity, using a VStack for button column, then an HStack for rows
-                    VStack(alignment: .trailing, spacing: 8) {
-                        HStack(spacing: 10) {
-                            // UPDATED: Better mining state detection for Build 18
-                            if miningService.isMining || miningService.isGethRunning {
-                                Button("Stop Mining") {
-                                    withAnimation { miningService.stopMining(); isAnimating = false }
-                                }.miningButtonStyle(isDestructive: true).font(.caption)
-                                Button(showPerformanceMetrics ? "Hide Metrics" : "Show Metrics") {
-                                    withAnimation { showPerformanceMetrics.toggle() }
-                                }.miningButtonStyle().font(.caption)
-                            } else {
-                                Button("Start Mining") {
-                                    withAnimation { miningService.startMining(address: miningAddress, password: password); isAnimating = true }
-                                }.miningButtonStyle().font(.caption)
-                            }
-                        }
-                        HStack(spacing: 10) {
-                            Button("See Backup Phrase") {
-                                let newMnemonic = miningService.getCurrentAccountMnemonic()
-                                if let mnemonicValue = newMnemonic, !mnemonicValue.starts(with: "Mnemonic not found"), !mnemonicValue.starts(with: "Error loading"), !mnemonicValue.isEmpty {
-                                    generatedMnemonic = mnemonicValue
-                                } else {
-                                    generatedMnemonic = newMnemonic ?? "No active account to retrieve mnemonic."
-                                }
-                                showingMnemonicSheet = true
-                            }.miningButtonStyle().font(.caption)
-                            Button("Reset Wallet") {
-                                do {
-                                    let (newAddress, newMnemonic) = try miningService.resetWallet(password: password)
-                                    miningAddress = newAddress
-                                    generatedMnemonic = newMnemonic
-                                    LogManager.shared.log("Wallet reset. New address: \(newAddress).", type: .warning)
-                                } catch {
-                                    LogManager.shared.log("Error resetting wallet: \(error.localizedDescription)", type: .error)
-                                }
-                            }.miningButtonStyle(isDestructive: true).font(.caption)
-                            Button(showLogs ? "Hide Logs" : "Show Logs") {
-                                withAnimation { showLogs.toggle() }
-                            }.miningButtonStyle().font(.caption)
                     }
-                }
-                    .padding(.trailing) // Add padding to right of buttons
+                    .padding(.trailing)
                 }
                 .padding()
                 .frame(height: 100) // Adjusted height
@@ -282,18 +335,18 @@ struct ContentView: View {
                         Text(generatedMnemonic).font(.system(.body, design: .monospaced)).foregroundColor(.white).padding().background(Color.gray.opacity(0.2)).cornerRadius(8).fixedSize(horizontal: false, vertical: true)
                         Button("Close") { showingMnemonicSheet = false }.miningButtonStyle()
                     }.padding()
+                }
             }
         }
         .onAppear {
-                loadAppVersion()
+            loadAppVersion()
             generateAccountIfNeeded()
             startAnimationTimers()
-                MiningService.shared = miningService // Keep this for signal handling
-                // LogManager.shared.log("App started. Click 'Start Mining' to begin mining.", type: .info) // Already logged by ContentView
+            MiningService.shared = miningService // Keep this for signal handling
+            // LogManager.shared.log("App started. Click 'Start Mining' to begin mining.", type: .info) // Already logged by ContentView
         }
         .onDisappear {
             stopAnimationTimers()
-            }
         }
     }
     

@@ -40,45 +40,14 @@ rm -rf "$ETHASH_DIR"/*
 mkdir -p "$ETHASH_DIR"
 
 # Create a minimal genesis file if it doesn't exist
-GENESIS_DIR="$DATA_DIR/genesis"
-GENESIS_FILE="$GENESIS_DIR/genesis.json"
-mkdir -p "$GENESIS_DIR"
+# REMOVED: Don't create local genesis - sync from real network instead
+# This was causing genesis mismatch preventing peer connections
 
-if [ ! -f "$GENESIS_FILE" ]; then
-    echo "Creating minimal genesis file..." >> "$LOG_DIR/geth.log"
-    cat > "$GENESIS_FILE" << EOF
-{
-  "config": {
-    "chainId": 110110,
-    "homesteadBlock": 0,
-    "eip150Block": 0,
-    "eip155Block": 0,
-    "eip158Block": 0,
-    "byzantiumBlock": 0,
-    "constantinopleBlock": 0,
-    "petersburgBlock": 0,
-    "istanbulBlock": 0,
-    "berlinBlock": 0,
-    "ethash": {}
-  },
-  "difficulty": "0x400",
-  "gasLimit": "0x8000000",
-  "alloc": {}
-}
-EOF
-fi
+# Initialize the blockchain if needed  
+# REMOVED: Don't initialize local blockchain - let geth sync from bootnodes
+# The real Mars Credit network genesis will be downloaded from peers
 
-# Initialize the blockchain if needed
-if [ ! -d "$DATA_DIR/geth/chaindata" ] || [ -z "$(ls -A "$DATA_DIR/geth/chaindata")" ]; then
-    echo "Initializing blockchain with genesis block..." >> "$LOG_DIR/geth.log"
-    "$GETH_BINARY_PATH" --datadir "$DATA_DIR" init "$GENESIS_FILE"
-    if [ $? -ne 0 ]; then
-        echo "Genesis initialization failed" >> "$LOG_DIR/geth.log"
-        exit 1
-    fi
-fi
-
-echo "Starting main Geth process using $GETH_BINARY_PATH..." >> "$LOG_DIR/geth.log"
+echo "Skipping local genesis creation - will sync from Mars Credit network" >> "$LOG_DIR/geth.log"
 
 # Set up bootnode list for better connectivity
 BOOTNODES="enode://bf93a274569cd009e4172c1a41b8bde1fb8d8e7cff1e5130707a0cf5be4ce0fc673c8a138ecb7705025ea4069da8c1d4b7ffc66e8666f7936aa432ce57693353@roundhouse.proxy.rlwy.net:50590,enode://ca3639067a580a0f1db7412aeeef6d5d5e93606ed7f236a5343fe0d1115fb8c2bea2a22fa86e9794b544f886a4cb0de1afcbccf60960802bf00d81dab9553ec9@monorail.proxy.rlwy.net:26254,enode://7f2ee75a1c112735aaa43de1e5a6c4d7e07d03a5352b5782ed8e0c7cc046a8c8839ad093b09649e0b4a6ed8900211fb4438765c99d07bb00006ef080a1aa9ab6@viaduct.proxy.rlwy.net:30270,enode://98710174f4798dae1931e417944ac7a7fb3268d38ef8d3941c8fcc44fe178b118003d8b3d61d85af39c561235a1708f8dd61f8ba47df4c4a6b9156e272af2cfc@monorail.proxy.rlwy.net:29138"

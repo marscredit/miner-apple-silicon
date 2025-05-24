@@ -13,20 +13,24 @@ struct ContentView: View {
     @State private var showPerformanceMetrics = false
     @State private var appVersion = "Build: N/A"
     
-    // Connection status calculation
+    // Connection status calculation - UPDATED for Build 18
     private var connectionStatus: (color: Color, text: String) {
-        if miningService.isMining {
-            if miningService.networkStatus.isConnected {
-                return (.green, "Connected")
-            } else {
-                return (.yellow, "Connecting...")
-            }
+        // Prioritize remote RPC connection status for the main indicator
+        if miningService.remoteRpcConnected {
+            return (.green, "Connected")
         } else {
-            if miningService.networkStatus.isConnected {
-                return (.green, "Connected")
-            } else {
-                return (.red, "Node not running")
-            }
+            return (.red, "Network Offline")
+        }
+    }
+    
+    // Local mining status for additional info
+    private var miningStatus: (color: Color, text: String) {
+        if miningService.isMining {
+            return (.orange, "Mining Active")
+        } else if miningService.isGethRunning {
+            return (.yellow, "Syncing...")
+        } else {
+            return (.gray, "Not Mining")
         }
     }
     
@@ -65,12 +69,27 @@ struct ContentView: View {
                                 .padding(.trailing, 8)
                             }
                             
-                            Circle()
-                                .fill(connectionStatus.color)
-                                .frame(width: 8, height: 8)
-                            Text(connectionStatus.text)
-                                .font(.system(.body, design: .default))
-                                .foregroundColor(connectionStatus.color)
+                            // Network Connection Status
+                            VStack(alignment: .trailing, spacing: 2) {
+                                HStack {
+                                    Circle()
+                                        .fill(connectionStatus.color)
+                                        .frame(width: 8, height: 8)
+                                    Text(connectionStatus.text)
+                                        .font(.system(.body, design: .default))
+                                        .foregroundColor(connectionStatus.color)
+                                }
+                                
+                                // Local Mining Status (secondary)
+                                HStack {
+                                    Circle()
+                                        .fill(miningStatus.color)
+                                        .frame(width: 6, height: 6)
+                                    Text(miningStatus.text)
+                                        .font(.system(.caption, design: .default))
+                                        .foregroundColor(miningStatus.color)
+                                }
+                            }
                         }
                         
                         if miningService.networkStatus.isConnected || miningService.isMining {
@@ -208,7 +227,8 @@ struct ContentView: View {
                     // For simplicity, using a VStack for button column, then an HStack for rows
                     VStack(alignment: .trailing, spacing: 8) {
                         HStack(spacing: 10) {
-                            if miningService.isMining {
+                            // UPDATED: Better mining state detection for Build 18
+                            if miningService.isMining || miningService.isGethRunning {
                                 Button("Stop Mining") {
                                     withAnimation { miningService.stopMining(); isAnimating = false }
                                 }.miningButtonStyle(isDestructive: true).font(.caption)

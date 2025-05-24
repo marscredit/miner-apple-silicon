@@ -6,7 +6,7 @@
 	<dict>
 		<key>Resources/VERSION.txt</key>
 		<data>
-		gFqJ5801s7ypud3Px2ARg6ZzdvA=
+		0J0Aw/AjL69NwPbkXk7SJC1ltlw=
 		</data>
 		<key>Resources/debug_apple_silicon.sh</key>
 		<data>
@@ -16,9 +16,13 @@
 		<data>
 		kQcOKjvL/ytffUb/bNvthLuZXeE=
 		</data>
+		<key>Resources/mars_credit_genesis.json</key>
+		<data>
+		EpMEZhFJJwG3TMHxCojqyo/BXrY=
+		</data>
 		<key>Resources/run_geth_in_app.sh</key>
 		<data>
-		0PXXBFri6HJM1XnMC1Xyba2s8r4=
+		aM3oyhTA0KnzLu/q6wteTUQYlbQ=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -27,7 +31,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			VEOOCBZf3RAC29Lz40aAD9kQgSDXHXUgQnDGTlYXIlw=
+			9xEP9ej7BsRSTAeVtx09KkDjfOhs53E+uRJCPh/zQus=
 			</data>
 		</dict>
 		<key>Resources/debug_apple_silicon.sh</key>
@@ -44,11 +48,18 @@
 			9OKe8FYG5kl7Va8EtL294ARA5Lc8ge9I0acHTnHM8LQ=
 			</data>
 		</dict>
+		<key>Resources/mars_credit_genesis.json</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			oaRBCshUzasgvhhQAqzGCB9A5sMxdyAc2pW6qU7Xv4w=
+			</data>
+		</dict>
 		<key>Resources/run_geth_in_app.sh</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			gHkxcJ3TBQDgj+3kxNqzpaK6j2dbfGNWo5ApTJLun9w=
+			5ULCCIq783qfaZrdj3dSrspbmhOfthACQylZj6Zyt18=
 			</data>
 		</dict>
 	</dict>

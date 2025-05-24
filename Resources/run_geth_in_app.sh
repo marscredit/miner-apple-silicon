@@ -56,34 +56,37 @@ echo "run_geth_in_app.sh: Using BOOTNODES: $BOOTNODES" >> "$LOG_FILE"
 
 # Initialize geth with Mars Credit genesis if not already done
 GENESIS_FILE="$SCRIPT_DIR/mars_credit_genesis.json"
-echo "run_geth_in_app.sh: Forcing Mars Credit genesis initialization..." >> "$LOG_FILE"
+echo "run_geth_in_app.sh: Checking Mars Credit genesis initialization..." >> "$LOG_FILE"
 
-# Always remove and reinitialize to ensure correct genesis
-if [ -d "$DATA_DIR/geth" ]; then
-    echo "run_geth_in_app.sh: Removing existing geth directory to force Mars Credit genesis" >> "$LOG_FILE"
-    rm -rf "$DATA_DIR/geth"
-fi
-
-if [ -f "$GENESIS_FILE" ]; then
-    echo "run_geth_in_app.sh: Initializing geth with Mars Credit genesis: $GENESIS_FILE" >> "$LOG_FILE"
-    "$GETH_BINARY_PATH" --datadir "$DATA_DIR" init "$GENESIS_FILE" >> "$LOG_FILE" 2>&1
-    INIT_EXIT_CODE=$?
-    if [ $INIT_EXIT_CODE -eq 0 ]; then
-        echo "run_geth_in_app.sh: Mars Credit genesis initialization SUCCESSFUL" >> "$LOG_FILE"
+# PRODUCTION FIX: Only initialize if no blockchain data exists
+if [ ! -d "$DATA_DIR/geth/chaindata" ]; then
+    echo "run_geth_in_app.sh: No blockchain data found, initializing with Mars Credit genesis: $GENESIS_FILE" >> "$LOG_FILE"
+    if [ -f "$GENESIS_FILE" ]; then
+        "$GETH_BINARY_PATH" --datadir "$DATA_DIR" init "$GENESIS_FILE" >> "$LOG_FILE" 2>&1
+        INIT_EXIT_CODE=$?
+        if [ $INIT_EXIT_CODE -eq 0 ]; then
+            echo "run_geth_in_app.sh: Mars Credit genesis initialization SUCCESSFUL" >> "$LOG_FILE"
+        else
+            echo "run_geth_in_app.sh: ERROR - Genesis initialization failed with exit code $INIT_EXIT_CODE" >> "$LOG_FILE"
+            exit 1
+        fi
     else
-        echo "run_geth_in_app.sh: ERROR - Genesis initialization failed with exit code $INIT_EXIT_CODE" >> "$LOG_FILE"
+        echo "run_geth_in_app.sh: ERROR - Mars Credit genesis file not found: $GENESIS_FILE" >> "$LOG_FILE"
         exit 1
     fi
 else
-    echo "run_geth_in_app.sh: ERROR - Mars Credit genesis file not found: $GENESIS_FILE" >> "$LOG_FILE"
-    exit 1
+    echo "run_geth_in_app.sh: Blockchain data exists, preserving sync progress for production mining" >> "$LOG_FILE"
 fi
 
-# Double fork to detach Geth completely
-( ( nohup "$GETH_BINARY_PATH" \
+# Double fork to detach Geth completely, but capture the PID
+echo "run_geth_in_app.sh: Starting geth with PID tracking..." >> "$LOG_FILE"
+
+# Start geth and capture its PID
+nohup "$GETH_BINARY_PATH" \
     --datadir "$DATA_DIR" \
     --keystore "$KEYSTORE_DIR" \
     --syncmode "full" \
+    --gcmode "full" \
     --http --http.addr "localhost" --http.port 8546 \
     --http.api "personal,eth,net,web3,miner,admin,debug" \
     --http.vhosts "*" --http.corsdomain "*" \
@@ -96,13 +99,24 @@ fi
     --mine --miner.threads 1 \
     --verbosity 3 \
     --maxpeers 50 \
-    --cache 2048 \
+    --cache 4096 \
+    --cache.database 75 \
+    --cache.trie 25 \
+    --cache.gc 25 \
+    --cache.snapshot 10 \
+    --txpool.globalslots 8192 \
+    --txpool.globalqueue 2048 \
     --nousb \
     --metrics \
     --allow-insecure-unlock \
-    < /dev/null >> "$LOG_FILE" 2>&1 & ) & ) &
+    --snapshot \
+    < /dev/null >> "$LOG_FILE" 2>&1 &
 
-echo "run_geth_in_app.sh: Geth launch (double-fork) initiated." >> "$LOG_FILE"
+# Capture the actual geth PID and save it
+GETH_PID=$!
+echo "$GETH_PID" > "$DATA_DIR/geth.pid"
+echo "run_geth_in_app.sh: Geth started with PID: $GETH_PID" >> "$LOG_FILE"
+
 echo "run_geth_in_app.sh: Sleeping 8 seconds for Geth to fully start before RPC check..." >> "$LOG_FILE"
 sleep 8 # Give Geth ample time to start before the script starts its own checks
 

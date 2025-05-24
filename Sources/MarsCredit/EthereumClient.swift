@@ -251,7 +251,7 @@ class EthereumClient {
                            let highestBlock = BigInt(highestBlockHex.dropFirst(2), radix: 16) {
                             
                             let progress = highestBlock > 0 ? Double(currentBlock) / Double(highestBlock) : 0
-                            LogManager.shared.log("Sync in progress: \(currentBlock)/\(highestBlock) (\(Int(progress * 100))%)", type: .info)
+                            LogManager.shared.log("Sync in progress: \(currentBlock)/\(highestBlock) (\(Int(progress * 100))%)", type: .mining)
                             resolver.fulfill((currentBlock: currentBlock, highestBlock: highestBlock, progress: progress))
                         } else {
                             resolver.reject(EthereumClientError.resultParsingFailed)

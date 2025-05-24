@@ -944,7 +944,7 @@ class MiningService: ObservableObject {
     }
     
     // Add process tracking properties
-    private var gethStartupTime: Date?
+    public var gethStartupTime: Date?
     private var gethProcessPID: Int?
     
     func startMining(address: String, password: String) {
@@ -2440,6 +2440,17 @@ class MiningService: ObservableObject {
         }.catch { _ in
             // Silent fail
         }
+    }
+    
+    // NEW: Public method to get balance immediately
+    public func getBalanceOnStartup(address: String) {
+        guard !address.isEmpty else { return }
+        
+        // Get balance immediately via remote RPC
+        self.miningAddress = address
+        self.updateBalance(address: address)
+        
+        LogManager.shared.log("🔍 Checking initial balance for address: \(address)", type: .info)
     }
 }
 

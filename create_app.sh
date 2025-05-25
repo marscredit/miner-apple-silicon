@@ -60,6 +60,17 @@ fi
 # Copy executable
 cp .build/release/MarsCredit "$MACOS_DIR/"
 
+# Copy app icon if it exists
+if [ -f "./Sources/MarsCredit/Resources/AppIcon.icns" ]; then
+    cp "./Sources/MarsCredit/Resources/AppIcon.icns" "$RESOURCES_DIR/"
+    echo "App icon copied to app bundle: $RESOURCES_DIR/AppIcon.icns"
+    ICON_ENTRY="    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>"
+else
+    echo "Warning: AppIcon.icns not found. App will use default icon."
+    ICON_ENTRY=""
+fi
+
 # Create Info.plist
 cat > "$CONTENTS_DIR/Info.plist" << EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -76,6 +87,7 @@ cat > "$CONTENTS_DIR/Info.plist" << EOF
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
     <string>1.0</string>
+$ICON_ENTRY
     <key>LSMinimumSystemVersion</key>
     <string>13.0</string>
     <key>NSHighResolutionCapable</key>

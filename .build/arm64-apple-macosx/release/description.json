@@ -17,6 +17,34 @@
         }
       ]
     },
+    "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit_MarsCredit.bundle/AppIcon.icns" : {
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Resources/AppIcon.icns"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit_MarsCredit.bundle/AppIcon.icns"
+        }
+      ]
+    },
+    "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit_MarsCredit.bundle/Assets.xcassets" : {
+      "inputs" : [
+        {
+          "kind" : "directory",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Resources/Assets.xcassets"
+        }
+      ],
+      "outputs" : [
+        {
+          "kind" : "directory",
+          "name" : "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit_MarsCredit.bundle/Assets.xcassets"
+        }
+      ]
+    },
     "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit_MarsCredit.bundle/gunshipboldital.otf" : {
       "inputs" : [
         {

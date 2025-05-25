@@ -26,7 +26,9 @@ let package = Package(
                 .product(name: "BigInt", package: "BigInt")
             ],
             resources: [
-                .copy("Resources/gunshipboldital.otf")
+                .copy("Resources/gunshipboldital.otf"),
+                .copy("Resources/AppIcon.icns"),
+                .copy("Resources/Assets.xcassets")
             ]
         )
     ]

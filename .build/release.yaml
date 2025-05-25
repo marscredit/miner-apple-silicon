@@ -3494,6 +3494,18 @@ commands:
     outputs: ["/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.product/Objects.LinkFileList"]
     description: "Write auxiliary file /Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.product/Objects.LinkFileList"
 
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit_MarsCredit.bundle/AppIcon.icns":
+    tool: copy-tool
+    inputs: ["/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Resources/AppIcon.icns"]
+    outputs: ["/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit_MarsCredit.bundle/AppIcon.icns"]
+    description: "Copying /Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Resources/AppIcon.icns"
+
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit_MarsCredit.bundle/Assets.xcassets":
+    tool: copy-tool
+    inputs: ["/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Resources/Assets.xcassets/"]
+    outputs: ["/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit_MarsCredit.bundle/Assets.xcassets/"]
+    description: "Copying /Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Resources/Assets.xcassets"
+
   "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit_MarsCredit.bundle/gunshipboldital.otf":
     tool: copy-tool
     inputs: ["/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Resources/gunshipboldital.otf"]
@@ -4632,7 +4644,7 @@ commands:
 
   "MarsCredit-arm64-apple-macosx15.0-release.module-resources":
     tool: phony
-    inputs: ["/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit_MarsCredit.bundle/gunshipboldital.otf"]
+    inputs: ["/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit_MarsCredit.bundle/AppIcon.icns","/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit_MarsCredit.bundle/Assets.xcassets/","/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit_MarsCredit.bundle/gunshipboldital.otf"]
     outputs: ["<MarsCredit-arm64-apple-macosx15.0-release.module-resources>"]
 
   "NIOPosix-arm64-apple-macosx15.0-release.module-resources":

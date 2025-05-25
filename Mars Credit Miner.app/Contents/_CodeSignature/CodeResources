@@ -4,9 +4,13 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>Resources/AppIcon.icns</key>
+		<data>
+		ekM5M5o3Uk83PARZ+ccCQmxSjf8=
+		</data>
 		<key>Resources/VERSION.txt</key>
 		<data>
-		O9tXd89tqrnydF0G56Vd1FrbvHE=
+		kIIKoZ+Wf5S/YO6GolLbSfiRhJo=
 		</data>
 		<key>Resources/geth/geth</key>
 		<data>
@@ -23,11 +27,18 @@
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>Resources/AppIcon.icns</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			zPNiTf4j++AD1cofsHIbYQu87aIwyOaSw+pPeKYKtu4=
+			</data>
+		</dict>
 		<key>Resources/VERSION.txt</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			/FEybxGKKpcuw8XFLjTRuKRRJUZuLwvjSxLq6cuRDf4=
+			8jiteG1JN0iPpnYVrynrbaQPDhfpslHMUX4BE87Kqug=
 			</data>
 		</dict>
 		<key>Resources/geth/geth</key>

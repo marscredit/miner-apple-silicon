@@ -1,2 +1,0 @@
-#!/bin/bash
-DATA_DIR="$HOME/.marscredit"; mkdir -p "$DATA_DIR/ethash"; GETH_PATH="./Resources/geth/geth"; "$GETH_PATH" --datadir "$DATA_DIR" --keystore "$DATA_DIR/keystore" --syncmode "full" --mine --miner.threads "1" --miner.etherbase "0xD21602919e81e32A456195e9cE34215Af504535A" --port "30304" --nat "any" --networkid "110110" --nodiscover --verbosity "3" --maxpeers "25" --cache "128" --ethash.dagdir "$DATA_DIR/ethash" --nousb

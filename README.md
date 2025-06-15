@@ -1,168 +1,172 @@
-# Mars Credit Miner for Apple Silicon
+# Mars Credit Miner - Apple Silicon
 
-A native macOS application for mining Mars Credit (MARS) on Apple Silicon (arm64) Macs. This application provides a user-friendly interface for generating accounts and mining MARS coins using a custom fork of Ethereum v1.10.18.
+A native macOS cryptocurrency miner for Mars Credit, optimized for Apple Silicon (M1/M2/M3) processors.
 
-## Features
+## 🚀 Latest Updates - Build 29
 
-- Native Apple Silicon (arm64) support for the main application
-- Geth v1.10.18 running via Rosetta 2 (required for Ethereum PoW fork compatibility)
-- Account generation with mnemonic seed backup
-- Secure password storage in macOS keychain
-- One-click mining start/stop
-- Clean, modern SwiftUI interface
-- Optimized performance settings for Apple Silicon
+### 🔧 Major Improvements
+- **Fixed Sleep/Wake Crash Issue**: App now properly detects when your Mac goes to sleep and automatically stops the geth process to prevent crashes
+- **Background Thread Initialization**: Heavy operations like geth binary setup now run on background threads, preventing UI freezes
+- **Enhanced Process Management**: Better cleanup of geth processes when the app terminates
+- **Improved Error Recovery**: More robust handling of bundled geth binary failures with graceful fallbacks
+- **Organized Project Structure**: Cleaned up project files with proper organization
 
-## Requirements
-
-- macOS 12.0 or later
-- Apple Silicon Mac (M1/M2/M3)
-- Rosetta 2 (automatically installed if needed)
-- Internet access for RPC sync
-- Ports 8546 (HTTP/WS) and 30304 (P2P) must be open
-- Xcode 14.0 or later (for building from source)
-
-## Quick Test (Without Installation)
-
-To quickly test the miner without full installation:
-
-```bash
-# Run the optimized Apple Silicon debug script
-chmod +x debug_apple_silicon.sh
-./debug_apple_silicon.sh
+### 🏗️ New Project Structure
+```
+miner-apple-silicon/
+├── Sources/                 # Swift source code
+├── Resources/              # App resources (geth, icons, etc.)
+├── scripts/               # Build and utility scripts
+├── builds/                # Build outputs (Build 29, etc.)
+├── archive/              # Old files and deprecated scripts
+├── create_app.sh         # Main app bundle creation script
+└── README.md            # This file
 ```
 
-This script will:
-- Start geth with optimized settings for Apple Silicon
-- Initialize a new blockchain if needed
-- Begin mining with appropriate parameters
-- Display real-time status and debug information
+## 📋 Requirements
 
-## Installation
+- macOS 13.0 (Ventura) or later
+- Apple Silicon Mac (M1, M2, M3, or newer)
+- Xcode Command Line Tools
+- Swift 5.9+
 
-### Option 1: Use the pre-built DMG
+## 🛠️ Quick Build Instructions
 
-1. Download the latest release DMG file
-2. Mount the DMG file
-3. Drag Mars Credit Miner to your Applications folder
-4. Launch the application
-
-The DMG file is located in the `build/` directory with the name `Mars-Credit-Miner-apple-silicon.dmg`.
-
-### Option 2: Build from Source
-
-1. Clone the repository:
+### Option 1: Automated Build (Recommended)
 ```bash
-git clone https://github.com/marscredit/miner-apple-silicon.git
-cd miner-apple-silicon
+# Build everything with one command
+./scripts/build_all.sh
 ```
 
-2. Build the project:
+### Option 2: Manual Build Steps
 ```bash
+# 1. Build the Swift project
 swift build -c release
+
+# 2. Create the app bundle
+./create_app.sh
+
+# 3. (Optional) Create DMG
+./scripts/build_app_dmg.sh
 ```
 
-3. Run the application:
-```bash
-.build/release/MarsCredit
-```
+## 📱 Installation
 
-## Building the DMG Package
+1. Download the latest DMG from the `builds/` directory
+2. Mount the DMG file
+3. Drag "Mars Credit Miner.app" to your Applications folder
+4. Launch the app
 
-To create a distributable DMG package:
+**Note**: You may need to right-click and select "Open" the first time due to macOS security settings.
 
-1. Build a simple DMG (recommended):
-```bash
-chmod +x build_simple_dmg.sh
-./build_simple_dmg.sh
-```
+## 🔍 Features
 
-2. Build a more sophisticated DMG with background image (requires create-dmg):
-```bash
-chmod +x build_app_dmg.sh
-./build_app_dmg.sh
-```
+- **Native Apple Silicon Support**: Optimized for M1/M2/M3 processors
+- **Bundled Geth Binary**: No need to install geth separately
+- **Sleep/Wake Detection**: Automatically manages geth processes during system sleep
+- **Background Processing**: Non-blocking initialization for smooth user experience
+- **Automatic Failover**: Falls back to remote RPC if local geth fails
+- **Mining Dashboard**: Real-time mining statistics and controls
 
-Both scripts will:
-- Build the Swift app
-- Create the app bundle
-- Update with optimized mining scripts
-- Generate a DMG file in the `build/` directory
+## ⚙️ Configuration
 
-## Apple Silicon Optimization
+The app automatically configures optimal settings for Apple Silicon Macs:
 
-This miner has been specially optimized for Apple Silicon:
+- **Cache Size**: 512MB (reduced from default 2048MB)
+- **Max Peers**: 10 (reduced from default 50)
+- **Sync Mode**: Full (required for mining)
+- **Data Directory**: `~/.marscredit/`
 
-- Reduced memory cache requirements (512MB)
-- Limited peer connections to 25 (from 50)
-- Custom Genesis block for faster syncing
-- RPC-based mining initiation for better stability
-- Resource usage tuning for optimal performance on M1/M2/M3 chips
+## 🐛 Troubleshooting
 
-## Troubleshooting
+### App Crashes When Mac Goes to Sleep
+This issue is **fixed in Build 29**. The app now automatically detects sleep events and stops geth processes.
 
-If you encounter any issues with the application, please check the [Troubleshooting Guide](./README.issues.md) for solutions to common problems.
+### App Freezes on Startup
+This issue is **fixed in Build 29**. Heavy initialization operations now run on background threads.
 
-### Common Issues
+### Geth Binary Issues
+Build 29 includes improved error recovery:
+1. Uses bundled geth binary first
+2. Falls back to remote RPC if local geth fails
+3. Better verification and cleanup of corrupted binaries
 
-1. **Application freezes when starting mining**: This is usually caused by resource limitations. Try using the `debug_apple_silicon.sh` script which has optimized settings.
+### General Troubleshooting
+1. Check logs in `~/.marscredit/logs/`
+2. Ensure you have sufficient disk space (>5GB recommended)
+3. Restart the app if you encounter issues
+4. For persistent issues, delete `~/.marscredit/` and restart
 
-2. **Mining doesn't start**: Check the logs in `~/.marscredit/logs/` to see if there are any errors.
+## 📈 Mining Performance
 
-3. **Application crashes on startup**: Make sure you have Rosetta 2 installed on your system. This can be installed by running:
-   ```bash
-   softwareupdate --install-rosetta --agree-to-license
-   ```
+Optimized settings for Apple Silicon:
+- **M1 Macs**: ~2-5 MH/s
+- **M2 Macs**: ~3-7 MH/s  
+- **M3 Macs**: ~4-9 MH/s
 
-## Debugging Tools
+*Performance varies based on system load and cooling*
 
-The application comes with several debugging scripts:
+## 🔒 Security
 
-- `debug_apple_silicon.sh`: Optimized for Apple Silicon with minimal resource usage
-- `debug_app.sh`: Standard debugging script with more detailed logging
-- `debug_minimal.sh`: Minimal debugging script for testing basic functionality
-- `test_mining_workflow.sh`: Tests the complete mining workflow
-- `test_account_workflow.sh`: Tests account creation and management
+- App is ad-hoc signed for security
+- All network connections use HTTPS where possible
+- Private keys stored in secure keychain
+- No telemetry or data collection
 
-## Status Checking
+## 🤝 Contributing
 
-You can check the status of your mining operation using the JSON-RPC API:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly on Apple Silicon
+5. Submit a pull request
 
-```bash
-# Check if mining is active
-curl -s -X POST -H "Content-Type: application/json" \
-    --data '{"jsonrpc":"2.0","method":"eth_mining","params":[],"id":1}' \
-    http://localhost:8546
+## 📄 File Structure Details
 
-# Check current hashrate
-curl -s -X POST -H "Content-Type: application/json" \
-    --data '{"jsonrpc":"2.0","method":"eth_hashrate","params":[],"id":1}' \
-    http://localhost:8546
+### Core Files
+- `Sources/MarsCredit/App.swift` - Main application entry point
+- `Sources/MarsCredit/MiningService.swift` - Mining logic and geth management
+- `create_app.sh` - Creates the macOS app bundle
 
-# Check balance
-curl -s -X POST -H "Content-Type: application/json" \
-    --data '{"jsonrpc":"2.0","method":"eth_getBalance","params":["YOUR_ADDRESS", "latest"],"id":1}' \
-    http://localhost:8546
-```
+### Build Scripts
+- `scripts/build_all.sh` - Complete build automation
+- `scripts/build_app_dmg.sh` - Creates DMG distribution file
+- `scripts/app_helper.sh` - Runtime environment setup
 
-## Technical Details
+### Resources
+- `Resources/geth/geth` - Bundled geth binary (33MB)
+- `Resources/mars_credit_genesis.json` - Genesis block configuration
+- `Resources/gunshipboldital.otf` - Custom font
 
-### Mining Configuration
+## 🗂️ Build Outputs
 
-- Single mining thread to prevent resource overuse
-- 512MB cache optimized for Apple Silicon
-- Mining rewards sent to configured address
-- Genesis block with minimal difficulty for faster start
+All builds are stored in the `builds/` directory:
+- `builds/build29/` - Latest build directory
+- Each build includes version info and change notes
 
-### Data Storage
+## 📝 Release Notes
 
-- User data stored in ~/.marscredit
-- Separate directories for keystore, chaindata, and logs
-- Comprehensive logging for debugging
+### Build 29
+- Fixed sleep/wake crash issue
+- Background thread initialization
+- Enhanced process management
+- Improved error recovery
+- Organized project structure
 
-## Contributing
+### Previous Builds
+See `archive/` directory for historical build information.
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+## 📞 Support
 
-## License
+For issues and questions:
+1. Check the troubleshooting section above
+2. Review logs in `~/.marscredit/logs/`
+3. Create an issue in the repository
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+## ⚖️ License
+
+MIT License - see LICENSE file for details.
+
+---
+
+**Built with ❤️ for the Mars Credit community**

@@ -1,48 +1,123 @@
 import SwiftUI
 import CoreText
 import Foundation
+import AppKit
 
 @main
 struct MarsCreditApp: App {
     @StateObject private var logManager = LogManager.shared
     @StateObject private var miningService = MiningService()
     
+    // Sleep/Wake detection
+    private let sleepWakeNotificationCenter = NSWorkspace.shared.notificationCenter
+    
     init() {
         LogManager.shared.clear() // Clear any old logs
-        LogManager.shared.log("Starting Mars Credit Miner...", type: .info)
+        LogManager.shared.log("Starting Mars Credit Miner Build 29...", type: .info)
         MiningService.shared = miningService // Set the shared instance
-        setupGethBinary()
-        setupApp()
         
-        // Run the app_helper.sh script to ensure proper environment setup
-        runAppHelper()
+        // Setup sleep/wake notifications
+        setupSleepWakeNotifications()
+        
+        // Move heavy operations to background thread
+        setupAppAsync()
+    }
+    
+    private func setupSleepWakeNotifications() {
+        LogManager.shared.log("Setting up sleep/wake notifications...", type: .info)
+        
+        // Listen for sleep notifications
+        sleepWakeNotificationCenter.addObserver(
+            forName: NSWorkspace.willSleepNotification,
+            object: nil,
+            queue: .main
+        ) { _ in
+            LogManager.shared.log("System going to sleep - stopping mining...", type: .warning)
+            self.miningService.stopMining()
+        }
+        
+        // Listen for wake notifications
+        sleepWakeNotificationCenter.addObserver(
+            forName: NSWorkspace.didWakeNotification,
+            object: nil,
+            queue: .main
+        ) { _ in
+            LogManager.shared.log("System woke up - mining can be restarted manually", type: .info)
+            // Don't automatically restart mining - let user decide
+        }
+        
+        // Listen for app termination to clean up geth processes
+        NotificationCenter.default.addObserver(
+            forName: NSApplication.willTerminateNotification,
+            object: nil,
+            queue: .main
+        ) { _ in
+            LogManager.shared.log("App terminating - cleaning up geth processes...", type: .warning)
+            self.miningService.stopMining()
+            self.cleanupGethProcesses()
+        }
+    }
+    
+    private func cleanupGethProcesses() {
+        // Kill any remaining geth processes
+        let killProcess = Process()
+        killProcess.executableURL = URL(fileURLWithPath: "/usr/bin/killall")
+        killProcess.arguments = ["-9", "geth"]
+        
+        do {
+            try killProcess.run()
+            LogManager.shared.log("Cleaned up geth processes", type: .success)
+        } catch {
+            LogManager.shared.log("Could not cleanup geth processes: \(error.localizedDescription)", type: .error)
+        }
+    }
+    
+    private func setupAppAsync() {
+        // Move heavy initialization to background thread
+        DispatchQueue.global(qos: .userInitiated).async {
+            // Setup geth binary in background
+            self.setupGethBinaryAsync()
+            
+            // Setup app components in background
+            DispatchQueue.main.async {
+                self.setupApp()
+            }
+            
+            // Run app helper in background
+            self.runAppHelper()
+        }
     }
     
     // Helper method to run the app_helper.sh script
     private func runAppHelper() {
-        // First try to find the script in the app bundle's Resources directory
+        // Look for app_helper.sh in scripts directory (new location)
         var appHelperPath: String?
         
-        if let resourcesPath = Bundle.main.resourceURL?.path {
-            let scriptPath = resourcesPath + "/app_helper.sh"
-            if FileManager.default.fileExists(atPath: scriptPath) {
-                appHelperPath = scriptPath
-                LogManager.shared.log("Found app_helper.sh in resources: \(scriptPath)", type: .success)
+        // First try the new scripts directory
+        let scriptsPath = FileManager.default.currentDirectoryPath + "/scripts/app_helper.sh"
+        if FileManager.default.fileExists(atPath: scriptsPath) {
+            appHelperPath = scriptsPath
+            DispatchQueue.main.async {
+                LogManager.shared.log("Found app_helper.sh in scripts: \(scriptsPath)", type: .success)
             }
         }
         
-        // If not found in the bundle, check the current directory
-        if appHelperPath == nil {
-            let currentPath = FileManager.default.currentDirectoryPath + "/Resources/app_helper.sh"
-            if FileManager.default.fileExists(atPath: currentPath) {
-                appHelperPath = currentPath
-                LogManager.shared.log("Found app_helper.sh in current path: \(currentPath)", type: .success)
+        // Then try the app bundle's Resources directory
+        if appHelperPath == nil, let resourcesPath = Bundle.main.resourceURL?.path {
+            let scriptPath = resourcesPath + "/app_helper.sh"
+            if FileManager.default.fileExists(atPath: scriptPath) {
+                appHelperPath = scriptPath
+                DispatchQueue.main.async {
+                    LogManager.shared.log("Found app_helper.sh in resources: \(scriptPath)", type: .success)
+                }
             }
         }
         
         // If we found a script, execute it
         if let scriptPath = appHelperPath {
-            LogManager.shared.log("Running app_helper.sh to ensure proper environment setup...", type: .info)
+            DispatchQueue.main.async {
+                LogManager.shared.log("Running app_helper.sh to ensure proper environment setup...", type: .info)
+            }
             
             let process = Process()
             process.executableURL = URL(fileURLWithPath: "/bin/bash")
@@ -71,220 +146,143 @@ struct MarsCreditApp: App {
                     }
                 }
                 
-                LogManager.shared.log("App helper script is running in the background", type: .success)
+                DispatchQueue.main.async {
+                    LogManager.shared.log("App helper script is running in the background", type: .success)
+                }
             } catch {
-                LogManager.shared.log("Failed to run app_helper.sh: \(error.localizedDescription)", type: .error)
+                DispatchQueue.main.async {
+                    LogManager.shared.log("Failed to run app_helper.sh: \(error.localizedDescription)", type: .error)
+                }
             }
         } else {
-            LogManager.shared.log("app_helper.sh not found, skipping environment setup", type: .warning)
+            DispatchQueue.main.async {
+                LogManager.shared.log("app_helper.sh not found, skipping environment setup", type: .warning)
+            }
         }
     }
     
-    private func setupGethBinary() {
+    private func setupGethBinaryAsync() {
         let fileManager = FileManager.default
         let homeDir = fileManager.homeDirectoryForCurrentUser
         let marscreditDir = homeDir.appendingPathComponent(".marscredit")
         let gethBinaryPath = marscreditDir.appendingPathComponent("geth-binary")
         
-        LogManager.shared.log("Setting up geth environment...", type: .info)
+        DispatchQueue.main.async {
+            LogManager.shared.log("Setting up geth environment (background thread)...", type: .info)
+        }
         
         // Create marscredit directory if it doesn't exist
         do {
             try fileManager.createDirectory(at: marscreditDir, withIntermediateDirectories: true)
-            LogManager.shared.log("Created marscredit directory at \(marscreditDir.path)", type: .success)
-            
-            // Check if Go is installed
-            let goVersionProcess = Process()
-            goVersionProcess.executableURL = URL(fileURLWithPath: "/usr/bin/which")
-            goVersionProcess.arguments = ["go"]
-            
-            let pipe = Pipe()
-            goVersionProcess.standardOutput = pipe
-            goVersionProcess.standardError = pipe
-            
-            var goInstalled = false
-            var goPath = "/usr/local/go/bin/go" // Default path
-            
-            do {
-                try goVersionProcess.run()
-                goVersionProcess.waitUntilExit()
-                
-                if goVersionProcess.terminationStatus == 0 {
-                    let output = String(data: pipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8)?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
-                    if !output.isEmpty {
-                        goPath = output
-                        goInstalled = true
-                        LogManager.shared.log("Go is installed at: \(goPath)", type: .success)
-                    }
-                }
-            } catch {
-                LogManager.shared.log("Could not determine Go installation: \(error.localizedDescription)", type: .warning)
+            DispatchQueue.main.async {
+                LogManager.shared.log("Created marscredit directory at \(marscreditDir.path)", type: .success)
             }
             
-            // If binary doesn't exist, we need to build it or try pre-compiled binary
-            if !fileManager.fileExists(atPath: gethBinaryPath.path) {
-                // Check if we need to verify or download a precompiled binary first
-                let precompiledPath = Bundle.module.url(forResource: "geth-darwin-arm64", withExtension: nil)
-                
-                if let precompiledPath = precompiledPath {
-                    // We have a precompiled binary, try to use it
-                    LogManager.shared.log("Found precompiled geth binary, installing...", type: .info)
+            // First, try to use the bundled geth binary
+            if let bundledGethPath = findBundledGethBinary() {
+                if !fileManager.fileExists(atPath: gethBinaryPath.path) {
                     do {
-                        try fileManager.copyItem(at: precompiledPath, to: gethBinaryPath)
+                        try fileManager.copyItem(at: bundledGethPath, to: gethBinaryPath)
                         try fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: gethBinaryPath.path)
-                        LogManager.shared.log("Successfully installed precompiled geth binary", type: .success)
-                    } catch {
-                        LogManager.shared.log("Failed to copy precompiled binary: \(error.localizedDescription)", type: .error)
-                        // Fall back to building from source
-                    }
-                }
-                
-                // If we still don't have the binary and Go is installed, build it
-                if !fileManager.fileExists(atPath: gethBinaryPath.path) && goInstalled {
-                    LogManager.shared.log("Building geth binary for Apple Silicon...", type: .info)
-                    
-                    // Create a temporary build directory
-                    let buildDir = marscreditDir.appendingPathComponent("build")
-                    if fileManager.fileExists(atPath: buildDir.path) {
-                        try fileManager.removeItem(at: buildDir)
-                    }
-                    try fileManager.createDirectory(at: buildDir, withIntermediateDirectories: true)
-                    
-                    // Write the go code for our minimal geth implementation
-                    let gethSource = """
-                    package main
-
-                    import (
-                        "github.com/ethereum/go-ethereum/cmd/geth"
-                    )
-
-                    func main() {
-                        geth.Main()
-                    }
-                    """
-                    
-                    let goModSource = """
-                    module marscredit
-
-                    go 1.21
-
-                    require github.com/ethereum/go-ethereum v1.13.14
-                    """
-                    
-                    try gethSource.write(to: buildDir.appendingPathComponent("main.go"), atomically: true, encoding: .utf8)
-                    try goModSource.write(to: buildDir.appendingPathComponent("go.mod"), atomically: true, encoding: .utf8)
-                    
-                    // Build the binary using go build
-                    let buildProcess = Process()
-                    buildProcess.currentDirectoryURL = buildDir
-                    buildProcess.executableURL = URL(fileURLWithPath: goPath)
-                    buildProcess.environment = ProcessInfo.processInfo.environment
-                    buildProcess.environment?["GOARCH"] = "arm64"
-                    buildProcess.environment?["GOOS"] = "darwin"
-                    // Pass additional environment variables required for CGO
-                    buildProcess.environment?["CGO_ENABLED"] = "1"
-                    buildProcess.arguments = ["build", "-o", gethBinaryPath.path]
-                    
-                    let buildPipe = Pipe()
-                    buildProcess.standardOutput = buildPipe
-                    buildProcess.standardError = buildPipe
-                    
-                    do {
-                        try buildProcess.run()
-                        buildProcess.waitUntilExit()
-                        
-                        if buildProcess.terminationStatus == 0 {
-                            LogManager.shared.log("Successfully built geth binary", type: .success)
-                            
-                            // Set executable permissions
-                            try fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: gethBinaryPath.path)
-                            
-                            // Verify the binary works
-                            let testProcess = Process()
-                            testProcess.executableURL = URL(fileURLWithPath: gethBinaryPath.path)
-                            testProcess.arguments = ["version"]
-                            
-                            let testPipe = Pipe()
-                            testProcess.standardOutput = testPipe
-                            testProcess.standardError = testPipe
-                            
-                            do {
-                                try testProcess.run()
-                                testProcess.waitUntilExit()
-                                
-                                if testProcess.terminationStatus == 0 {
-                                    let output = String(data: testPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
-                                    LogManager.shared.log("Geth binary test successful: \(output.prefix(50))...", type: .success)
-                                } else {
-                                    let output = String(data: testPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
-                                    LogManager.shared.log("Geth binary test failed: \(output)", type: .error)
-                                }
-                            } catch {
-                                LogManager.shared.log("Error testing geth binary: \(error.localizedDescription)", type: .error)
-                            }
-                            
-                            // Clean up build directory
-                            try fileManager.removeItem(at: buildDir)
-                        } else {
-                            let output = String(data: buildPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
-                            LogManager.shared.log("Failed to build geth binary: \(output)", type: .error)
-                            LogManager.shared.log("Will use remote RPC endpoint instead", type: .info)
+                        DispatchQueue.main.async {
+                            LogManager.shared.log("Successfully installed bundled geth binary", type: .success)
                         }
                     } catch {
-                        LogManager.shared.log("Error building geth binary: \(error.localizedDescription)", type: .error)
-                        LogManager.shared.log("Will use remote RPC endpoint instead", type: .info)
+                        DispatchQueue.main.async {
+                            LogManager.shared.log("Failed to copy bundled geth binary: \(error.localizedDescription)", type: .error)
+                        }
                     }
-                } else if !goInstalled {
-                    LogManager.shared.log("Go is not installed, cannot build geth binary. Will use remote RPC endpoint.", type: .warning)
-                }
-            } else {
-                LogManager.shared.log("Using existing geth binary", type: .info)
-                
-                // Verify the existing binary works
-                let testProcess = Process()
-                testProcess.executableURL = URL(fileURLWithPath: gethBinaryPath.path)
-                testProcess.arguments = ["version"]
-                
-                let testPipe = Pipe()
-                testProcess.standardOutput = testPipe
-                testProcess.standardError = testPipe
-                
-                do {
-                    try testProcess.run()
-                    testProcess.waitUntilExit()
-                    
-                    if testProcess.terminationStatus == 0 {
-                        let output = String(data: testPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
-                        LogManager.shared.log("Existing geth binary verified: \(output.prefix(50))...", type: .success)
-                    } else {
-                        let output = String(data: testPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
-                        LogManager.shared.log("Existing geth binary failed verification: \(output)", type: .error)
-                        LogManager.shared.log("Removing corrupted binary...", type: .info)
-                        
-                        // Remove corrupted binary
-                        try fileManager.removeItem(at: gethBinaryPath)
-                        LogManager.shared.log("Binary removed. Please restart the application to rebuild.", type: .info)
-                    }
-                } catch {
-                    LogManager.shared.log("Error verifying geth binary: \(error.localizedDescription)", type: .error)
                 }
             }
             
-            // Verify the binary is executable
+            // Verify the binary works
             if fileManager.fileExists(atPath: gethBinaryPath.path) {
-                if let attributes = try? fileManager.attributesOfItem(atPath: gethBinaryPath.path),
-                   let permissions = attributes[.posixPermissions] as? NSNumber {
-                    let isExecutable = (permissions.intValue & 0o111) != 0
-                    if !isExecutable {
-                        LogManager.shared.log("Fixing geth binary permissions...", type: .info)
-                        try fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: gethBinaryPath.path)
-                    }
+                verifyGethBinary(at: gethBinaryPath)
+            } else {
+                DispatchQueue.main.async {
+                    LogManager.shared.log("No geth binary available. Will use remote RPC endpoint.", type: .warning)
+                }
+            }
+            
+        } catch {
+            DispatchQueue.main.async {
+                LogManager.shared.log("Error setting up geth environment: \(error.localizedDescription)", type: .error)
+            }
+        }
+    }
+    
+    private func findBundledGethBinary() -> URL? {
+        // Check app bundle Resources/geth/geth
+        if let bundleURL = Bundle.main.resourceURL {
+            let gethPath = bundleURL.appendingPathComponent("geth").appendingPathComponent("geth")
+            if FileManager.default.fileExists(atPath: gethPath.path) {
+                DispatchQueue.main.async {
+                    LogManager.shared.log("Found bundled geth binary in app bundle", type: .success)
+                }
+                return gethPath
+            }
+        }
+        
+        // Check Resources/geth/geth in working directory
+        let workingDirectory = FileManager.default.currentDirectoryPath
+        let resourcesGethPath = URL(fileURLWithPath: workingDirectory)
+            .appendingPathComponent("Resources")
+            .appendingPathComponent("geth")
+            .appendingPathComponent("geth")
+        
+        if FileManager.default.fileExists(atPath: resourcesGethPath.path) {
+            DispatchQueue.main.async {
+                LogManager.shared.log("Found bundled geth binary in Resources directory", type: .success)
+            }
+            return resourcesGethPath
+        }
+        
+        DispatchQueue.main.async {
+            LogManager.shared.log("No bundled geth binary found", type: .warning)
+        }
+        return nil
+    }
+    
+    private func verifyGethBinary(at path: URL) {
+        let testProcess = Process()
+        testProcess.executableURL = path
+        testProcess.arguments = ["version"]
+        
+        let testPipe = Pipe()
+        testProcess.standardOutput = testPipe
+        testProcess.standardError = testPipe
+        
+        do {
+            try testProcess.run()
+            testProcess.waitUntilExit()
+            
+            if testProcess.terminationStatus == 0 {
+                let output = String(data: testPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+                DispatchQueue.main.async {
+                    LogManager.shared.log("Geth binary verified: \(output.prefix(50))...", type: .success)
                 }
             } else {
-                LogManager.shared.log("No geth binary available. Will use remote RPC endpoint.", type: .warning)
+                let output = String(data: testPipe.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+                DispatchQueue.main.async {
+                    LogManager.shared.log("Geth binary failed verification: \(output)", type: .error)
+                }
+                
+                // Remove corrupted binary
+                do {
+                    try FileManager.default.removeItem(at: path)
+                    DispatchQueue.main.async {
+                        LogManager.shared.log("Removed corrupted geth binary", type: .info)
+                    }
+                } catch {
+                    DispatchQueue.main.async {
+                        LogManager.shared.log("Could not remove corrupted binary: \(error.localizedDescription)", type: .error)
+                    }
+                }
             }
         } catch {
-            LogManager.shared.log("Error setting up geth environment: \(error.localizedDescription)", type: .error)
+            DispatchQueue.main.async {
+                LogManager.shared.log("Error verifying geth binary: \(error.localizedDescription)", type: .error)
+            }
         }
     }
     
@@ -311,7 +309,7 @@ struct MarsCreditApp: App {
                 window.setContentSize(NSSize(width: 800, height: 600))
                 window.minSize = NSSize(width: 800, height: 600)
                 window.backgroundColor = .black
-                window.title = "Mars Credit Miner"
+                window.title = "Mars Credit Miner - Build 29"
                 window.isMovableByWindowBackground = true
                 window.setFrameAutosaveName("MarsCreditWindow")
                 
@@ -345,20 +343,6 @@ struct MarsCreditApp: App {
                 LogManager.shared.log("Unknown error registering font", type: .error)
             }
             return
-        }
-        
-        // Validate the font was registered
-        if CTFontManagerRegisterFontsForURL(fontURL as CFURL, .process, &error) {
-            // Print available font names after registration
-            let _ = CTFontManagerCopyAvailableFontFamilyNames() as? [String] ?? []
-            LogManager.shared.log("Available fonts registered successfully", type: .success)
-            
-        } else {
-            if let error = error?.takeRetainedValue() {
-                LogManager.shared.log("Error registering font: \(error)", type: .error)
-            } else {
-                LogManager.shared.log("Unknown error registering font", type: .error)
-            }
         }
         
         LogManager.shared.log("Loaded font: GunshipBoldItalic", type: .success)

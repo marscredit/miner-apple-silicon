@@ -4,25 +4,30 @@
 set -e
 
 APP_NAME="Mars Credit Miner.app"
-CONTENTS_DIR="$APP_NAME/Contents"
+BUILD_DIR="builds/build29"
+CONTENTS_DIR="$BUILD_DIR/$APP_NAME/Contents"
 MACOS_DIR="$CONTENTS_DIR/MacOS"
 RESOURCES_DIR="$CONTENTS_DIR/Resources"
 VERSION_FILE="build_version.txt"
 BUNDLE_VERSION_FILE="$RESOURCES_DIR/VERSION.txt"
 
-# Increment build number
-BUILD_NUMBER=0
+# Create build directory
+mkdir -p "$BUILD_DIR"
+
+# Get build number from version file
+BUILD_NUMBER=29
 if [ -f "$VERSION_FILE" ]; then
     BUILD_NUMBER=$(cat "$VERSION_FILE")
 fi
-BUILD_NUMBER=$((BUILD_NUMBER + 1))
-echo "$BUILD_NUMBER" > "$VERSION_FILE"
+
+echo "Creating Build $BUILD_NUMBER..."
 
 # Create directories
 mkdir -p "$MACOS_DIR" "$RESOURCES_DIR"
 
 # Write version to bundle
 echo "Build: $BUILD_NUMBER" > "$BUNDLE_VERSION_FILE"
+echo "Date: $(date)" >> "$BUNDLE_VERSION_FILE"
 echo "App version $BUILD_NUMBER written to $BUNDLE_VERSION_FILE"
 
 # Create geth subdirectory in Resources
@@ -36,17 +41,22 @@ if [ -f "./Resources/geth/geth" ]; then
     chmod +x "$RESOURCES_DIR/geth/geth"
 else
     echo "Error: ./Resources/geth/geth not found. Geth binary will be missing from app bundle."
-    # You might want to exit 1 here if Geth is critical for the app to function
-    # exit 1 
 fi
 
-# Copy the geth wrapper script
-if [ -f "./Resources/run_geth_in_app.sh" ]; then
-    cp "./Resources/run_geth_in_app.sh" "$RESOURCES_DIR/"
-    echo "Geth wrapper script copied to app bundle: $RESOURCES_DIR/run_geth_in_app.sh"
-    chmod +x "$RESOURCES_DIR/run_geth_in_app.sh"
+# Copy the app helper script from the new scripts directory
+if [ -f "./scripts/app_helper.sh" ]; then
+    cp "./scripts/app_helper.sh" "$RESOURCES_DIR/"
+    echo "App helper script copied to app bundle: $RESOURCES_DIR/app_helper.sh"
+    chmod +x "$RESOURCES_DIR/app_helper.sh"
 else
-    echo "Warning: ./Resources/run_geth_in_app.sh not found. Geth may not start correctly from the app."
+    # Fallback to old location
+    if [ -f "./Resources/app_helper.sh" ]; then
+        cp "./Resources/app_helper.sh" "$RESOURCES_DIR/"
+        echo "App helper script copied from Resources: $RESOURCES_DIR/app_helper.sh"
+        chmod +x "$RESOURCES_DIR/app_helper.sh"
+    else
+        echo "Warning: app_helper.sh not found in scripts/ or Resources/. App may not start correctly."
+    fi
 fi
 
 # Copy the Mars Credit genesis file
@@ -58,7 +68,13 @@ else
 fi
 
 # Copy executable
-cp .build/release/MarsCredit "$MACOS_DIR/"
+if [ -f ".build/release/MarsCredit" ]; then
+    cp .build/release/MarsCredit "$MACOS_DIR/"
+    echo "Executable copied to app bundle: $MACOS_DIR/MarsCredit"
+else
+    echo "Error: .build/release/MarsCredit not found. Build the project first with 'swift build -c release'"
+    exit 1
+fi
 
 # Copy app icon if it exists
 if [ -f "./Sources/MarsCredit/Resources/AppIcon.icns" ]; then
@@ -69,6 +85,14 @@ if [ -f "./Sources/MarsCredit/Resources/AppIcon.icns" ]; then
 else
     echo "Warning: AppIcon.icns not found. App will use default icon."
     ICON_ENTRY=""
+fi
+
+# Copy font file if it exists
+if [ -f "./Sources/MarsCredit/Resources/gunshipboldital.otf" ]; then
+    cp "./Sources/MarsCredit/Resources/gunshipboldital.otf" "$RESOURCES_DIR/"
+    echo "Font file copied to app bundle: $RESOURCES_DIR/gunshipboldital.otf"
+else
+    echo "Warning: gunshipboldital.otf not found. App may not display fonts correctly."
 fi
 
 # Create Info.plist
@@ -86,29 +110,31 @@ cat > "$CONTENTS_DIR/Info.plist" << EOF
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0</string>
+    <string>1.0.$BUILD_NUMBER</string>
+    <key>CFBundleVersion</key>
+    <string>$BUILD_NUMBER</string>
 $ICON_ENTRY
     <key>LSMinimumSystemVersion</key>
     <string>13.0</string>
     <key>NSHighResolutionCapable</key>
     <true/>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.finance</string>
 </dict>
 </plist>
 EOF
 
-# (Section to be removed)
-# Create DMG
-# create-dmg \
-#     --volname "Mars Credit Miner" \
-#     --window-pos 200 120 \
-#     --window-size 800 400 \
-#     --icon-size 100 \
-#     --icon "$APP_NAME" 200 190 \
-#     --hide-extension "$APP_NAME" \
-#     --app-drop-link 600 185 \
-#     "Mars Credit Miner.dmg" \
-#     "$APP_NAME" 
-
 echo "Re-signing the app bundle with an ad-hoc signature..."
-codesign --force --deep --sign - "$APP_NAME" || echo "Warning: Ad-hoc codesign failed. This might be an issue on some systems."
+codesign --force --deep --sign - "$BUILD_DIR/$APP_NAME" || echo "Warning: Ad-hoc codesign failed. This might be an issue on some systems."
 echo "App bundle re-signed." 
+
+echo ""
+echo "✅ Build $BUILD_NUMBER created successfully!"
+echo "📁 Location: $BUILD_DIR/$APP_NAME"
+echo "🔧 Build improvements:"
+echo "   - Moved heavy operations off main thread"
+echo "   - Added sleep/wake detection to prevent geth crashes"
+echo "   - Improved error recovery with bundled geth binary"
+echo "   - Better resource management and cleanup"
+echo ""
+echo "To create a DMG, run: ./scripts/build_app_dmg.sh" 

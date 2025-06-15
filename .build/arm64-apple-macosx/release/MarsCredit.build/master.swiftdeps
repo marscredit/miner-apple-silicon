@@ -1,11 +1,11 @@
 version: "Apple Swift version 6.0.3 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)"
 options: "01e5c812c37b7a5225f3cab8dafaf249a09e41fd4e935679ad88ac5fd5c9f706"
-build_start_time: [1748128985, 965707000]
-build_end_time: [1748128993, 756574000]
+build_start_time: [1749855013, 88672000]
+build_end_time: [1749855023, 41609000]
 inputs:
   ? "/Users/jeremycrane/Repositories/miner-apple-silicon/.build/arm64-apple-macosx/release/MarsCredit.build/DerivedSources/resource_bundle_accessor.swift"
   : [1748128929, 179583666]
-  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/App.swift": [1746424715, 794631107]
+  "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/App.swift": [1749852197, 550359385]
   "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/EthereumClient.swift": [1748125112, 779971011]
   "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/Extensions/Font+Custom.swift": [1741329875, 601164314]
   "/Users/jeremycrane/Repositories/miner-apple-silicon/Sources/MarsCredit/LogManager.swift": [1747711448, 854211882]
